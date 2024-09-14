@@ -1,0 +1,913 @@
+# PostgreSQL 101
+
+### Contents:
+
+0. [File description](#file-description)
+1. [Theory](#theory)
+2. [instalation](#instalationgeneral)
+3. [Entering DB shell](#entering-database-shell)
+4. [Creating user](#creating-a-user)
+5. [Creating DB](#creating-database)
+6. [Connect to DB](#connect-to-database)
+7. [DB shell command list](#database-shell-commands-list)
+8. [SQL commands list](#sql-commands-list)
+9. [Constraints](#constraints) \
+    9.1. [Primary key](#primary-key) \
+    9.2. [Unique constraint](#unique-constraint) \
+    9.3. [Check constraint](#check-constraint) 
+10. [Tables connection](#tables-connection) \
+    10.1. [Foreign key](#foreign-key-relationship) \
+    10.2. [Joins](#joins) \
+        10.2.1. [Join](#join) \
+        10.2.2. [Left join](#left-join) \
+        10.2.3 [Cross join](#cross-join) \
+        10.2.4. [Natural join](#natural-join) \
+    10.3. [Set operations](#set-operations) \
+        10.3.1. [UNION](#union) \
+        10.3.2. [INTERSECT](#intersect) \
+        10.3.3. [EXCEPT](#except)
+11. [Sequence](#sequence)
+12. [Extensions](#extensions)
+13. [Examples](#examples) \
+    13.1. [Create table](#create-table-no-constrains)\
+    13.2. [Create table](#create-table-with-constrains)\
+    13.3. [Insert values into table](#insert-values-into-table)\
+    13.4. [Sorted output](#sorted-output) \
+    13.5. [Unique output](#unique-output) \
+    13.6. [Selective output](#selective-output) \
+    13.7. [Summarizing result](#summarizing-result) \
+    13.8. [Use of functions](#use-of-functions) \
+    13.9. [Simple calculations](#simple-calculations) \
+    13.10. [Table calculations](#table-calculations) \
+    13.11. [Null handeling](#null-handeling) \
+    13.12. [Timestampg](#timestamp) \
+    13.13. [Structure changes](#structure-changes) \
+    13.14. [Data changes](#data-changes) \
+    13.15. [Conflict handeler](#conflict-handeler) \
+    13.16. [Formated output](#formated-output)
+    13.17. [Case(if-else)](#if----else-aka-case)
+14. [Export data](#export-data) 
+    14.1. [CSV](#csv)
+15. [Links](#links)
+
+## File description
+
+Foulder [table_examples](table_examples) contain some *SQL* files that can be inported into DB, those are used as examples in text below.
+|File|Description|Tables|
+|----|-----------|---|
+| [car.sql](table_examples/car.sql)|BD full of car info|car|
+| [person.sql](table_examples/person.sql)|BD full of personal info|person|
+| [connected_1.sql](table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
+| [connected_uuid.sql](table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
+| [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated info|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
+
+
+## Theory
+### Terms
+|Term|Def|
+|---|---|
+|**BIGSERIAL** |spesial data type that is *BIGINT* and has auto incrimination function|
+|[**primary key**](#primary-key)| Value that uniquely identify a record in the table (unique for any and all rows, not NULL)|
+|[**UNIQUE** constraint](#unique-constraint)|Value that must bw unique for every row, but can be NULL. the constraint would not allow to add a new row with the similar to some other data in the constraint column|
+|[**CHECK** constraint](#check-constraint)|Allow to list values the particular column can have or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule|
+|[**foreign key**](#foreign-key-relationship)|Unique value that reference *primary key* from another table (!!types of foreign key column and primary key from another table column must be same!!) |
+|[**join**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data|
+|[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output  that data and all other data from the first table|
+|[**cress join**](#cross-join)|*CROSS JOIN* allow to output all possible combinations of two tables in SQL.|
+|[**sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes|
+|[**NATURAL JOIN**](#natural-join)|A *NATURAL JOIN* in *SQL* is a type of join that automatically combines two tables based on columns with the same names and compatible data types. It simplifies the process by eliminating the need to explicitly specify the join condition. However, it can be risky because it relies entirely on column names, which may unintentionally match columns you don’t want to join.|
+|[Set operations](#set-operations)|UNION,INTERSECT,EXCEPT|
+
+## Pre_Work
+
+#### [Instalation.general](https://www.postgresql.org/download/)
+#### [Instalation.fedora](https://developer.fedoraproject.org/tech/database/postgresql/about.html)
+
+### !
+
+* In Windows use **SQL Shell** or **pqAdmin**.
+* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```), your own user with sertain database or use **pqAdmin**.
+
+
+## Entering database shell
+### Linux 1
+1. Linux -> *terminal* -> user **postgres**;
+2. ```psql```.
+
+### Linux 2 (for sertain DB)
+1. ```psql -h <address> -U <user> -p <gate> <db_name> ```.
+
+### Windows
+1. Use **SQL Shell** app.
+
+
+## Creating a user
+### DB Shell
+1. Enter database shell;
+2. ```CREATE USER <db_username> WITH PASSWORD '<password>';```.
+### Linux
+1. Linux -> *terminal* -> user **postgres**;
+2. ```createuser -P <db_username>```.
+
+
+## Creating database
+### DB Shell
+1. Enter database shell;
+2. 
+    ```SQL
+    CREATE DATABASE <db_name> WITH OWNER <db_username> ENCODING='UTF8' LC_COLLATE='en_GB.UTF-8' LC_CTYPE='en_GB.UTF-8';
+    --or
+    CREATE DATABASE <db_name> WITH OWNER <db_username> ENCODING='UTF8' LC_COLLATE='en_US.utf8' LC_CTYPE='en_US.utf8';
+    --or
+    CREATE DATABASE <db_name>
+    ```
+```
+ex.:
+CREATE DATABASE temp_db WITH OWNER jackoneill ENCODING='UTF8' LC_COLLATE='en_GB.UTF-8' LC_CTYPE='en_GB.UTF-8';
+```
+### Linux
+1. Linux -> *terminal* -> user **postgres**;
+2. ```createdb <db_name> -O <db_username>```.
+
+
+
+## Connect to database
+### linux
+1. Linux -> *terminal* -> user **postgres**;
+2. ```psql -h <DB_address> -U <db_username> <db_name>```.
+```
+ex.:
+psql -h localhost -U jackoneill -p 5432  temp_db
+```
+
+### DB Shell
+1. Enter database shell;
+2. ```\c <db_name>```
+
+
+## Database shell commands list
+|Command| Explanation |
+|---|---|
+|\q|exit|
+|\l|list databases|
+|\\?|PSQL commands help|
+|help|general db shell cammands help|
+|\h| SQL commands help|
+|\d| show list of tables amd sequences in DB|
+|\dt| show only list of tables  in DB|
+|\d <table_name>| show table info|
+|\i <file_name>|execute commands from file (be careful: windows -' \\', linux && psql -' / '!) |
+|\x|change to another data interpritation (allow to show big tables better) <br> - aka. change colomns into rows in output|
+
+## SQL+ commands list
+
+* All SQL command lines end with **';'**!
+* *NULL* handeling:[📗](#null-handeling).
+* SQL comparison opperators(**>**,**<**,**>=**,**<=**,**=**,**<>**) can be used on numbers, lines, dates etc.
+* "**%**" - any character(s); "**_**" - any *single* character.
+* For data analyses can be used [aggregate functions](https://www.postgresql.org/docs/16/functions-aggregate.html) (*COUNT*, [etc](#use-of-functions)).
+* Calculation examples:[📙](#simple-calculations)[📘](#table-calculations).
+
+|Command| Explanation |Tag|
+|---|---|---|
+|**CREATE DATABASE** <db_name>; |create DB |create|
+|**DROP DATABASE** <db_name>; |delete DB|delete|
+|**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|create table|create|
+|**DROP TABLE **<table_name>; |delete table|delete|
+|**INSERT INTO** <table_name> (<list_of_columns>) <br> VALUES (<list_of_values>);|insert records|change_table<br>data_change|
+|**SELECT * FROM** <table_name>|print the table (instead of "*" can be *name_of_columns* to return this columns)|output_data|
+|**DISTINCT**|goes after select to [remove](#unique-output) dublicates|output_data<br>filter|
+|**ORDER BY** <column_name>|goes after <table_name> to order the output|sort<br>output_data|
+|SELECT * FROM <table_name> **WHERE** <column_name>='<data_example>' **AND/OR** <other_condition>|[selective output](#selective-output) be like (constructions may be more complex and use "()")|select<br>output_data|
+|SELECT * FROM <table_name> WHERE <column_name> **IN** **(**<data_example_1>, <data_example_2>, ..**)**|[selective output](#selective-output) with several values ​​of interest (can be inverted with **NOT**)|select<br>output_data|
+|SELECT * FROM <table_name> WHERE <column_name> **EXISTS** **(**  **)**| [**EXISTS**](#selective-output)  keyword in *SQL* is a logical operator used in **WHERE** clauses to check the existence of rows returned by a subquery(!!). It returns *TRUE* if the subquery finds at least one row and *FALSE* if no rows are found(can be inverted with **NOT**)|select<br>output_data|
+|SELECT * FROM <table_name> WHERE <column_name> **BETWEEN** <data_example_begining> **AND** <data_example_END>|[selective output](#selective-output) with the range of values ​​of interest|select<br>output_data|
+|SELECT * FROM <table_name> WHERE <column_name> **LIKE** '<data_pattern>'|[selective output](#selective-output) based on similar pattern in the values of interest|select<br>output_data|
+|**ILIKE** '<data_pattern>'|similar to **LIKE** but is not case sensitive |select<br>output_data|
+|**LIMIT** \<number>|put at the end of the command to limit the number of rows in output|limit<br>output_data|
+|**OFFSET** \<number> |put at the end of the command *but* before **LIMIT** to exclude first <number> rows from output |limit<br>output_data|
+|**FETCH FIRST** \<number> **ROW ONLY**;| same as **LIMIT**|limit<br>output_data|
+|**GROUP BY** <column_name>|[used](#summarizing-result) after the *<table_name>* to group/summarize identical data from the column |output_data<br>filter|
+|**COUNT(**\<argument(<column_name>/*/etc)>**)**|function (will appear as a column) [used](#summarizing-result) to summerize unique data from <argument> based on **GROUP BY** column data|output_data<br>data_analyses|
+|GROUP BY <column_name>**HAVING** <rule>|must be [used](#summarizing-result) with **GROUP BY** and take place right after it, can specify (filter) the output |output_data<br>filter|
+|<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data|
+|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handeling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses|
+|**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handeling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses|
+|**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|get_data|
+|NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calclations|get_data<br>data_analyses|
+|**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses|
+|**AGE(**<time_to>,<time_from>**)**|[calculate](#timestamp) the age (aka. time difference)|data_analyses|
+|**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on it's parameters (aka. *<rule>*)|change_table<br>data_change|
+|**ALTER** TABLE <table_name> <the_change>|used to modify the structure of an existing table or view.|change_table<br>structure_change|
+|ALTER TABLE <table_name> **ADD** <adding_changes>|command used to [add structure changes](#structure-changes) to the table|change_table<br>structure_change|
+|ALTER TABLE <table_name> ADD **CONSTRAINT** <constraint_name> <constraint_itself>|command used to add a [new constraint](#unique-constraint)  to the table|change_table<br>structure_change|
+|**UPDATE** <table_name> **SET** <column_name>='<new_data>' WHERE <rule>|[updating](#data-changes) rows selected by the *<rule>* with the *<new_data>* to the *<column_name>*|change_table<br>data_change|
+|**ON CONFLICT** <column_name>/<other_conflict_case> **DO** <command_to_perform_in_case_of_conflict>|handeling [conflict](#conflict-handeler) situations, can be used only with *<column_name>* that is either a *primal key* or a *unique constraint* |change_table<br>error|
+|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow to handle [conflict](#conflict-handeler) with doing nothing|change_table<br>error|
+|ON CONFLICT <column_name>/<other_conflict_case> DO UPDATE set <column_name_to_replace>=**EXCLUDED.**<column_name_new_info>|in case of a [conflict](#conflict-handeler) replace existing info with new one for given columns otherwise add a new row|change_table<br>error|
+|<column_name> <data_type> **REFERENCES** <other_table_name>(<column_of_the_table>)|parameter of the colunm to [create](#foreign-key-relationship) [connected](#terms) to another table column|create<br>table_connection|
+|SELECT <columns_names> FROM <table_1_name> **JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#join) the [connected](#terms) data from tables (**!**will output only rows that have data in both/all tables)|output_data<br>table_connection<br>filter|
+|SELECT <columns_names> FROM <table_1_name> **LEFT JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#left-join) the [connected](#terms) data from tables (**!**will output rows that have data in both/all tables and other rows from the first table)|output_data<br>table_connection<br>filter|
+|**CASCADE**| added to the end after deletion allow to delete ad the dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change|
+|**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>get_data|
+|SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter|
+|<column_name> **default** <default_data>| add default data to the table's column settings|change_table<br>data_change|
+|**EXCEPT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
+|**INTERSECT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
+|**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
+|[**CROSS JOIN**](#cross-join)|[cross join](#terms)|output_data<br>table_connection<br>filter|
+|[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter|
+|WHERE **IN** ()
+
+## Constraints
+### [Primary key](#terms)
+
+#### ***Remove*** an existing *primary key* constraint: 
+```SQL
+ALTER TABLE <table_name> DROP CONSTRAINT <constraint_name>;
+``` 
+* <constraint_name> can be got with ```\d <table_name>```.
+
+#### ***Add*** a new *primary key* constraint: 
+```SQL
+ALTER TABLE <table_name> ADD PRIMARY KEY (<list_of_columns_to_become_primary_key>);
+```
+
+### [Unique constraint](#terms)
+#### ***Add*** an *unique* constraint and name it:
+```SQL
+ALTER TABLE <table_name> ADD CONSTRAINT <constraint_name> UNIQUE (<list_of_columns_to_have_unique_values_to_form_the_constraint>);
+--example:
+ALTER TABLE person ADD CONSTRAINT unique_email UNIQUE (email);
+```
+
+#### ***Add*** an *unique* constraint (PSQL will name it by itself):
+```SQL
+ALTER TABLE <table_name> ADD UNIQUE (<list_of_columns_to_have_unique_values_to_form_the_constraint>);
+--example:
+ALTER TABLE person ADD UNIQUE (email);
+```
+
+#### ***Remove*** an existing *unique* constraint:
+```SQL
+ALTER TABLE <table_name> DROP CONSTRAINT <constraint_name>;
+--example:
+ALTER TABLE person DROP CONSTRAINT unique_email;
+```
+
+#### ***See*** all constraint's list: ```\d <table_name>```
+
+### [Check constraint](#terms)
+
+#### ***Add*** a new *check* constraint and name it:
+```SQL
+ALTER TABLE <table_name> ADD CONSTRAINT <constraint_name> CHECK (<rule_columns_values_to_follow>);
+--example
+ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender ='Male' or gender='Female');
+```
+
+## Tables connection
+
+### [Foreign key (Relationship)](#terms)
+* includes: [**REFERENCES**](#sql-commands-list)
+#### [Example of creating connected tables](table_examples/connected.sql)
+
+#### To ***add*** new values if connection column exists can be done by simple **update** (!Uniqueness if it exists will give warnings if you give same values)
+```SQL 
+--example
+UPDATE person SET car_id = 2 WHERE id=5;
+UPDATE person SET car_id = 2 WHERE id=6; --ERROR
+UPDATE person SET car_id = 1 WHERE id=6;
+```
+#### To ***delete** value from the table that has foreign key constraint - delete thr foreign key first
+* Comments == output
+```SQL
+--example
+SELECT * FROM car WHERE id>5;
+--  id |     make      |  model   |  price   
+-- ----+---------------+----------+----------
+--   6 | Chrysler      | Concorde | 56676.38 
+--  32 | Mercedes-Benz | S-Class  | 54656.63 
+SELECT * FROM person WHERE car_id=6 OR car_id=32;
+--  id | first_name | last_name | gender | date_of_birth | country_of_birth | email | car_id 
+-- ----+------------+-----------+--------+---------------+------------------+-------+--------
+--   2 | Johnny     | Cash      | Male   | 1944-04-05    | USA              |       |      6
+
+DELETE FROM car WHERE id =6;
+-- ERROR:  update or delete on table "car" violates foreign key constraint "person_car_id_fkey" on table "person"
+-- DETAIL:  Key (id)=(6) is still referenced from table "person".
+DELETE FROM car WHERE id =32;
+-- DELETE 1
+SELECT * FROM car WHERE id>5;
+--  id |   make   |  model   |  price   
+-- ----+----------+----------+----------
+--   6 | Chrysler | Concorde | 56676.38
+UPDATE person SET car_id = NULL WHERE id=2;
+-- UPDATE 1
+SELECT * FROM person WHERE car_id=6 OR car_id=32;
+-- (0 rows)
+DELETE FROM car WHERE id =6;
+-- DELETE 1
+SELECT * FROM car WHERE id>5;
+-- (0 rows)
+```
+
+### Simple use example
+* person table (id, name, age, gender, address);
+* person_order table (id, person_id, menu_id, order_date).
+```SQL
+SELECT person.name AS name 
+FROM person, person_order 
+WHERE person.id=person_order.person_id AND
+(menu_id = 13 OR menu_id = 14 OR menu_id = 18) AND 
+order_date=DATE'2022-01-07';
+--or 
+SELECT
+    (SELECT person.name
+    FROM person
+    WHERE person.id=person_order.person_id) AS NAME
+FROM person_order
+WHERE (menu_id = 13 OR menu_id = 14 OR menu_id = 18) AND 
+order_date=DATE'2022-01-07';
+--or
+SELECT
+    (SELECT person.name FROM person
+    WHERE person.id=person_visits.person_id)
+    AS person_name,
+
+    (SELECT pizzeria.name FROM pizzeria
+    WHERE pizzeria.id=person_visits.pizzeria_id)
+    AS pizzeria_name
+FROM 
+    (SELECT pizzeria_id, person_id FROM person_visits
+    WHERE visit_date BETWEEN DATE '2022-01-07' AND DATE '2022-01-09')AS person_visits;
+```
+* never forget to add an alias after *SELECT*ing something in other element (aka. ```(...) AS  <some_thing>```) 
+
+### JOINs
+
+#### [Join](#terms)
+* ref: [**JOIN**](#sql-commands-list)
+* To ***output*** the connected data from 2 tables:
+    ```SQL 
+    --example 1
+    SELECT * FROM person JOIN car ON person.car_id=car.id;
+    --output data from all columns of both tabes and only rows that are conected
+
+    --example 2
+    SELECT person.first_name, person.last_name, car.make, car.model FROM person JOIN car ON person.car_id=car.id;
+    --output data from sertain columns and only rows that are conected
+
+    --example 3
+    SELECT person.name AS person_name, 
+        menu.pizza_name AS pizza_name, 
+        pizzeria.name AS pizzeria_name
+    FROM person_order 
+        JOIN person ON person.id=person_order.person_id
+        JOIN menu ON menu.id=person_order.menu_id
+        JOIN pizzeria ON menu.pizzeria_id=pizzeria.id
+    ORDER BY person_name,pizza_name,pizzeria_name;
+    --multi join
+    ```
+
+#### [Left join](#terms)
+* ref: [**JOIN**](#sql-commands-list)
+* To ***output*** the connected data from 2 tables:
+    ```SQL 
+    --example 1
+    SELECT * FROM person LEFT JOIN car ON person.car_id=car.id;
+    --output data from all columns of both tabes for rows that are conected and all other columns of table "person"
+
+    --example 2
+    SELECT person.first_name, person.last_name, car.make, car.model FROM person LEFT JOIN car ON person.car_id=car.id;
+    --output data from sertain columns for rows that are conected and all other columns of table "person"
+
+    --example 3
+    SELECT * FROM person LEFT JOIN car ON person.car_id=car.id WHERE car.* IS NULL;
+    --output data from all columns of both tabes for rows of table "person" that has no connection to *car* table
+    ```
+
+#### [Cross join](#terms)
+* Example - all posible combinations of two columns:
+    ```SQL
+    SELECT * FROM person
+    CROSS JOIN pizzeria
+    ORDER BY person.id, pizzeria.id;
+    ```
+
+#### [NATURAL JOIN](#terms)
+
+* How it Works:
+    * Identify Common Columns: The *NATURAL JOIN* automatically identifies columns in both tables that have the same name and compatible data types.
+    * Implicit Join Condition: It joins the tables based on equality of these columns.
+    * Result Set: The result will only contain one instance of the common columns (i.e., the duplicate column will be removed from the result - it collapses duplicates).
+
+ 
+* Example:
+    ```SQL
+    --With no duplicates
+    SELECT person_order.order_date, (person.name || ' (age:' || person.age||')') AS person_information
+    FROM person_order NATURAL JOIN  person
+    ORDER BY order_date, person_information;
+    --With duplicates
+    SELECT person_order.order_date, (person_info.name || ' (age:' || person_info.age||')') AS person_information
+    FROM person_order 
+    NATURAL JOIN  (select id as person_id, name, age from person) as person_info
+    ORDER BY order_date, person_information;
+    ```
+
+
+
+### [Set operations](#terms)
+
+![th_1](DICM/th_1.png)
+
+* In many aspects, sets are used in Relational Databases. Not only to do UNION or MINUS between sets. Sets are also good candidates for doing recursive queries.
+
+* There are the following set operators in PostgreSQL:
+    - UNION [ALL]
+    - EXCEPT [ALL] 
+    - INTERSECT [ALL]
+
+* The keyword "ALL" means to store duplicate rows in the result.
+
+* The main rules for working with sets are as follows:
+    - Main SQL provides final names of attributes for the whole query.
+    - The attributes of controlled SQL should match the number of columns and corresponding family types of main SQL.
+
+    ![th_2](DICM/th_2.png)
+
+* In addition, SQL sets are useful for calculating some specific data science metrics, such as the Jaccard distance between 2 objects based on existing data features.
+
+#### **UNION**
+
+* Column Compatibility: 
+
+    All *SELECT* statements involved in the UNION must have the same number of columns, and the data types in corresponding columns must be compatible. The column names in the result are taken from the first *SELECT* query.
+
+* Duplicate Removal:
+
+    By default, UNION removes any duplicate rows from the result set. It behaves like the SQL equivalent of a "set union" in mathematics, where all unique elements are combined.
+
+    If you want to keep duplicates, you use *UNION ALL*, which includes all rows, including duplicates.
+
+* Order of Execution: The result set is determined by executing both queries, combining them, and then applying any final ordering specified by an *ORDER BY* clause, which must be placed after all the *SELECT* queries, not within individual queries.
+
+* Example:
+    ```SQL
+    SELECT  menu.id AS object_id,  menu.pizza_name AS object_name FROM menu
+    UNION
+    SELECT  person.id AS object_id,  person.name AS object_name FROM person
+    ORDER BY  object_id, object_name;
+    ```
+
+#### **INTERSECT**
+
+* *INTERSECT* is a *SQL* set operation that returns the common rows between two or more *SELECT* queries. It only includes rows that appear in all queries, similar to the intersection of two sets in mathematics.
+
+* Example:
+    ```SQL
+    SELECT order_date AS action_date, person_id
+    FROM person_order
+    INTERSECT
+    SELECT visit_date AS action_date,  person_id
+    FROM person_visits
+    ORDER BY action_date ASC, person_id DESC;
+    ```
+#### **EXCEPT**
+
+* *EXCEPT* is a *SQL* set operation that allows you to return the difference between two *SELECT* queries. It returns the rows from the first query that are not present in the second query. Essentially, it's used to find records that exist in one dataset but not in another.
+
+* Example:
+    ```SQL
+    SELECT person_id from person_order
+    WHERE order_date = DATE '2022-01-07'
+    EXCEPT ALL
+    SELECT person_id from person_visits
+    WHERE visit_date = DATE '2022-01-07';
+    ```
+
+## Sequence
+
+#### Check && increase the sequence
+
+```SQL 
+\d person
+--       Column      |          Type          | Collation | Nullable |              Default               
+-- ------------------+------------------------+-----------+----------+------------------------------------
+--  id               | bigint                 |           | not null | nextval('person_id_seq'::regclass)
+--  first_name       | character varying(70)  |           | not null | 
+--  last_name        | character varying(70)  |           | not null | 
+--  gender           | character varying(7)   |           | not null | 
+--  date_of_birth    | date                   |           | not null | 
+--  country_of_birth | character varying(100) |           | not null | 
+--  email            | character varying(250) |           |          | 
+--  car_id           | bigint                 |           |          | 
+SELECT * FROM person_id_seq;
+--  last_value | log_cnt | is_called 
+-- ------------+---------+-----------
+--          10 |      23 | t
+SELECT * FROM person ORDER BY id;
+--  id | first_name | last_name | gender | date_of_birth | country_of_birth |           email           | car_id 
+-- ----+------------+-----------+--------+---------------+------------------+---------------------------+--------
+--   1 | Jack       | ONeill    | Male   | 2067-11-25    | Russia           | jack_o_gate@gmail.com     |      5
+--   2 | Johnny     | Cash      | Male   | 1944-04-05    | USA              |                           |       
+--   3 | Lizzy      | Rickson   | Female | 2045-09-01    | Japan            |                           |       
+--   4 | Immanuel   | Cousins   | Male   | 2046-11-27    | United States    | icousins0@bloomberg.com   |      3
+--   5 | Ariella    | Trapp     | Female | 1983-02-28    | Peru             | atrapp1@state.gov         |      2
+--   6 | Robina     | Ullrich   | Female | 1961-05-21    | Tunisia          |                           |      1
+--   7 | Madeleine  | O' Dornan | Female | 2066-09-25    | Brazil           |                           |       
+--   8 | Tiffanie   | Reekie    | Female | 2093-03-21    | China            | treekie4@google.com.au    |       
+--   9 | Faunie     | Witterick | Female | 2041-01-27    | China            | fwitterick5@go.com        |      4
+--  10 | Raimundo   | Morrott   | Male   | 2086-10-08    | Iran             | rmorrott6@theguardian.com |       
+SELECT nextval('person_id_seq'::regclass);
+--  nextval 
+-- ---------
+--       11
+SELECT nextval('person_id_seq'::regclass);
+--  nextval 
+-- ---------
+--       12
+insert into person (first_name, last_name, gender, date_of_birth, country_of_birth, email) values ('Delmore', 'Castellani', 'Male', '2056-08-09', 'Poland', 'dcastellani1k@reddit.com');
+-- INSERT 0 1
+SELECT * FROM person ORDER BY id;
+--  id | first_name | last_name  | gender | date_of_birth | country_of_birth |           email           | car_id 
+-- ----+------------+------------+--------+---------------+------------------+---------------------------+--------
+--   1 | Jack       | ONeill     | Male   | 2067-11-25    | Russia           | jack_o_gate@gmail.com     |      5
+--   2 | Johnny     | Cash       | Male   | 1944-04-05    | USA              |                           |       
+--   3 | Lizzy      | Rickson    | Female | 2045-09-01    | Japan            |                           |       
+--   4 | Immanuel   | Cousins    | Male   | 2046-11-27    | United States    | icousins0@bloomberg.com   |      3
+--   5 | Ariella    | Trapp      | Female | 1983-02-28    | Peru             | atrapp1@state.gov         |      2
+--   6 | Robina     | Ullrich    | Female | 1961-05-21    | Tunisia          |                           |      1
+--   7 | Madeleine  | O' Dornan  | Female | 2066-09-25    | Brazil           |                           |       
+--   8 | Tiffanie   | Reekie     | Female | 2093-03-21    | China            | treekie4@google.com.au    |       
+--   9 | Faunie     | Witterick  | Female | 2041-01-27    | China            | fwitterick5@go.com        |      4
+--  10 | Raimundo   | Morrott    | Male   | 2086-10-08    | Iran             | rmorrott6@theguardian.com |       
+--  14 | Delmore    | Castellani | Male   | 2056-08-09    | Poland           | dcastellani1k@reddit.com  |       
+```
+#### Restart the sequence
+```SQL
+SELECT nextval('person_id_seq'::regclass); -- x5
+--  nextval 
+-- ---------
+--       19
+ALTER SEQUENCE person_id_seq RESTART WITH 14;
+SELECT * FROM person_id_seq;
+--  last_value | log_cnt | is_called 
+-- ------------+---------+-----------
+--          14 |       0 | f
+```
+
+## Extensions
+
+* PostgreSQL is designed to be easily extensible. For this reason, extensions loaded into the database can function just like features that are built in.
+
+#### To list the ***installed*** extensions: ```SELECT * FROM pg_extension;```.
+#### To list the ***available*** extensions: ```SELECT * FROM pg_available_extensions;```.
+#### To ***load*** an extension: 
+```SQL
+CREATE EXTENSION IF NOT EXISTS <extension_name>;
+--or
+CREATE EXTENSION IF NOT EXISTS "<extension_name>";
+```
+#### To see list of available extensions' ***functions***: ```\df```.
+#### Example of using extensions in work ([uuid](https://en.wikipedia.org/wiki/Universally_unique_identifier)):
+
+ 1. Install the UUID creation extension: ```CREATE EXTENSION IF NOT EXISTS "uuid-ossp";```
+ 2. Execute (```\i```) the [file](table_examples/connected_uuid.sql).
+ 3.   ```UPDATE person SET car_uid = '<car_uid>' WHERE person_uid='<person_uid>';```  etc.
+ 4. 
+    ```SQL
+    SELECT person.first_name, person.last_name, car.make, car.model, car.price, car.car_uid FROM person 
+    LEFT JOIN car ON car.car_uid=person.car_uid;
+    --or
+     SELECT person.first_name, person.last_name, car.make, car.model, car.price, car.car_uid 
+     FROM person LEFT JOIN car USING (car_uid);
+    ```
+
+
+## Examples 
+
+### Create table (no constrains)
+```SQL
+CREATE TABLE person (
+    id int,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    age int,
+    gender VARCHAR(6),
+    date_of_birth DATE
+);
+```
+### Create table (with constrains)
+```SQL
+CREATE TABLE person (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    age int NOT NULL,
+    gender VARCHAR(6) NOT NULL,
+    date_of_birth DATE NOT NULL
+);
+```
+- A **primary key** constraint indicates that a column, or group of columns, can be used as a unique identifier for rows in the table. This requires that the values be both *unique* and *not null*.
+- A **not null** constraint indicates that a column cannot contain null values.
+- **BIGSERIAL** - signed int that auto-increase.
+
+### Insert values into table
+```SQL
+INSERT INTO person (first_name, last_name, age, gender, date_of_birth)
+VALUES ('Johnny', 'Cash', 30, 'Male', DATE '1990-1-29');
+```
+- for **DATE** it's better to specify type (YYYY-MM-DD is used).
+
+### Sorted output
+```SQL
+SELECT * FROM person ORDER BY country_of_birth;
+--or 
+SELECT * FROM person ORDER BY country_of_birth DESC;
+--or
+SELECT * FROM person ORDER BY country_of_birth, id ASC;
+--or
+SELECT * FROM person ORDER BY gender, country_of_birth, id;
+```
+### Unique output 
+```SQL
+SELECT DISTINCT * FROM person ORDER BY country_of_birth;
+--will do same as: SELECT DISTINCT * FROM person ORDER BYcountry_of_birth ;
+SELECT DISTINCT country_of_birth FROM person ORDER BY country_of_birth ;
+--return the list of unique countres sorted alphabetically
+```
+### Selective output
+```SQL
+--example 1.1
+SELECT * FROM person WHERE gender ='Male' AND (country_of_birth='Japan' OR country_of_birth = 'Russia' OR country_of_birth = 'USA') ORDER BY id;
+--example 1.2
+SELECT * FROM person WHERE gender ='Male' AND (country_of_birth='Japan' OR country_of_birth = 'Russia' OR country_of_birth = 'USA') AND id<=517 ORDER BY id;
+--example 1.3
+SELECT * FROM person WHERE gender ='Male' AND (country_of_birth='Japan' OR country_of_birth = 'Russia' OR country_of_birth = 'USA') AND id<=517 AND email IS NOT NULL ORDER BY country_of_birth, id;
+--example 2.1
+SELECT * FROM person WHERE country_of_birth IN ('Japan', 'USA','Russia') AND email IS NOT NULL
+--example 2.2
+SELECT name FROM pizzeria WHERE id NOT IN (SELECT pizzeria_id FROM person_visits);
+--example 3.1
+SELECT * FROM person WHERE date_of_birth BETWEEN DATE '1998-01-01' AND '2024-12-31' ORDER BY date_of_birth;
+--example 4.1
+SELECT * FROM person WHERE email LIKE '%.com';
+--example 4.2
+SELECT * FROM person WHERE email LIKE '%@google.%';
+--example 5.1  -- the same as 'example 2.2'
+SELECT name FROM pizzeria
+WHERE NOT EXISTS 
+    (SELECT * FROM person_visits  --, pizzeria   -- that won't work
+    WHERE pizzeria.id = person_visits.pizzeria_id);
+--example 5.2  -- this way it does not work
+SELECT name FROM pizzeria
+WHERE NOT EXISTS 
+    (SELECT * FROM person_visits, pizzeria  
+    WHERE pizzeria.id = person_visits.pizzeria_id);
+```
+### Summarizing result
+```SQL
+SELECT country_of_birth FROM person ORDER BY country_of_birth;
+--return the list of countries sorted alphabetically (with repetition)
+
+--example 1.1
+SELECT country_of_birth FROM person GROUP BY country_of_birth ORDER BY country_of_birth;
+--return the list of UNIQUE countries sorted alphabetically 
+
+--example 2.1
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth ORDER BY country_of_birth;
+--return the list of UNIQUE countries sorted alphabetically, with the number of people from each country 
+
+--example 2.2
+SELECT country_of_birth, COUNT(email) FROM person GROUP BY country_of_birth ORDER BY country_of_birth;
+--return the list of UNIQUE countries sorted alphabetically, with the number of people that has email from each country
+
+--example 3.1
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING COUNT(*)>5 ORDER BY country_of_birth;
+--return the list of UNIQUE countries sorted alphabetically with more than 5 people from, with the number of people from each country 
+
+--example 3.2
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING country_of_birth<'K' ORDER BY country_of_birth;
+--return the list of UNIQUE countries sorted alphabetically that name starts with any letter befor "K", with the number of people from each country 
+```
+
+### Use of functions
+```SQL
+--example 1 -- MIN
+SELECT MIN(price) FROM car;
+--minimum price from the table
+
+--example 2 -- MAX
+SELECT MAX(price) FROM car;
+--maximum price from the table
+
+--example 3 -- AVG
+SELECT AVG(price) FROM car;
+--average price from the table
+
+--example 4 -- ROUND
+SELECT ROUND(AVG(price)) FROM car;
+--average price from the table rounded to the nearest integer
+
+--example 5 -- complex
+SELECT make, model, price FROM car;
+--output make, model, prices columns 
+SELECT make, model, MIN(price) FROM car GROUP BY make, model ;
+--output make, model, minimum price columns (so for each model minimum price will be calculated and the result will be summarized in the output table)
+SELECT make,  ROUND(AVG(price)) FROM car GROUP BY make  ORDER BY ROUND(AVG(price));
+--output make, (rounded) average price for each make columns, ordered from less pricy makes to the most pricy ones
+
+--example 6 -- SUM
+SELECT SUM(price) FROM car;
+--summ of all cars' prices from the table
+SELECT make, SUM(price) FROM car GROUP BY make;
+--summ of all cars' prices for each make
+```
+
+### Simple calculations 
+```SQL
+SELECT 10 ^ 3; --1000
+SELECT 10 % 3; --1
+SELECT 5!; --120
+```
+
+### Table calculations
+```SQL
+SELECT id, make, model, price, price * .1 FROM car;
+--add a column with 10% of the price
+SELECT id, make, model, price, ROUND(price * .1,2) FROM car;
+--add a column with 10% of the price, rounded to 2 decimal places
+SELECT id, make, model, price, ROUND(price * .9,2), ROUND((price-price*0.1),2) FROM car;
+--add columns with 90% of the price calculated 2 different ways and rounded
+SELECT id, make, model, price AS origin_price, ROUND(price * .8,2) AS "20_percent_discount_price", ROUND((price-price*0.1),2) AS price_with_10_perc_disc FROM car;
+--rename column "price" to "original price" and add columns with 20% discount price and with 10% discount price 
+```
+
+### Null handeling
+* Equal *NULL* and opposite of this one are: ```<column_name> IS NULL``` and  ```<column_name> IS NOT NULL```.
+```SQL
+--example 1 (COALESCE)
+SELECT first_name, last_name, COALESCE(email, 'no email provided')  FROM person;
+--if email is null, then 'no email provided' will be shown instead
+
+--example 2 (NULLIF)
+SELECT 10/0;
+--returns ERROR!
+SELECT 10/NULL;
+--returns NULL
+SELECT 10/NULLIF(2,9);
+--returns 5, because 2!=9
+SELECT 10/NULLIF(2,2);
+--returns NULL, because 2==2
+SELECT 10/NULLIF(0,0);
+--returns NULL, because 0==0
+SELECT COALESCE(10/NULLIF(0,0),0);
+--returns 0, because 0==0 in NULLIF returns NULL and COALESCE replace it with 0
+```
+
+### Timestamp
+```SQL
+--example 1 (NOW)
+SELECT NOW(); --returns current date and time (2024-09-05 07:21:37.624322+07)
+SELECT NOW()::DATE; --returns current date(2024-09-05)
+SELECT NOW()::TIME; --returns current time(07:21:37.624322)
+
+--example 2 (INTERVAL)
+SELECT NOW() + INTERVAL'1 DAY'; --returns current date and time + 1 day
+SELECT NOW() - INTERVAL'1 YEAR'; --returns current date and time - 1 year
+SELECT NOW()::DATE +  INTERVAL'1 DAY'; --sets time to 00:00:00 then do + 1 day
+SELECT (NOW() +  INTERVAL'100 DAYS')::DATE; --returns current date + 100 days and output only the date
+
+--example 3 (EXTRACT)
+SELECT EXTRACT (YEAR FROM NOW()); --returns current year(2024)
+SELECT EXTRACT (HOUR FROM NOW()); --returns current hour(7)
+SELECT EXTRACT (DOW FROM NOW()); --returns current day of week(4)
+SELECT EXTRACT (CENTURY FROM NOW()); --returns current century(21)
+
+--example 4 (AGE)
+SELECT first_name, last_name, gender, date_of_birth, AGE(NOW(),date_of_birth) FROM person;
+--returns age of person in structure: 41 years 6 mons 5 days 07:54:50.207729
+SELECT first_name, last_name, gender, date_of_birth, EXTRACT(YEAR FROM AGE(NOW(),date_of_birth)) AS age FROM person;
+--returns age of person in as: 41
+```
+
+### Structure changes
+```SQL
+ALTER TABLE person ADD passport VARCHAR(20);
+--add a new column
+ALTER TABLE person DROP COLUMN passport;
+--drop a column
+```
+
+### Data changes
+```SQL
+--example 1 (DELETE)
+DELETE FROM person WHERE id=989;
+--delete a row with id=989
+DELETE FROM person WHERE gender ='Female' AND country_of_birth = 'Nigeria';
+--delete all females from the Nigeria from the table
+
+--example 2 (UPDATE)
+UPDATE person SET email ='johnny_rocker@yandex.ru' WHERE id=2;
+--update email of person with id=2
+UPDATE person SET email = 'johnny_rocker@yandex.ru';
+--update email of all persons
+UPDATE person SET first_name ='NEO', last_name='The chosen one'  WHERE id=1001;
+--update first_name and last_name of person with id=1001
+```
+
+### Conflict handeler
+* Comments == output
+```SQL
+\d person
+--  Indexes:
+--      "person_pkey" PRIMARY KEY, btree (id)
+--      "person_email_key" UNIQUE CONSTRAINT, btree (email)
+SELECT * FROM person WHERE id= 445;
+--   445 | Simon      | Dethloff  | Male   | 1990-08-27    | Sweden           | sdethloffc9@surveymonkey.com | 
+insert into person (id,first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values (445,'Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com');
+--  ERROR:  duplicate key value violates unique constraint "person_pkey"
+--  DETAIL:  Key (id)=(445) already exists.
+insert into person (id,first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values (445,'Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com') 
+ON CONFLICT (id) DO NOTHING;
+--  INSERT 0 0
+insert into person (first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values ('Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com');
+--  ERROR:  duplicate key value violates unique constraint "person_email_key"
+--  DETAIL:  Key (email)=(sdethloffc9@surveymonkey.com) already exists.
+insert into person (first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values ('Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com') 
+ON CONFLICT (id) DO NOTHING;
+--  ERROR:  duplicate key value violates unique constraint "person_email_key"
+--  DETAIL:  Key (email)=(sdethloffc9@surveymonkey.com) already exists.
+insert into person (first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values ('Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com') 
+ON CONFLICT (email) DO NOTHING;
+--  INSERT 0 0
+insert into person (first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values ('Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com') 
+ON CONFLICT (first_name) DO NOTHING;
+--  ERROR:  there is no unique or exclusion constraint matching the ON CONFLICT specification
+
+SELECT * FROM person WHERE id= 445;
+--  445 | Simon      | Dethloff  | Male   | 1990-08-27    | Sweden           | sdethloffc9@surveymonkey.com | 
+insert into person (id, first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values (445, 'Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@surveymonkey.com') 
+ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email;
+--  INSERT 0 1
+SELECT * FROM person WHERE id= 445;
+--  445 | Simon      | Dethloff  | Male   | 1990-08-27    | Sweden           | sdethloffc9@surveymonkey.com | 
+insert into person (id, first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values (445, 'Simon', 'Dethloff', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@mm-monkey.ua.com')
+ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email;
+--  INSERT 0 1
+temp_db=# SELECT * FROM person WHERE id= 445;
+--  445 | Simon      | Dethloff  | Male   | 1990-08-27    | Sweden           | sdethloffc9@mm-monkey.ua.com | 
+insert into person (id, first_name, last_name, gender, date_of_birth, country_of_birth, email) 
+values (445, 'Simonius', 'Undethov', 'Male', '1990-08-27', 'Sweden', 'sdethloffc9@mm-monkey.ua.com')
+ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, last_name = EXCLUDED.last_name, first_name = EXCLUDED.first_name;
+--  INSERT 0 1
+temp_db=# SELECT * FROM person WHERE id= 445;
+--  445 | Simonius   | Undethov  | Male   | 1990-08-27    | Sweden           | sdethloffc9@mm-monkey.ua.com | 
+```
+
+
+### Formated output
+```SQL
+SELECT name || ' (age:'|| age||',gender:'||gender||',address:'||address||')' from person;
+--or
+SELECT name || ' (age:'|| age||',gender:'''||gender||''',address:'''||address||''')' AS person_information from person;
+--or use CONCAT()
+```
+
+### If -- else (aka CASE)
+```SQL
+SELECT CASE 
+    WHEN name = 'Denis' 
+        THEN 'true'
+        ELSE 'false'
+    END
+FROM person
+```
+
+
+
+## Export data
+### CSV
+```SQL
+\copy (<command_result_of_which_to_export>) TO '<destination>' DELIMITER '<separator_of_data>' CSV;
+--example
+\copy (SELECT person.first_name, person.last_name, car.make, car.model, car.price FROM person LEFT JOIN car ON person.car_id=car.id) TO '/home/<user_name>/Downloads/output.csv' DELIMITER ',' CSV HEADER; 
+```
+
+
+## Links 
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/);
+- [Data generator](https://mockaroo.com/) [🖼️](/DICM/sh_1.png);
+- [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
+- [PostgreSQL Tutorial](https://www.tutorialspoint.com/postgresql/index.htm) - not checked;
+- [One more guide](https://docs.fedoraproject.org/en-US/quick-docs/postgresql/) - not checked;
