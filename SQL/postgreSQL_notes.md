@@ -59,7 +59,7 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 | [person.sql](table_examples/person.sql)|BD full of personal info|person|
 | [connected_1.sql](table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
 | [connected_uuid.sql](table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
-| [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated info|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
+| [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
 
 
 ## Theory
@@ -217,7 +217,6 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
 |[**CROSS JOIN**](#cross-join)|[cross join](#terms)|output_data<br>table_connection<br>filter|
 |[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter|
-|WHERE **IN** ()
 
 ## Constraints
 ### [Primary key](#terms)
