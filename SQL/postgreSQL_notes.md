@@ -10,7 +10,7 @@
 5. [Creating DB](#creating-database)
 6. [Connect to DB](#connect-to-database)
 7. [DB shell command list](#database-shell-commands-list)
-8. [SQL commands list](#sql-commands-list)
+8. [SQL commands list](#sql-commands-and-functions-list)
 9. [Constraints](#constraints) \
     9.1. [Primary key](#primary-key) \
     9.2. [Unique constraint](#unique-constraint) \
@@ -22,33 +22,37 @@
         10.2.2. [Left join](#left-join) \
         10.2.3 [Cross join](#cross-join) \
         10.2.4. [Natural join](#natural-join) \
+        10.2.5. [Full join](#full-join)\
     10.3. [Set operations](#set-operations) \
         10.3.1. [UNION](#union) \
         10.3.2. [INTERSECT](#intersect) \
         10.3.3. [EXCEPT](#except)
 11. [Sequence](#sequence)
-12. [Extensions](#extensions)
-13. [Examples](#examples) \
-    13.1. [Create table](#create-table-no-constrains)\
-    13.2. [Create table](#create-table-with-constrains)\
-    13.3. [Insert values into table](#insert-values-into-table)\
-    13.4. [Sorted output](#sorted-output) \
-    13.5. [Unique output](#unique-output) \
-    13.6. [Selective output](#selective-output) \
-    13.7. [Summarizing result](#summarizing-result) \
-    13.8. [Use of functions](#use-of-functions) \
-    13.9. [Simple calculations](#simple-calculations) \
-    13.10. [Table calculations](#table-calculations) \
-    13.11. [Null handeling](#null-handeling) \
-    13.12. [Timestampg](#timestamp) \
-    13.13. [Structure changes](#structure-changes) \
-    13.14. [Data changes](#data-changes) \
-    13.15. [Conflict handeler](#conflict-handeler) \
-    13.16. [Formated output](#formated-output)
-    13.17. [Case(if-else)](#if----else-aka-case)
-14. [Export data](#export-data) 
-    14.1. [CSV](#csv)
-15. [Links](#links)
+12. [Common Table Expression (CTE)](#common-table-expression-cte)
+13. [Extensions](#extensions)
+14. [Examples](#examples) \
+    14.1. [Create table](#create-table-no-constrains)\
+    14.2. [Create table](#create-table-with-constrains)\
+    14.3. [Insert values into table](#insert-values-into-table)\
+    14.4. [Sorted output](#sorted-output) \
+    14.5. [Unique output](#unique-output) \
+    14.6. [Selective output](#selective-output) \
+    14.7. [Summarizing result](#summarizing-result) \
+    14.8. [Use of functions](#use-of-functions) \
+    14.9. [Simple calculations](#simple-calculations) \
+    14.10. [Table calculations](#table-calculations) \
+    14.11. [Null handeling](#null-handeling) \
+    14.12. [Timestampg](#timestamp) \
+    14.13. [Structure changes](#structure-changes) \
+    14.14. [Data changes](#data-changes) \
+    14.15. [Conflict handeler](#conflict-handeler) \
+    14.16. [Formated output](#formated-output)\
+    14.17. [Case(if-else)](#if----else-aka-case) \
+    14.18. [Generate series](#generate-series) \
+    14.19. [Greatest && Least](#greatest--least) 
+15. [Export data](#export-data) \
+    15.1. [CSV](#csv)
+16. [Links](#links)
 
 ## File description
 
@@ -73,10 +77,12 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 |[**foreign key**](#foreign-key-relationship)|Unique value that reference *primary key* from another table (!!types of foreign key column and primary key from another table column must be same!!) |
 |[**join**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data|
 |[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output  that data and all other data from the first table|
-|[**cress join**](#cross-join)|*CROSS JOIN* allow to output all possible combinations of two tables in SQL.|
-|[**sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes|
+|[**cross join**](#cross-join)|*CROSS JOIN* allow to output all possible combinations of two tables in SQL.|
 |[**NATURAL JOIN**](#natural-join)|A *NATURAL JOIN* in *SQL* is a type of join that automatically combines two tables based on columns with the same names and compatible data types. It simplifies the process by eliminating the need to explicitly specify the join condition. However, it can be risky because it relies entirely on column names, which may unintentionally match columns you don’t want to join.|
-|[Set operations](#set-operations)|UNION,INTERSECT,EXCEPT|
+|[**FULL JOIN**](#full-join) <br>(or **FULL OUTER JOIN**)|is used to combine rows from two tables, returning all rows from both tables, regardless of whether there is a match between them. If a row from one table doesn't have a match in the other table, the result will include that row with NULL values for the columns from the other table.|
+|[**Sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes|
+|[**Set operations**](#set-operations)|UNION,INTERSECT,EXCEPT|
+|[**CTE**](#CTE)|Common Table Expression|
 
 ## Pre_Work
 
@@ -159,7 +165,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |\i <file_name>|execute commands from file (be careful: windows -' \\', linux && psql -' / '!) |
 |\x|change to another data interpritation (allow to show big tables better) <br> - aka. change colomns into rows in output|
 
-## SQL+ commands list
+## SQL+ commands and functions list 
 
 * All SQL command lines end with **';'**!
 * *NULL* handeling:[📗](#null-handeling).
@@ -193,8 +199,8 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data|
 |- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handeling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses|
 |**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handeling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses|
-|**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|get_data|
-|NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calclations|get_data<br>data_analyses|
+|**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|gen_data|
+|NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calclations|gen_data<br>data_analyses|
 |**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses|
 |**AGE(**<time_to>,<time_from>**)**|[calculate](#timestamp) the age (aka. time difference)|data_analyses|
 |**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on it's parameters (aka. *<rule>*)|change_table<br>data_change|
@@ -209,7 +215,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |SELECT <columns_names> FROM <table_1_name> **JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#join) the [connected](#terms) data from tables (**!**will output only rows that have data in both/all tables)|output_data<br>table_connection<br>filter|
 |SELECT <columns_names> FROM <table_1_name> **LEFT JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#left-join) the [connected](#terms) data from tables (**!**will output rows that have data in both/all tables and other rows from the first table)|output_data<br>table_connection<br>filter|
 |**CASCADE**| added to the end after deletion allow to delete ad the dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change|
-|**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>get_data|
+|**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>gen_data|
 |SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter|
 |<column_name> **default** <default_data>| add default data to the table's column settings|change_table<br>data_change|
 |**EXCEPT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
@@ -217,6 +223,9 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
 |[**CROSS JOIN**](#cross-join)|[cross join](#terms)|output_data<br>table_connection<br>filter|
 |[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter|
+|[**FULL JOIN**](#full-join)|[full join](#terms)|output_data<br>table_connection<br>filter|
+|**generate_series(**start, stop, step **)**|[**generate_series**](#generate-series) is a set-returning function in PostgreSQL that generates a series of values based on a specified *start*(the starting value of the series), *stop*(the ending value of the series), and *step*(the increment value between each element in the series). (It can be used for creating a sequence of numbers, dates, or timestamps.)|gen_data|
+|**LEAST(**<list_of_values>/<list_of_columns>**)**<br>**GREATEST(**<list_of_values>/<list_of_columns>**)**|[Return](#greatest--least) smallest (inc. alphabetically first) or biggest values|gen_data|
 
 ## Constraints
 ### [Primary key](#terms)
@@ -394,7 +403,7 @@ FROM
     ORDER BY person.id, pizzeria.id;
     ```
 
-#### [NATURAL JOIN](#terms)
+#### [Natural Join](#terms)
 
 * How it Works:
     * Identify Common Columns: The *NATURAL JOIN* automatically identifies columns in both tables that have the same name and compatible data types.
@@ -415,6 +424,23 @@ FROM
     ORDER BY order_date, person_information;
     ```
 
+#### [Full join](#terms)
+* Example (will return the entire list of names of people who visited (or did not visit) pizzerias during the period from January 1 to January 3, 2022 on one side and the entire list of names of pizzerias that were visited (or did not visit) on the other side):
+    ```SQL
+    SELECT 
+        COALESCE (person.name,'-') AS person_name, 
+        person_visits.visit_date AS visit_date,
+        COALESCE (pizzeria.name, '-') AS pizzeria_name
+    FROM 
+        (SELECT * FROM person_visits WHERE visit_date<=DATE '2022-01-03' AND visit_date>=DATE '2022-01-01') AS person_visits
+        FULL JOIN pizzeria ON pizzeria.id=person_visits.pizzeria_id
+        FULL JOIN person ON person.id=person_visits.person_id
+    WHERE 
+        person.name IS NOT NULL
+        OR person_visits.visit_date  IS NOT NULL
+        OR pizzeria.name IS NOT NULL
+    ORDER BY person_name,visit_date,pizzeria_name;
+    ```
 
 
 ### [Set operations](#terms)
@@ -556,6 +582,44 @@ SELECT * FROM person_id_seq;
 -- ------------+---------+-----------
 --          14 |       0 | f
 ```
+
+## Common Table Expression (CTE)
+
+* **A Common Table Expression (CTE)** in SQL is a temporary result set that you can reference within a **SELECT**, **INSERT**, **UPDATE**, or **DELETE** statement. *CTE*s make complex queries easier to read and maintain by breaking them down into simpler parts, especially when they need to be referenced multiple times within the same query.
+
+* Syntax:
+    ```SQL
+    WITH cte_name AS (
+        -- Query to define the CTE
+        SELECT column1, column2, ...
+        FROM table_name
+        WHERE condition
+    )
+    SELECT *
+    FROM cte_name
+    ```
+* Key Characteristics:
+    * Temporarily available: The *CTE* exists only during the execution of the query and is not stored in the database.
+    * Readable and reusable: *CTE*s can make queries more readable by logically breaking down subqueries and allow you to reference the *CTE* multiple times in the main query.
+    * Supports recursive queries: A *CTE* can be recursive, making it useful for hierarchical or tree-like structures (e.g., organizational charts, folder structures).
+
+* Example (returns the missing days from January 1 through January 10, 2022 (including all days) for visits by people with identifiers 1 or 2 (i.e., days missed by both), ordered by visit days in ascending mode):
+    ```SQL
+    WITH tmp_table AS (
+        SELECT DISTINCT visit_date FROM person_visits
+        WHERE  (person_visits.person_id=1 OR person_visits.person_id=2)
+    ),
+    calendar AS (
+        SELECT * FROM  generate_series('2022-01-01'::date, '2022-01-10'::date, '1 day'::interval) AS missing_date 
+    )
+    SELECT missing_date::DATE 
+    FROM calendar
+    LEFT JOIN tmp_table
+    ON missing_date=tmp_table.visit_date
+    WHERE tmp_table.visit_date IS NULL
+    ORDER BY missing_date;
+    ```
+
 
 ## Extensions
 
@@ -874,7 +938,6 @@ temp_db=# SELECT * FROM person WHERE id= 445;
 --  445 | Simonius   | Undethov  | Male   | 1990-08-27    | Sweden           | sdethloffc9@mm-monkey.ua.com | 
 ```
 
-
 ### Formated output
 ```SQL
 SELECT name || ' (age:'|| age||',gender:'||gender||',address:'||address||')' from person;
@@ -892,6 +955,36 @@ SELECT CASE
     END
 FROM person
 ```
+
+### Generate series
+```SQL
+SELECT missing_date::DATE
+FROM 
+    generate_series('2022-01-01'::date, '2022-01-10'::date, '1 day'::interval) AS missing_date
+LEFT JOIN 
+    ( SELECT DISTINCT visit_date FROM person_visits
+    WHERE  (person_visits.person_id=1 OR person_visits.person_id=2)) AS per_v
+ON missing_date=per_v.visit_date
+WHERE per_v.visit_date IS NULL
+ORDER BY missing_date;
+```
+
+### Greatest & Least
+* returns the names of people who live at the same address.
+```SQL
+SELECT DISTINCT 
+    LEAST(p_l_1.name,p_l_2.name)  AS person_name1, 
+    GREATEST (p_l_1.name,p_l_2.name)  AS person_name2, 
+    p_l_1.address AS common_address
+FROM 
+    person AS p_l_1,
+    person AS p_l_2 
+WHERE 
+    p_l_1.name<>p_l_2.name
+    AND p_l_1.address=p_l_2.address
+ORDER BY person_name1, person_name2;
+```
+
 
 
 
