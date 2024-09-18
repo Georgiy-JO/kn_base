@@ -83,6 +83,8 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 |[**Sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes|
 |[**Set operations**](#set-operations)|UNION,INTERSECT,EXCEPT|
 |[**CTE**](#CTE)|Common Table Expression|
+|["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows to insert data into a table by selecting values from another table or query result|
+|**DML (Data Manipulation Language)**|refers to SQL statements that are used to manage and manipulate data in a database: INSERT, UPDATE, DELETE, and SELECT.<br> These commands modify the data within the database without altering the structure of the tables.|
 
 ## Pre_Work
 
@@ -179,8 +181,9 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**CREATE DATABASE** <db_name>; |create DB |create|
 |**DROP DATABASE** <db_name>; |delete DB|delete|
 |**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|create table|create|
-|**DROP TABLE **<table_name>; |delete table|delete|
-|**INSERT INTO** <table_name> (<list_of_columns>) <br> VALUES (<list_of_values>);|insert records|change_table<br>data_change|
+|**DROP TABLE** <table_name>; |delete table|delete|
+|**INSERT INTO** <table_name> (<list_of_columns>) <br> **VALUES** (<list_of_values>);|insert records|change_table<br>data_change|
+|**INSERT INTO** <table_name> (<list_of_columns>) <br> **SELECT** <columns_made_with_select>;|[insert records](#insert-values-into-table)|change_table<br>data_change|
 |**SELECT * FROM** <table_name>|print the table (instead of "*" can be *name_of_columns* to return this columns)|output_data|
 |**DISTINCT**|goes after select to [remove](#unique-output) dublicates|output_data<br>filter|
 |**ORDER BY** <column_name>|goes after <table_name> to order the output|sort<br>output_data|
@@ -225,7 +228,9 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter|
 |[**FULL JOIN**](#full-join)|[full join](#terms)|output_data<br>table_connection<br>filter|
 |**generate_series(**start, stop, step **)**|[**generate_series**](#generate-series) is a set-returning function in PostgreSQL that generates a series of values based on a specified *start*(the starting value of the series), *stop*(the ending value of the series), and *step*(the increment value between each element in the series). (It can be used for creating a sequence of numbers, dates, or timestamps.)|gen_data|
-|**LEAST(**<list_of_values>/<list_of_columns>**)**<br>**GREATEST(**<list_of_values>/<list_of_columns>**)**|[Return](#greatest--least) smallest (inc. alphabetically first) or biggest values|gen_data|
+|**LEAST(**<list_of_values>/<list_of_columns>**)**<br>**GREATEST(**<list_of_values>/<list_of_columns>**)**|[Return](#greatest--least) smallest (inc. alphabetically first) or biggest values|output_data<br>filter<br>data_analyses|
+|**MAX(**<column_name>**)**|return the biggest value from the column (similar [works](#use-of-functions) with **MIN(**...**)**)|output_data<br>filter<br>data_analyses|
+|**FLOOR(**<value>**)**|floor function|gen_data<br>data_change|
 
 ## Constraints
 ### [Primary key](#terms)
@@ -683,6 +688,23 @@ INSERT INTO person (first_name, last_name, age, gender, date_of_birth)
 VALUES ('Johnny', 'Cash', 30, 'Male', DATE '1990-1-29');
 ```
 - for **DATE** it's better to specify type (YYYY-MM-DD is used).
+
+```SQL
+--example insert-select  --register new orders of all persons for "greek pizza" on February 25, 2022.
+INSERT INTO person_order(
+    id,
+    person_id,
+    menu_id,
+    order_date
+)
+SELECT 
+    generate_series((SELECT MAX(id) FROM person_order)+1,(SELECT MAX(id) FROM person_order)+ (SELECT MAX(id) FROM person),1),
+    generate_series((SELECT  MIN(id)FROM person), (SELECT MAX(id) FROM person)),
+    (SELECT id FROM menu WHERE pizza_name='greek pizza'),
+    DATE '2022-02-25';
+```
+- The columns in the **INSERT INTO** part must match the number of columns in the **SELECT** part.
+
 
 ### Sorted output
 ```SQL
