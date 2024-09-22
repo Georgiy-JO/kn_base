@@ -29,7 +29,10 @@
         10.3.3. [EXCEPT](#except)
 11. [Sequence](#sequence)
 12. [Common Table Expression (CTE)](#common-table-expression-cte)
-13. [Extensions](#extensions)
+13. [Recursive queries](#recursive-queries)
+14. [View](#view)
+15. [Index](#index)
+14. [Extensions](#extensions)
 14. [Examples](#examples) \
     14.1. [Create table](#create-table-no-constrains)\
     14.2. [Create table](#create-table-with-constrains)\
@@ -82,9 +85,13 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 |[**FULL JOIN**](#full-join) <br>(or **FULL OUTER JOIN**)|is used to combine rows from two tables, returning all rows from both tables, regardless of whether there is a match between them. If a row from one table doesn't have a match in the other table, the result will include that row with NULL values for the columns from the other table.|
 |[**Sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes|
 |[**Set operations**](#set-operations)|UNION,INTERSECT,EXCEPT|
-|[**CTE**](#CTE)|Common Table Expression|
+|[**CTE**](#common-table-expression-cte)|Common Table Expression|
 |["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows to insert data into a table by selecting values from another table or query result|
 |**DML (Data Manipulation Language)**|refers to SQL statements that are used to manage and manipulate data in a database: INSERT, UPDATE, DELETE, and SELECT.<br> These commands modify the data within the database without altering the structure of the tables.|
+|[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data itselfe, instead, it presents data derived from one or more tables.|
+|[**MATHERIALIZED VIEW**](#materialized-view)|a database object that stores the result of a query **physically on disk**, rather than just being a virtual table like a regular view (can significantly improve query performance, especially for complex queries or large datasets due to it's saved nature).|
+|[**INDEX**](#index)|a database object used to speed up the retrieval of rows by creating an additional data structure, improves the performance of **SELECT** queries by allowing the database to quickly locate the rows without having to scan the entire table.|
+
 
 ## Pre_Work
 
@@ -176,61 +183,76 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 * For data analyses can be used [aggregate functions](https://www.postgresql.org/docs/16/functions-aggregate.html) (*COUNT*, [etc](#use-of-functions)).
 * Calculation examples:[📙](#simple-calculations)[📘](#table-calculations).
 
+|Tag list|||||
+|---|---|---|---|---|
+|**command**;<br> **function**;|create;<br> delete; <br>change_table (structure_change); <br>data_change;|output_data;<br> filter (search); <br>sort; <br>limit; <br>data_analyses; |gen_data; <br>error; <br>table_connection|get_info|
+
+
 |Command| Explanation |Tag|
 |---|---|---|
-|**CREATE DATABASE** <db_name>; |create DB |create|
-|**DROP DATABASE** <db_name>; |delete DB|delete|
-|**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|create table|create|
-|**DROP TABLE** <table_name>; |delete table|delete|
-|**INSERT INTO** <table_name> (<list_of_columns>) <br> **VALUES** (<list_of_values>);|insert records|change_table<br>data_change|
-|**INSERT INTO** <table_name> (<list_of_columns>) <br> **SELECT** <columns_made_with_select>;|[insert records](#insert-values-into-table)|change_table<br>data_change|
-|**SELECT * FROM** <table_name>|print the table (instead of "*" can be *name_of_columns* to return this columns)|output_data|
-|**DISTINCT**|goes after select to [remove](#unique-output) dublicates|output_data<br>filter|
-|**ORDER BY** <column_name>|goes after <table_name> to order the output|sort<br>output_data|
-|SELECT * FROM <table_name> **WHERE** <column_name>='<data_example>' **AND/OR** <other_condition>|[selective output](#selective-output) be like (constructions may be more complex and use "()")|select<br>output_data|
-|SELECT * FROM <table_name> WHERE <column_name> **IN** **(**<data_example_1>, <data_example_2>, ..**)**|[selective output](#selective-output) with several values ​​of interest (can be inverted with **NOT**)|select<br>output_data|
-|SELECT * FROM <table_name> WHERE <column_name> **EXISTS** **(**  **)**| [**EXISTS**](#selective-output)  keyword in *SQL* is a logical operator used in **WHERE** clauses to check the existence of rows returned by a subquery(!!). It returns *TRUE* if the subquery finds at least one row and *FALSE* if no rows are found(can be inverted with **NOT**)|select<br>output_data|
-|SELECT * FROM <table_name> WHERE <column_name> **BETWEEN** <data_example_begining> **AND** <data_example_END>|[selective output](#selective-output) with the range of values ​​of interest|select<br>output_data|
-|SELECT * FROM <table_name> WHERE <column_name> **LIKE** '<data_pattern>'|[selective output](#selective-output) based on similar pattern in the values of interest|select<br>output_data|
-|**ILIKE** '<data_pattern>'|similar to **LIKE** but is not case sensitive |select<br>output_data|
-|**LIMIT** \<number>|put at the end of the command to limit the number of rows in output|limit<br>output_data|
-|**OFFSET** \<number> |put at the end of the command *but* before **LIMIT** to exclude first <number> rows from output |limit<br>output_data|
-|**FETCH FIRST** \<number> **ROW ONLY**;| same as **LIMIT**|limit<br>output_data|
-|**GROUP BY** <column_name>|[used](#summarizing-result) after the *<table_name>* to group/summarize identical data from the column |output_data<br>filter|
-|**COUNT(**\<argument(<column_name>/*/etc)>**)**|function (will appear as a column) [used](#summarizing-result) to summerize unique data from <argument> based on **GROUP BY** column data|output_data<br>data_analyses|
-|GROUP BY <column_name>**HAVING** <rule>|must be [used](#summarizing-result) with **GROUP BY** and take place right after it, can specify (filter) the output |output_data<br>filter|
-|<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data|
-|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handeling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses|
-|**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handeling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses|
-|**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|gen_data|
+|**CREATE DATABASE** <db_name>; |create DB |create<br>structure_change<br>command|
+|**DROP DATABASE** <db_name>; |delete DB|delete<br>structure_change<br>command|
+|**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|create table|create<br>structure_change<br>command|
+|**DROP TABLE** <table_name>; |delete table|delete<br>structure_change<br>command|
+|**INSERT INTO** <table_name> (<list_of_columns>) <br> **VALUES** (<list_of_values>);|insert records|data_change<br>command|
+|**INSERT INTO** <table_name> (<list_of_columns>) <br> **SELECT** <columns_made_with_select>;|[insert records](#insert-values-into-table)|data_change<br>command|
+|**SELECT * FROM** <table_name>|print the table (instead of "*" can be *name_of_columns* to return this columns)|output_data<br>command|
+|**DISTINCT**|goes after select to [remove](#unique-output) dublicates|output_data<br>filter<br>command|
+|**ORDER BY** <column_name>|goes after <table_name> to order the output|sort<br>output_data<br>command|
+|SELECT * FROM <table_name> **WHERE** <column_name>='<data_example>' **AND/OR** <other_condition>|[selective output](#selective-output) be like (constructions may be more complex and use "()")|filter<br>output_data<br>command|
+|SELECT * FROM <table_name> WHERE <column_name> **IN** **(**<data_example_1>, <data_example_2>, ..**)**|[selective output](#selective-output) with several values ​​of interest (can be inverted with **NOT**)|filter<br>output_data<br>command|
+|SELECT * FROM <table_name> WHERE <column_name> **EXISTS** **(**  **)**| [**EXISTS**](#selective-output)  keyword in *SQL* is a logical operator used in **WHERE** clauses to check the existence of rows returned by a subquery(!!). It returns *TRUE* if the subquery finds at least one row and *FALSE* if no rows are found(can be inverted with **NOT**)|filter<br>output_data<br>command|
+|SELECT * FROM <table_name> WHERE <column_name> **BETWEEN** <data_example_begining> **AND** <data_example_END>|[selective output](#selective-output) with the range of values ​​of interest|filter<br>output_data<br>command|
+|SELECT * FROM <table_name> WHERE <column_name> **LIKE** '<data_pattern>'|[selective output](#selective-output) based on similar pattern in the values of interest|filter<br>output_data<br>command|
+|**ILIKE** '<data_pattern>'|similar to **LIKE** but is not case sensitive |filter<br>output_data<br>command|
+|**LIMIT** \<number>|put at the end of the command to limit the number of rows in output|limit<br>output_data<br>command|
+|**OFFSET** \<number> |put at the end of the command *but* before **LIMIT** to exclude first <number> rows from output |limit<br>output_data<br>command|
+|**FETCH FIRST** \<number> **ROW ONLY**;| same as **LIMIT**|limit<br>output_data<br>command|
+|**GROUP BY** <column_name>|[used](#summarizing-result) after the *<table_name>* to group/summarize identical data from the column |output_data<br>filter<br>data_analyses<br>command|
+|**COUNT(**\<argument(<column_name>/*/etc)>**)**|function (will appear as a column) [used](#summarizing-result) to summerize unique data from <argument> based on **GROUP BY** column data|output_data<br>data_analyses<br>function|
+|GROUP BY <column_name>**HAVING** <rule>|must be [used](#summarizing-result) with **GROUP BY** and take place right after it, can specify (filter) the output |output_data<br>filter<br>command|
+|<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data<br>command|
+|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handeling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses<br>function|
+|**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handeling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses<br>function|
+|**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|gen_data<br>function|
 |NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calclations|gen_data<br>data_analyses|
-|**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses|
-|**AGE(**<time_to>,<time_from>**)**|[calculate](#timestamp) the age (aka. time difference)|data_analyses|
-|**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on it's parameters (aka. *<rule>*)|change_table<br>data_change|
-|**ALTER** TABLE <table_name> <the_change>|used to modify the structure of an existing table or view.|change_table<br>structure_change|
-|ALTER TABLE <table_name> **ADD** <adding_changes>|command used to [add structure changes](#structure-changes) to the table|change_table<br>structure_change|
-|ALTER TABLE <table_name> ADD **CONSTRAINT** <constraint_name> <constraint_itself>|command used to add a [new constraint](#unique-constraint)  to the table|change_table<br>structure_change|
-|**UPDATE** <table_name> **SET** <column_name>='<new_data>' WHERE <rule>|[updating](#data-changes) rows selected by the *<rule>* with the *<new_data>* to the *<column_name>*|change_table<br>data_change|
-|**ON CONFLICT** <column_name>/<other_conflict_case> **DO** <command_to_perform_in_case_of_conflict>|handeling [conflict](#conflict-handeler) situations, can be used only with *<column_name>* that is either a *primal key* or a *unique constraint* |change_table<br>error|
-|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow to handle [conflict](#conflict-handeler) with doing nothing|change_table<br>error|
-|ON CONFLICT <column_name>/<other_conflict_case> DO UPDATE set <column_name_to_replace>=**EXCLUDED.**<column_name_new_info>|in case of a [conflict](#conflict-handeler) replace existing info with new one for given columns otherwise add a new row|change_table<br>error|
-|<column_name> <data_type> **REFERENCES** <other_table_name>(<column_of_the_table>)|parameter of the colunm to [create](#foreign-key-relationship) [connected](#terms) to another table column|create<br>table_connection|
-|SELECT <columns_names> FROM <table_1_name> **JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#join) the [connected](#terms) data from tables (**!**will output only rows that have data in both/all tables)|output_data<br>table_connection<br>filter|
-|SELECT <columns_names> FROM <table_1_name> **LEFT JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#left-join) the [connected](#terms) data from tables (**!**will output rows that have data in both/all tables and other rows from the first table)|output_data<br>table_connection<br>filter|
-|**CASCADE**| added to the end after deletion allow to delete ad the dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change|
+|**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses<br>function|
+|**AGE(**<time_to>,<time_from>**)**|[calculate](#timestamp) the age (aka. time difference)|data_analyses<br>function|
+|**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on it's parameters (aka. *<rule>*)|data_change<br>command|
+|**ALTER** TABLE <table_name> <the_change>|used to modify the structure of an existing table or view.|change_table<br>structure_change<br>command|
+|ALTER TABLE <table_name> **ADD** <adding_changes>|command used to [add structure changes](#structure-changes) to the table|change_table<br>structure_change<br>command|
+|ALTER TABLE <table_name> ADD **CONSTRAINT** <constraint_name> <constraint_itself>|command used to add a [new constraint](#unique-constraint)  to the table|change_table<br>structure_change<br>command|
+|**UPDATE** <table_name> **SET** <column_name>='<new_data>' WHERE <rule>|[updating](#data-changes) rows selected by the *<rule>* with the *<new_data>* to the *<column_name>*|data_change<br>command|
+|**ON CONFLICT** <column_name>/<other_conflict_case> **DO** <command_to_perform_in_case_of_conflict>|handeling [conflict](#conflict-handeler) situations, can be used only with *<column_name>* that is either a *primal key* or a *unique constraint* |data_change<br>error<br>command|
+|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow to handle [conflict](#conflict-handeler) with doing nothing|data_change<br>error<br>command|
+|ON CONFLICT <column_name>/<other_conflict_case> DO UPDATE set <column_name_to_replace>=**EXCLUDED.**<column_name_new_info>|in case of a [conflict](#conflict-handeler) replace existing info with new one for given columns otherwise add a new row|data_change<br>error<br>command|
+|<column_name> <data_type> **REFERENCES** <other_table_name>(<column_of_the_table>)|parameter of the colunm to [create](#foreign-key-relationship) [connected](#terms) to another table column|create<br>table_connection<br>command|
+|SELECT <columns_names> FROM <table_1_name> **JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#join) the [connected](#terms) data from tables (**!**will output only rows that have data in both/all tables)|output_data<br>table_connection<br>filter<br>command|
+|SELECT <columns_names> FROM <table_1_name> **LEFT JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#left-join) the [connected](#terms) data from tables (**!**will output rows that have data in both/all tables and other rows from the first table)|output_data<br>table_connection<br>filter<br>command|
+|**CASCADE**| added to the end after deletion allow to delete ad the dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change<br>command|
 |**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>gen_data|
-|SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter|
-|<column_name> **default** <default_data>| add default data to the table's column settings|change_table<br>data_change|
-|**EXCEPT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
-|**INTERSECT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
-|**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter|
-|[**CROSS JOIN**](#cross-join)|[cross join](#terms)|output_data<br>table_connection<br>filter|
-|[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter|
-|[**FULL JOIN**](#full-join)|[full join](#terms)|output_data<br>table_connection<br>filter|
-|**generate_series(**start, stop, step **)**|[**generate_series**](#generate-series) is a set-returning function in PostgreSQL that generates a series of values based on a specified *start*(the starting value of the series), *stop*(the ending value of the series), and *step*(the increment value between each element in the series). (It can be used for creating a sequence of numbers, dates, or timestamps.)|gen_data|
-|**LEAST(**<list_of_values>/<list_of_columns>**)**<br>**GREATEST(**<list_of_values>/<list_of_columns>**)**|[Return](#greatest--least) smallest (inc. alphabetically first) or biggest values|output_data<br>filter<br>data_analyses|
-|**MAX(**<column_name>**)**|return the biggest value from the column (similar [works](#use-of-functions) with **MIN(**...**)**)|output_data<br>filter<br>data_analyses|
-|**FLOOR(**<value>**)**|floor function|gen_data<br>data_change|
+|SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter<br>function|
+|<column_name> **default** <default_data>| add default data to the table's column settings|change_table<br>data_change<br>command|
+|**EXCEPT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
+|**INTERSECT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
+|**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
+|[**CROSS JOIN**](#cross-join)|[cross join](#terms)|output_data<br>table_connection<br>filter<br>command|
+|[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter<br>command|
+|[**FULL JOIN**](#full-join)|[full join](#terms)|output_data<br>table_connection<br>filter<br>command|
+|**generate_series(**start, stop, step **)**|[**generate_series**](#generate-series) is a set-returning function in PostgreSQL that generates a series of values based on a specified *start*(the starting value of the series), *stop*(the ending value of the series), and *step*(the increment value between each element in the series). (It can be used for creating a sequence of numbers, dates, or timestamps.)|gen_data<br>function|
+|**LEAST(**<list_of_values>/<list_of_columns>**)**<br>**GREATEST(**<list_of_values>/<list_of_columns>**)**|[Return](#greatest--least) smallest (inc. alphabetically first) or biggest values|output_data<br>filter<br>data_analyses<br>function|
+|**MAX(**<column_name>**)**|return the biggest value from the column (similar [works](#use-of-functions) with **MIN(**...**)**)|output_data<br>filter<br>data_analyses<br>function|
+|**FLOOR(**\<value>**)**|floor function|gen_data<br>data_change<br>function|
+|**CREATE VIEW** <view_name> <selection><br>**REPLACE VIEW**<view_name> <selection><br>**DROP VIEW**<view_name> |used to [create / update / delete](#view) a [**view**](#theory)|create<br>filter<br>output_data<br>delete<br>command|
+|CREATE **MATERIALIZED** VIEW <view_name> <selection><br>REPLACE **MATERIALIZED** VIEW<view_name> <selection><br>DROP **MATERIALIZED** VIEW <view_name> **REFRESH MATERIALIZED** VIEW <view_name>|used to [create / update / delete / refresh](#view) a **materialized** [**view**](#theory)|create<br>filter<br>output_data<br>delete<br>structure_change<br>command|
+|**ROUND(**\<data>**)**|round the data ad bring it to INTEGER|data_change<br>output_data<br>gen_data<br>function|
+|ORDER BY **RANDOM()**|In PostgreSQL, you can use the **RANDOM()** function to order the rows randomly.|output_data<br>sort<br>function|
+|WITH **RECURSIVE** <recursion_CTE_name> AS (<CTE>) |to [use](#recursive-queries) recursive [Common Table Expression](#common-table-expression-cte) |output_data<br>data_analyses<br>gen_data<br>command|
+|**CREATE INDEX** <index_name> **ON** <table_name> (<column_name>) <br> **DROP INDEX** <index_name> |to [create / delete](#index) an index|create<br>filter<br>output_data<br>delete<br>command|
+|**CREATE UNIQUE INDEX** <index_name> **ON** <table_name> (<column_name>) <br> **DROP UNIQUE INDEX** <index_name> |to [create / delete](#unique-index) an ***unique*** index|create<br>filter<br>output_data<br>delete<br>command|
+|**CREATE UNIQUE INDEX** <index_name> **ON** <table_name> (<column_name>) **WHERE** <condition_for_unique_rows>|to [create](#partial-unique-index) an ***partially unique*** index|create<br>filter<br>output_data<br>delete<br>command|
+|**EXPLAIN ANALYZE**<any_command>| put before any command to return the command execution info (including time it takes)|get_info<br>command|
+|**UPPER(**<column/data>**)**|change all leters from the column/data into upper case|output_data<br>data_change<br>function|
 
 ## Constraints
 ### [Primary key](#terms)
@@ -626,6 +648,225 @@ SELECT * FROM person_id_seq;
     ```
 
 
+## Recursive queries 
+
+* allow to build trees
+* allow to do recursion
+
+#### Syntax
+```SQL
+WITH RECURSIVE <CTE_name> AS (
+    SELECT 
+        <begining_values_of_recursion>
+
+    UNION
+
+    SELECT 
+        <recursive_part>
+    FROM <CTE_name / table_name>
+    WHERE <rule_for_exit_recursion>
+)
+SELECT * FROM <CTE_name>;
+```
+
+#### Examples
+* Factorial with recurtion
+    ```SQL
+    WITH RECURSIVE r AS (
+        -- begining values of recursion
+        SELECT 
+            1 AS i, 
+            1 AS factorial
+        UNION
+        -- recursive part 
+        SELECT 
+            i+1 AS i, 
+            factorial * (i+1) as factorial 
+        FROM r
+        WHERE i < 10
+    )
+    SELECT * FROM r;
+    ```
+* Calculate the roads between 4 cities to visit all of them starting from 'a' and finishing in 'a' (DATA: *abcd_tsp(point1,point2,cost)*);
+    ```SQL
+    CREATE VIEW a_to_a_city_list AS
+    WITH RECURSIVE rec_city_list AS (
+        SELECT 
+            'a'::VARCHAR AS cur_city,
+            0::BIGINT AS road_cost, 
+            ARRAY['a']::VARCHAR[] AS visited,
+            ARRAY['a']::VARCHAR[] AS unique_visit
+        UNION ALL
+        SELECT 
+            abcd_tsp.point2 AS cur_city, 
+            rec_city_list.road_cost + abcd_tsp.cost AS road_cost, 
+            ARRAY_APPEND(rec_city_list.visited, abcd_tsp.point2) AS visited,
+            CASE 
+                WHEN abcd_tsp.point2=ANY(rec_city_list.unique_visit)
+                    THEN rec_city_list.unique_visit
+                    ELSE ARRAY_APPEND(rec_city_list.unique_visit, abcd_tsp.point2)
+            END AS unique_visit
+        FROM rec_city_list
+        JOIN abcd_tsp ON rec_city_list.cur_city = abcd_tsp.point1
+        WHERE array_length(unique_visit, 1) < 4
+            AND array_length(visited, 1) < 6
+    )
+    SELECT road_cost+abcd_tsp.cost AS total_cost, ARRAY_APPEND(visited,'a'::VARCHAR ) AS tour
+    FROM rec_city_list
+        JOIN abcd_tsp ON rec_city_list.cur_city = abcd_tsp.point1
+                    AND abcd_tsp.point2='a'
+    WHERE array_length(unique_visit, 1) = 4
+    ORDER BY road_cost;
+    ```
+
+
+## View
+### [View (usual)](#theory)
+
+#### [Syntax](#sql-commands-and-functions-list):
+```sql
+--creation
+CREATE VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE conditions;
+```
+
+#### Key Features of a View:
+
+1. **Virtual table**: A view behaves like a table, but it doesn't store data directly. Instead, it dynamically retrieves data from the underlying tables whenever the view is queried.
+2. **Simplification**: It can simplify complex queries by abstracting the logic and making it easier for users to access specific data without writing complex SQL each time.
+3. **Security**: Views can limit the visibility of certain columns or rows in a table, acting as a security layer by allowing users to query only specific data.
+4. **Reusability**: Once created, a view can be reused like a table in `SELECT` statements, joins, and even updates (with certain limitations).
+5. **No direct data storage**: A view doesn't store data; it retrieves the latest data from the underlying tables.
+6. **Updatable views**: Not all views are updatable, especially if they involve complex joins, aggregate functions, or other advanced SQL features.
+
+#### Example
+* Let’s say you have a table `employees`, and you often query for employees who are in the "Marketing" department. Instead of writing the same query repeatedly, you can create a view:
+    ```sql
+    CREATE VIEW marketing_employees AS
+    SELECT employee_id, name, department
+    FROM employees
+    WHERE department = 'Marketing';
+    -- from now on
+    SELECT * FROM marketing_employees;
+
+    --or
+
+    CREATE VIEW v_persons_female AS
+    SELECT * FROM person
+    WHERE gender = 'female';
+    ```
+
+### [Materialized view](#theory)
+#### [Syntax](#sql-commands-and-functions-list):
+```sql
+--creation
+CREATE MATERIALIZED VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE conditions;
+```
+#### Key Features of Materialized Views:
+
+1. **Stored Data**: Unlike a regular view, which dynamically fetches data from underlying tables whenever queried, a materialized view stores the result of the query on disk. This means subsequent queries on the materialized view are faster, as they don’t have to recompute the result each time.
+2. **Periodic Refresh**: Since the data in the materialized view is stored, it can become outdated if the underlying tables are modified. To keep the materialized view up-to-date, it can be refreshed either manually or automatically at defined intervals.
+3. **Performance Boost**: Materialized views are particularly useful in scenarios where complex queries (e.g., aggregations, joins, and filtering) are frequently run, but the underlying data changes infrequently. Instead of recalculating the result every time, the stored result can be quickly retrieved.
+4. **Staleness**: Since the view is based on stored data, it can become outdated if the underlying tables change. You need to manage refreshing the view to keep it current.
+5. **Storage Overhead**: Materialized views take up physical storage space, unlike regular views that are virtual.
+
+#### Example:
+
+* You have a table `sales` with millions of rows. You want to frequently query the total sales for each product, which is computationally expensive.
+    ```sql
+    -- creation
+    CREATE MATERIALIZED VIEW product_sales_summary AS
+    SELECT product_id, SUM(amount) AS total_sales
+    FROM sales
+    GROUP BY product_id;
+
+    -- output it
+    SELECT * FROM product_sales_summary;
+    ```
+#### Refreshing a Materialized View:
+* The data in a materialized view can become stale if the underlying tables change. You can refresh the view manually or automatically.
+1. **Manual refresh**:
+    ```sql
+    REFRESH MATERIALIZED VIEW product_sales_summary;
+    ```
+2.  **Automatic Refresh** (Supported in some databases like Oracle or Postgres with certain configurations):
+    - You can schedule automatic refreshes at regular intervals, or configure the materialized view to refresh on-demand.
+
+
+## [Index](#theory)
+
+* Index ~ content of a book.
+* Indexes are used to make data retrieval faster. They do this by allowing the database to find data without scanning the entire table (it uses binary search).
+* [Syntax:](#sql-commands-and-functions-list)
+    ```SQL
+    CREATE INDEX <index_name_(ind_...)>
+    ON <table_name> (<column_name>);
+
+    DROP INDEX <index_name>;
+
+    CREATE CLUSTERED INDEX <index_name>
+    ON <table_name> (<column_name>);
+
+    CREATE BITMAP INDEX <index_name>
+    ON <table_name> (<column_name>);
+    ```
+* index types: 
+    * b-tree index aka. balanced tree -default one; 
+        ![b-tree index](DICM/th_4.png?raw=true "b-tree index for alphabetic based column")
+    * function-based indndex - index structure is based on some function, not just a table;
+    * clustered index - data in table sorted tha same way as the index;
+    * bitmap index - index structure is a 2D table;
+        ![bitmap index](DICM/th_5.png?raw=true "bitmap index for employee with 'at work status'")
+    * etc...
+* SQL can use indexes ***automaticaly*** in search if there are any or you can force SQL to use indexes by blocking the usual search: ```SET enable_seqscan = OFF;```.
+* **INDEX** speed up *search*, but slow down *INSERT*, *DELETE*, *UPDATE*.
+    ![don't use when](DICM/th_6.png?raw=true "don't use when")
+* Index can be created for several columns.
+* **Claster index** is created automaticaly if there is a primary key (others **handmade indexes** are unclustered).
+* Indexes are most useful on columns that are frequently used in **WHERE** clauses, **JOIN** conditions, and **ORDER BY** clauses.
+    |![th_7](DICM/th_7.png)|![th_8](DICM/th_8.png)|
+    |---|---|
+
+#### Example 
+```SQL
+--function-based indndex
+CREATE INDEX idx_emp_mounth_selary
+ON employees (salary/12);
+```
+
+### Unique Index
+* A unique index ensures that all the values in the indexed column(s) are unique, 
+meaning no two rows can have the same value (or combination of values) in the indexed columns.
+* If you try to insert a duplicate value into a column (or combination of columns) that has a unique index, 
+the database will throw a constraint violation error.
+* Unique indexes are often used in conjunction with constraints like PRIMARY KEY or UNIQUE constraints.
+
+#### Example 
+```SQL
+CREATE UNIQUE INDEX idx_menu_unique
+ON menu (pizzeria_id, pizza_name);
+```
+
+### Partial unique index
+
+* A **partial unique index** in SQL is an index that applies to only a subset of rows in a table, based on a condition specified in the **WHERE** clause. This can be useful to enforce uniqueness on certain rows but allow duplicates in others.
+
+#### Example
+* Users table where only active users (status = 'active') should have unique email addresses, but inactive users can have duplicate emails:
+    ```SQL
+    Copy code
+    CREATE UNIQUE INDEX idx_users_active_email_unique ON users (email)
+    WHERE status = 'active';
+    In this case:
+    ```
+    * The email column will be unique only for rows where status = 'active'. Inactive users can have duplicate email addresses.
+
+
 ## Extensions
 
 * PostgreSQL is designed to be easily extensible. For this reason, extensions loaded into the database can function just like features that are built in.
@@ -751,6 +992,25 @@ SELECT name FROM pizzeria
 WHERE NOT EXISTS 
     (SELECT * FROM person_visits, pizzeria  
     WHERE pizzeria.id = person_visits.pizzeria_id);
+-- example 4.3 -- Getting all tours with minimum travel cost between 4 "cities": abcd_tsp(point1,point2,cost) city_list(city) 
+CREATE VIEW five_r_list AS
+WITH full_l_5 AS (
+SELECT (r1.cost+r2.cost+r3.cost+r4.cost) AS road_cost, 
+    ('{'||r1.point1||','||r2.point1||','||r3.point1||','||r4.point1||','||r4.point2||'}') AS the_way
+FROM abcd_tsp AS r1,
+    abcd_tsp AS r2,
+    abcd_tsp AS r3,
+    abcd_tsp AS r4
+WHERE r1.point1='a'
+    AND r1.point2=r2.point1
+    AND r2.point2=r3.point1
+    AND r3.point2=r4.point1
+    AND r4.point2=r1.point1
+ORDER BY the_way)
+SELECT road_cost, the_way FROM full_l_5
+JOIN city_list ON full_l_5.the_way LIKE '%'||city_list.city ||'%'
+GROUP BY road_cost, the_way HAVING COUNT(*)>=4
+ORDER BY the_way;
 ```
 ### Summarizing result
 ```SQL
@@ -1023,5 +1283,6 @@ ORDER BY person_name1, person_name2;
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/);
 - [Data generator](https://mockaroo.com/) [🖼️](/DICM/sh_1.png);
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
+- [SQL index video artical](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
 - [PostgreSQL Tutorial](https://www.tutorialspoint.com/postgresql/index.htm) - not checked;
 - [One more guide](https://docs.fedoraproject.org/en-US/quick-docs/postgresql/) - not checked;
