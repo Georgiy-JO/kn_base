@@ -1,4 +1,4 @@
-# PostgreSQL 101
+# PostgreSQL 101 (psql ver.)
 
 ### Contents:
 
@@ -32,30 +32,30 @@
 13. [Recursive queries](#recursive-queries)
 14. [View](#view)
 15. [Index](#index)
-14. [Extensions](#extensions)
-14. [Examples](#examples) \
-    14.1. [Create table](#create-table-no-constrains)\
-    14.2. [Create table](#create-table-with-constrains)\
-    14.3. [Insert values into table](#insert-values-into-table)\
-    14.4. [Sorted output](#sorted-output) \
-    14.5. [Unique output](#unique-output) \
-    14.6. [Selective output](#selective-output) \
-    14.7. [Summarizing result](#summarizing-result) \
-    14.8. [Use of functions](#use-of-functions) \
-    14.9. [Simple calculations](#simple-calculations) \
-    14.10. [Table calculations](#table-calculations) \
-    14.11. [Null handeling](#null-handeling) \
-    14.12. [Timestampg](#timestamp) \
-    14.13. [Structure changes](#structure-changes) \
-    14.14. [Data changes](#data-changes) \
-    14.15. [Conflict handeler](#conflict-handeler) \
-    14.16. [Formated output](#formated-output)\
-    14.17. [Case(if-else)](#if----else-aka-case) \
-    14.18. [Generate series](#generate-series) \
-    14.19. [Greatest && Least](#greatest--least) 
-15. [Export data](#export-data) \
-    15.1. [CSV](#csv)
-16. [Links](#links)
+17. [Extensions](#extensions)
+18. [Examples](#examples) \
+    18.1. [Create table](#create-table-no-constrains)\
+    18.2. [Create table](#create-table-with-constrains)\
+    18.3. [Insert values into table](#insert-values-into-table)\
+    18.4. [Sorted output](#sorted-output) \
+    18.5. [Unique output](#unique-output) \
+    18.6. [Selective output](#selective-output) \
+    18.7. [Summarizing result](#summarizing-result) \
+    18.8. [Use of functions](#use-of-functions) \
+    18.9. [Simple calculations](#simple-calculations) \
+    18.10. [Table calculations](#table-calculations) \
+    18.11. [Null handeling](#null-handeling) \
+    18.12. [Timestampg](#timestamp) \
+    18.13. [Structure changes](#structure-changes) \
+    18.14. [Data changes](#data-changes) \
+    18.15. [Conflict handeler](#conflict-handeler) \
+    18.16. [Formated output](#formated-output)\
+    18.17. [Case(if-else)](#if----else-aka-case) \
+    18.18. [Generate series](#generate-series) \
+    18.19. [Greatest && Least](#greatest--least) 
+19. [Export data](#export-data) \
+    19.1. [CSV](#csv)
+20. [Links](#links)
 
 ## File description
 
@@ -73,25 +73,31 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 ### Terms
 |Term|Def|
 |---|---|
-|**BIGSERIAL** |spesial data type that is *BIGINT* and has auto incrimination function|
-|[**primary key**](#primary-key)| Value that uniquely identify a record in the table (unique for any and all rows, not NULL)|
-|[**UNIQUE** constraint](#unique-constraint)|Value that must bw unique for every row, but can be NULL. the constraint would not allow to add a new row with the similar to some other data in the constraint column|
-|[**CHECK** constraint](#check-constraint)|Allow to list values the particular column can have or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule|
-|[**foreign key**](#foreign-key-relationship)|Unique value that reference *primary key* from another table (!!types of foreign key column and primary key from another table column must be same!!) |
-|[**join**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data|
-|[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output  that data and all other data from the first table|
+|**(SQL) Structured Query Language**|the database language by which we can perform certain operations on the existing database, and we can also use this language to create a database.|
+|**DDL (Data Definition Language)**|consists of the SQL commands that can be used to define the database schema, deals with descriptions of the database schema and is used to create and modify the structure of database objects in the database (**CREATE**, **DROP**, **ALTER**, **TRUNCATE**, **COMMENT**, **RENAME**).|
+|**DML (Data Manipulation Language)**|refers to SQL statements that are used to manage and manipulate data in a database: **INSERT**, **UPDATE**, **DELETE**, **LOCK**, **CALL**, **EXPLAIN PLAN**.<br> These commands modify the data within the database without altering the structure of the tables.|
+|**DQL (Data Query Language)**|performs queries on the data within schema objectsts to get some schema relation based on the query passed to it, allows getting data from the database and imposing order upon it (**SELECT**).|
+|**DCL (Data Control Language)**|includes commands such as **GRANT** and **REVOKE** which mainly deal with the rights, permissions, and other controls of the database system. |
+|**TCL (Transaction Control Language)**|transactions group a set of tasks into a single execution unit, each transaction begins with a specific task and ends when all the tasks in the group are successfully completed, if any of the tasks fail, the transaction fails (**BEGIN TRANSACTION**, **COMMIT**, **ROLLBACK**, **SAVEPOINT**).|
+|[**Set operations**](#set-operations)|**UNION**, **INTERSECT**, **EXCEPT**.|
+|[**CTE**](#common-table-expression-cte)|Common Table Expression (**WITH** ... **AS (**...**)**).|
+|**BIGSERIAL** |spesial data type that is *BIGINT* and has auto incrimination function.|
+|[**primary key**](#primary-key)| Value that uniquely identify a record in the table (unique for any and all rows, not NULL).|
+|[**UNIQUE** constraint](#unique-constraint)|Value that must bw unique for every row, but can be NULL. the constraint would not allow to add a new row with the similar to some other data in the constraint column.|
+|[**CHECK** constraint](#check-constraint)|Allow to list values the particular column can have or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule.|
+|[**foreign key**](#foreign-key-relationship)|Unique value that reference *primary key* from another table (!!types of foreign key column and primary key from another table column must be same!!).|
+|[**join**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data.|
+|[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output  that data and all other data from the first table.|
 |[**cross join**](#cross-join)|*CROSS JOIN* allow to output all possible combinations of two tables in SQL.|
 |[**NATURAL JOIN**](#natural-join)|A *NATURAL JOIN* in *SQL* is a type of join that automatically combines two tables based on columns with the same names and compatible data types. It simplifies the process by eliminating the need to explicitly specify the join condition. However, it can be risky because it relies entirely on column names, which may unintentionally match columns you don’t want to join.|
 |[**FULL JOIN**](#full-join) <br>(or **FULL OUTER JOIN**)|is used to combine rows from two tables, returning all rows from both tables, regardless of whether there is a match between them. If a row from one table doesn't have a match in the other table, the result will include that row with NULL values for the columns from the other table.|
-|[**Sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes|
-|[**Set operations**](#set-operations)|UNION,INTERSECT,EXCEPT|
-|[**CTE**](#common-table-expression-cte)|Common Table Expression|
-|["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows to insert data into a table by selecting values from another table or query result|
-|**DML (Data Manipulation Language)**|refers to SQL statements that are used to manage and manipulate data in a database: INSERT, UPDATE, DELETE, and SELECT.<br> These commands modify the data within the database without altering the structure of the tables.|
+|[**Sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes.|
+|["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows to insert data into a table by selecting values from another table or query result.|
 |[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data itselfe, instead, it presents data derived from one or more tables.|
 |[**MATHERIALIZED VIEW**](#materialized-view)|a database object that stores the result of a query **physically on disk**, rather than just being a virtual table like a regular view (can significantly improve query performance, especially for complex queries or large datasets due to it's saved nature).|
 |[**INDEX**](#index)|a database object used to speed up the retrieval of rows by creating an additional data structure, improves the performance of **SELECT** queries by allowing the database to quickly locate the rows without having to scan the entire table.|
 
+* [off top] Remember! The [Curve of Usefulness](DICM/th_9.png) of detailed data over time decrease but the value of aggregated data increase.
 
 ## Pre_Work
 
@@ -101,7 +107,7 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 ### !
 
 * In Windows use **SQL Shell** or **pqAdmin**.
-* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```), your own user with sertain database or use **pqAdmin**.
+* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```) or your own user with sertain database, or use **pqAdmin**.
 
 
 ## Entering database shell
@@ -192,7 +198,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |---|---|---|
 |**CREATE DATABASE** <db_name>; |create DB |create<br>structure_change<br>command|
 |**DROP DATABASE** <db_name>; |delete DB|delete<br>structure_change<br>command|
-|**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|create table|create<br>structure_change<br>command|
+|**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|[create table](#create-table-no-constrains)|create<br>structure_change<br>command|
 |**DROP TABLE** <table_name>; |delete table|delete<br>structure_change<br>command|
 |**INSERT INTO** <table_name> (<list_of_columns>) <br> **VALUES** (<list_of_values>);|insert records|data_change<br>command|
 |**INSERT INTO** <table_name> (<list_of_columns>) <br> **SELECT** <columns_made_with_select>;|[insert records](#insert-values-into-table)|data_change<br>command|
@@ -219,7 +225,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses<br>function|
 |**AGE(**<time_to>,<time_from>**)**|[calculate](#timestamp) the age (aka. time difference)|data_analyses<br>function|
 |**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on it's parameters (aka. *<rule>*)|data_change<br>command|
-|**ALTER** TABLE <table_name> <the_change>|used to modify the structure of an existing table or view.|change_table<br>structure_change<br>command|
+|**ALTER** TABLE <table_name> <the_change>|[used](#alter) to modify the structure of an existing table, column or view.|change_table<br>structure_change<br>command|
 |ALTER TABLE <table_name> **ADD** <adding_changes>|command used to [add structure changes](#structure-changes) to the table|change_table<br>structure_change<br>command|
 |ALTER TABLE <table_name> ADD **CONSTRAINT** <constraint_name> <constraint_itself>|command used to add a [new constraint](#unique-constraint)  to the table|change_table<br>structure_change<br>command|
 |**UPDATE** <table_name> **SET** <column_name>='<new_data>' WHERE <rule>|[updating](#data-changes) rows selected by the *<rule>* with the *<new_data>* to the *<column_name>*|data_change<br>command|
@@ -232,14 +238,15 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**CASCADE**| added to the end after deletion allow to delete ad the dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change<br>command|
 |**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>gen_data|
 |SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter<br>function|
-|<column_name> **default** <default_data>| add default data to the table's column settings|change_table<br>data_change<br>command|
+|<column_name> **default** <default_data>| [add default data](#create-table-with-constrains) to the table's column settings|change_table<br>data_change<br>command|
+|ALTER TABLE <table_name> ALTER COLUMN <column_name> <br> **SET DEFAULT** <default_value;>| set default value to existing column|change_table<br>data_change<br>command|
 |**EXCEPT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
 |**INTERSECT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
 |**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
 |[**CROSS JOIN**](#cross-join)|[cross join](#terms)|output_data<br>table_connection<br>filter<br>command|
 |[**NATURAL JOIN**](#natural-join)|[natural join](#terms)|output_data<br>table_connection<br>filter<br>command|
 |[**FULL JOIN**](#full-join)|[full join](#terms)|output_data<br>table_connection<br>filter<br>command|
-|**generate_series(**start, stop, step **)**|[**generate_series**](#generate-series) is a set-returning function in PostgreSQL that generates a series of values based on a specified *start*(the starting value of the series), *stop*(the ending value of the series), and *step*(the increment value between each element in the series). (It can be used for creating a sequence of numbers, dates, or timestamps.)|gen_data<br>function|
+|**generate_series(** start, stop, step **)**|[**generate_series**](#generate-series) is a set-returning function in PostgreSQL that generates a series of values based on a specified *start*(the starting value of the series), *stop*(the ending value of the series), and *step*(the increment value between each element in the series). (It can be used for creating a sequence of numbers, dates, or timestamps.)|gen_data<br>function|
 |**LEAST(**<list_of_values>/<list_of_columns>**)**<br>**GREATEST(**<list_of_values>/<list_of_columns>**)**|[Return](#greatest--least) smallest (inc. alphabetically first) or biggest values|output_data<br>filter<br>data_analyses<br>function|
 |**MAX(**<column_name>**)**|return the biggest value from the column (similar [works](#use-of-functions) with **MIN(**...**)**)|output_data<br>filter<br>data_analyses<br>function|
 |**FLOOR(**\<value>**)**|floor function|gen_data<br>data_change<br>function|
@@ -305,7 +312,7 @@ ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender ='Male' or gen
 
 ### [Foreign key (Relationship)](#terms)
 * includes: [**REFERENCES**](#sql-commands-list)
-#### [Example of creating connected tables](table_examples/connected.sql)
+#### Examples of creating connected tables:  [1](table_examples/connected.sql), [2](#create-table-with-constrains)
 
 #### To ***add*** new values if connection column exists can be done by simple **update** (!Uniqueness if it exists will give warnings if you give same values)
 ```SQL 
@@ -844,7 +851,7 @@ ON employees (salary/12);
 meaning no two rows can have the same value (or combination of values) in the indexed columns.
 * If you try to insert a duplicate value into a column (or combination of columns) that has a unique index, 
 the database will throw a constraint violation error.
-* Unique indexes are often used in conjunction with constraints like PRIMARY KEY or UNIQUE constraints.
+* Unique indexes are often used in conjunction with constraints like **PRIMARY KEY** or **UNIQUE** constraints.
 
 #### Example 
 ```SQL
@@ -862,7 +869,6 @@ ON menu (pizzeria_id, pizza_name);
     Copy code
     CREATE UNIQUE INDEX idx_users_active_email_unique ON users (email)
     WHERE status = 'active';
-    In this case:
     ```
     * The email column will be unique only for rows where status = 'active'. Inactive users can have duplicate email addresses.
 
@@ -923,6 +929,19 @@ CREATE TABLE person (
 - A **not null** constraint indicates that a column cannot contain null values.
 - **BIGSERIAL** - signed int that auto-increase.
 
+```SQL
+CREATE TABLE person_discounts (
+    id BIGINT PRIMARY KEY,
+    person_id BIGINT NOT NULL,
+    pizzeria_id BIGINT NOT NULL,
+    discount numeric(5,2) DEFAULT 0,
+    CONSTRAINT fk_discounts_person_id FOREIGN KEY (person_id) REFERENCES person(id),
+    CONSTRAINT fk_discounts_pizzeria_id FOREIGN KEY (pizzeria_id) REFERENCES pizzeria(id),
+    UNIQUE(person_id, pizzeria_id),
+    CHECK (discount<=100 AND discount>=0)
+);
+```
+
 ### Insert values into table
 ```SQL
 INSERT INTO person (first_name, last_name, age, gender, date_of_birth)
@@ -945,6 +964,31 @@ SELECT
     DATE '2022-02-25';
 ```
 - The columns in the **INSERT INTO** part must match the number of columns in the **SELECT** part.
+
+```SQL
+-- insert values into the table
+INSERT INTO person_discounts (
+    id,
+    person_id,
+    pizzeria_id,
+    discount
+)
+WITH order_number AS(
+        SELECT COUNT(*) AS n,person_id, pizzeria_id  FROM person_order 
+        JOIN menu ON person_order.menu_id=menu.id 
+        GROUP BY person_id, pizzeria_id)
+SELECT DISTINCT
+    ROW_NUMBER() OVER (ORDER BY order_number.person_id) AS id,
+    order_number.person_id AS person_id,
+    order_number.pizzeria_id AS pizzeria_id,
+    (CASE
+        WHEN order_number.n=0 THEN 0
+        WHEN order_number.n=1 THEN 10.5
+        WHEN order_number.n=2 THEN 22
+        ELSE 30
+    END) AS discount
+FROM order_number;
+```
 
 
 ### Sorted output
@@ -1229,6 +1273,7 @@ SELECT name || ' (age:'|| age||',gender:'''||gender||''',address:'''||address||'
 ```
 
 ### If -- else (aka CASE)
+1. 
 ```SQL
 SELECT CASE 
     WHEN name = 'Denis' 
@@ -1237,6 +1282,7 @@ SELECT CASE
     END
 FROM person
 ```
+[2.](#insert-values-into-table)
 
 ### Generate series
 ```SQL
@@ -1267,6 +1313,10 @@ WHERE
 ORDER BY person_name1, person_name2;
 ```
 
+### Alter 
+```SQL
+ALTER TABLE person_discounts ALTER COLUMN discount SET DEFAULT 0;
+```
 
 
 
