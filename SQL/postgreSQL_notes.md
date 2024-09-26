@@ -748,6 +748,17 @@ WHERE conditions;
 5. **No direct data storage**: A view doesn't store data; it retrieves the latest data from the underlying tables.
 6. **Updatable views**: Not all views are updatable, especially if they involve complex joins, aggregate functions, or other advanced SQL features.
 
+#### To see the list of views connected to the table
+```SQL
+SELECT * 
+FROM   INFORMATION_SCHEMA.VIEWS 
+WHERE  VIEW_DEFINITION like '%<table_name>%';
+-- example for table 'person'
+SELECT * 
+FROM   INFORMATION_SCHEMA.VIEWS 
+WHERE  VIEW_DEFINITION like '%person%';
+```
+
 #### Example
 * Let’s say you have a table `employees`, and you often query for employees who are in the "Marketing" department. Instead of writing the same query repeatedly, you can create a view:
     ```sql
@@ -764,6 +775,7 @@ WHERE conditions;
     SELECT * FROM person
     WHERE gender = 'female';
     ```
+
 
 ### [Materialized view](#theory)
 #### [Syntax](#sql-commands-and-functions-list):
