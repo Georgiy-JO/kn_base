@@ -49,11 +49,11 @@
     18.8. [Use of functions](#use-of-functions) \
     18.9. [Simple calculations](#simple-calculations) \
     18.10. [Table calculations](#table-calculations) \
-    18.11. [Null handeling](#null-handeling) \
-    18.12. [Timestampg](#timestamp) \
+    18.11. [Null handling](#null-handling) \
+    18.12. [Timestamp](#timestamp) \
     18.13. [Structure changes](#structure-changes) \
     18.14. [Data changes](#data-changes) \
-    18.15. [Conflict handeler](#conflict-handeler) \
+    18.15. [Conflict handler](#conflict-handler) \
     18.16. [Formated output](#formated-output)\
     18.17. [Case(if-else)](#if----else-aka-case) \
     18.18. [Generate series](#generate-series) \
@@ -197,7 +197,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 ## SQL+ commands and functions list 
 
 * All SQL command lines end with **';'**!
-* *NULL* handeling:[📗](#null-handeling).
+* *NULL* handling:[📗](#null-handling).
 * SQL comparison opperators(**>**,**<**,**>=**,**<=**,**=**,**<>**) can be used on numbers, lines, dates etc.
 * "**%**" - any character(s); "**_**" - any *single* character.
 * For data analyses can be used [aggregate functions](https://www.postgresql.org/docs/16/functions-aggregate.html) (*COUNT*, [etc](#use-of-functions)).
@@ -232,8 +232,8 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**COUNT(**\<argument(<column_name>/*/etc)>**)**|function (will appear as a column) [used](#summarizing-result) to summerize unique data from <argument> based on **GROUP BY** column data|output_data<br>data_analyses<br>function|
 |GROUP BY <column_name>**HAVING** <rule>|must be [used](#summarizing-result) with **GROUP BY** and take place right after it, can specify (filter) the output |output_data<br>filter<br>command|
 |<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data<br>command|
-|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handeling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses<br>function|
-|**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handeling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses<br>function|
+|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses<br>function|
+|**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses<br>function|
 |**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|gen_data<br>function|
 |NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calclations|gen_data<br>data_analyses|
 |**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses<br>function|
@@ -243,9 +243,9 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |ALTER TABLE <table_name> **ADD** <adding_changes>|command used to [add structure changes](#structure-changes) to the table|change_table<br>structure_change<br>command|
 |ALTER TABLE <table_name> ADD **CONSTRAINT** <constraint_name> <constraint_itself>|command used to add a [new constraint](#unique-constraint)  to the table|change_table<br>structure_change<br>command|
 |**UPDATE** <table_name> **SET** <column_name>='<new_data>' WHERE <rule>|[updating](#data-changes) rows selected by the *<rule>* with the *<new_data>* to the *<column_name>*|data_change<br>command|
-|**ON CONFLICT** <column_name>/<other_conflict_case> **DO** <command_to_perform_in_case_of_conflict>|handeling [conflict](#conflict-handeler) situations, can be used only with *<column_name>* that is either a *primal key* or a *unique constraint* |data_change<br>error<br>command|
-|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow to handle [conflict](#conflict-handeler) with doing nothing|data_change<br>error<br>command|
-|ON CONFLICT <column_name>/<other_conflict_case> DO UPDATE set <column_name_to_replace>=**EXCLUDED.**<column_name_new_info>|in case of a [conflict](#conflict-handeler) replace existing info with new one for given columns otherwise add a new row|data_change<br>error<br>command|
+|**ON CONFLICT** <column_name>/<other_conflict_case> **DO** <command_to_perform_in_case_of_conflict>|handling [conflict](#conflict-handler) situations, can be used only with *<column_name>* that is either a *primal key* or a *unique constraint* |data_change<br>error<br>command|
+|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow to handle [conflict](#conflict-handler) with doing nothing|data_change<br>error<br>command|
+|ON CONFLICT <column_name>/<other_conflict_case> DO UPDATE set <column_name_to_replace>=**EXCLUDED.**<column_name_new_info>|in case of a [conflict](#conflict-handler) replace existing info with new one for given columns otherwise add a new row|data_change<br>error<br>command|
 |<column_name> <data_type> **REFERENCES** <other_table_name>(<column_of_the_table>)|parameter of the colunm to [create](#foreign-key-relationship) [connected](#terms) to another table column|create<br>table_connection<br>command|
 |SELECT <columns_names> FROM <table_1_name> **JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#join) the [connected](#terms) data from tables (**!**will output only rows that have data in both/all tables)|output_data<br>table_connection<br>filter<br>command|
 |SELECT <columns_names> FROM <table_1_name> **LEFT JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#left-join) the [connected](#terms) data from tables (**!**will output rows that have data in both/all tables and other rows from the first table)|output_data<br>table_connection<br>filter<br>command|
@@ -1260,7 +1260,7 @@ SELECT id, make, model, price AS origin_price, ROUND(price * .8,2) AS "20_percen
 --rename column "price" to "original price" and add columns with 20% discount price and with 10% discount price 
 ```
 
-### Null handeling
+### Null handling
 * Equal *NULL* and opposite of this one are: ```<column_name> IS NULL``` and  ```<column_name> IS NOT NULL```.
 ```SQL
 --example 1 (COALESCE)
@@ -1333,7 +1333,7 @@ UPDATE person SET first_name ='NEO', last_name='The chosen one'  WHERE id=1001;
 --update first_name and last_name of person with id=1001
 ```
 
-### Conflict handeler
+### Conflict handler
 * Comments == output
 ```SQL
 \d person
@@ -1465,6 +1465,6 @@ ON person_discounts (person_id, pizzeria_id);
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/);
 - [Data generator](https://mockaroo.com/) [🖼️](/DICM/sh_1.png);
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
-- [SQL index video artical](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
+- [SQL index video article](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
 - [PostgreSQL Tutorial](https://www.tutorialspoint.com/postgresql/index.htm) - not checked;
 - [One more guide](https://docs.fedoraproject.org/en-US/quick-docs/postgresql/) - not checked;
