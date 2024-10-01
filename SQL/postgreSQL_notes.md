@@ -1,9 +1,11 @@
-# PostgreSQL 101 (psql ver.)
+# PostgreSQL 101 (psql ver. 2.0)
 
 ### Contents:
 
 0. [File description](#file-description)
 1. [Theory](#theory)
+    1.1. [Terms](#terms) \
+    1.2. [Anomalies](#anomalies)
 2. [instalation](#instalationgeneral)
 3. [Entering DB shell](#entering-database-shell)
 4. [Creating user](#creating-a-user)
@@ -11,29 +13,32 @@
 6. [Connect to DB](#connect-to-database)
 7. [DB shell command list](#database-shell-commands-list)
 8. [SQL commands list](#sql-commands-and-functions-list)
-9. [Constraints](#constraints) \
-    9.1. [Primary key](#primary-key) \
-    9.2. [Unique constraint](#unique-constraint) \
-    9.3. [Check constraint](#check-constraint) 
-10. [Tables connection](#tables-connection) \
-    10.1. [Foreign key](#foreign-key-relationship) \
-    10.2. [Joins](#joins) \
-        10.2.1. [Join](#join) \
-        10.2.2. [Left join](#left-join) \
-        10.2.3 [Cross join](#cross-join) \
-        10.2.4. [Natural join](#natural-join) \
-        10.2.5. [Full join](#full-join)\
-    10.3. [Set operations](#set-operations) \
-        10.3.1. [UNION](#union) \
-        10.3.2. [INTERSECT](#intersect) \
-        10.3.3. [EXCEPT](#except)
-11. [Sequence](#sequence)
-12. [Common Table Expression (CTE)](#common-table-expression-cte)
-13. [Recursive queries](#recursive-queries)
-14. [View](#view)
-15. [Index](#index)
-17. [Extensions](#extensions)
-18. [Examples](#examples) \
+9. [Data types](#data-types)
+10. [Constraints](#constraints) \
+    10.1. [Primary key](#primary-key) \
+    10.2. [Unique constraint](#unique-constraint) \
+    10.3. [Check constraint](#check-constraint) 
+11. [Tables connection](#tables-connection) \
+    11.1. [Foreign key](#foreign-key-relationship) \
+    11.2. [Joins](#joins) \
+        11.2.1. [Join](#join) \
+        11.2.2. [Left join](#left-join) \
+        11.2.3 [Cross join](#cross-join) \
+        11.2.4. [Natural join](#natural-join) \
+        11.2.5. [Full join](#full-join)\
+    11.3. [Set operations](#set-operations) \
+        11.3.1. [UNION](#union) \
+        11.3.2. [INTERSECT](#intersect) \
+        11.3.3. [EXCEPT](#except)
+12. [Sequence](#sequence)
+13. [Common Table Expression (CTE)](#common-table-expression-cte)
+14. [Recursive queries](#recursive-queries)
+15. [View](#view)
+16. [Index](#index)
+17. [Comments](#comments)
+18. [Transactions](#transactions)
+1. [Extensions](#extensions)
+. [Examples](#examples) \
     18.1. [Create table](#create-table-no-constrains)\
     18.2. [Create table](#create-table-with-constrains)\
     18.3. [Insert values into table](#insert-values-into-table)\
@@ -52,21 +57,25 @@
     18.16. [Formated output](#formated-output)\
     18.17. [Case(if-else)](#if----else-aka-case) \
     18.18. [Generate series](#generate-series) \
-    18.19. [Greatest && Least](#greatest--least) 
-19. [Export data](#export-data) \
+    18.19. [Greatest && Least](#greatest--least) \
+    18.20. [Alter](#alter) \
+    18.21. [If exists](#if-exists) 
+. [Export data](#export-data) \
     19.1. [CSV](#csv)
-20. [Links](#links)
+. [Links](#links)
 
 ## File description
 
-Foulder [table_examples](table_examples) contain some *SQL* files that can be inported into DB, those are used as examples in text below.
-|File|Description|Tables|
-|----|-----------|---|
-| [car.sql](table_examples/car.sql)|BD full of car info|car|
-| [person.sql](table_examples/person.sql)|BD full of personal info|person|
-| [connected_1.sql](table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
-| [connected_uuid.sql](table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
-| [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
+* Foulder [table_examples](table_examples) contain some *SQL* files that can be inported into DB, those are used as examples in text below.
+    |File|Description|Tables|
+    |----|-----------|---|
+    | [car.sql](table_examples/car.sql)|BD full of car info|car|
+    | [person.sql](table_examples/person.sql)|BD full of personal info|person|
+    | [connected_1.sql](table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
+    | [connected_uuid.sql](table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
+    | [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
+
+* *DICM* foulder countains illustrations for the file. 
 
 
 ## Theory
@@ -96,6 +105,11 @@ Foulder [table_examples](table_examples) contain some *SQL* files that can be in
 |[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data itselfe, instead, it presents data derived from one or more tables.|
 |[**MATHERIALIZED VIEW**](#materialized-view)|a database object that stores the result of a query **physically on disk**, rather than just being a virtual table like a regular view (can significantly improve query performance, especially for complex queries or large datasets due to it's saved nature).|
 |[**INDEX**](#index)|a database object used to speed up the retrieval of rows by creating an additional data structure, improves the performance of **SELECT** queries by allowing the database to quickly locate the rows without having to scan the entire table.|
+|[**TRANSACTION**](#transactions)||
+|[**Anomalies**](#anomalies)||
+
+### [Anomalies](#transactions)
+
 
 * [off top] Remember! The [Curve of Usefulness](DICM/th_9.png) of detailed data over time decrease but the value of aggregated data increase.
 
@@ -191,7 +205,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 
 |Tag list|||||
 |---|---|---|---|---|
-|**command**;<br> **function**;|create;<br> delete; <br>change_table (structure_change); <br>data_change;|output_data;<br> filter (search); <br>sort; <br>limit; <br>data_analyses; |gen_data; <br>error; <br>table_connection|get_info|
+|**command**;<br> **function**;|create;<br> delete; <br>change_table (structure_change); <br>data_change;|output_data;<br> filter (search); <br>sort; <br>limit; <br>data_analyses; |gen_data; <br>error; <br>table_connection|get_info <br> way_of_work|
 
 
 |Command| Explanation |Tag|
@@ -260,6 +274,19 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**CREATE UNIQUE INDEX** <index_name> **ON** <table_name> (<column_name>) **WHERE** <condition_for_unique_rows>|to [create](#partial-unique-index) an ***partially unique*** index|create<br>filter<br>output_data<br>delete<br>command|
 |**EXPLAIN ANALYZE**<any_command>| put before any command to return the command execution info (including time it takes)|get_info<br>command|
 |**UPPER(**<column/data>**)**|change all leters from the column/data into upper case|output_data<br>data_change<br>function|
+|**IF NOT EXISTS**|allows to create new entities ([ex. index](#if-exists)) or preform another action only in case one with same name does not exist or something else not exists |change_table<br>create|
+|**IF EXISTS**|same as previous, but in case of existence |change_table|
+|**COMMENT ON** TABLE <table_name> **IS** '<comment>';<br>**COMMENT ON** COLUMN <column_name> **IS** '<comment>';|adding [comments](#comments) to table or column|change_table|
+|**START TRANSACTION;** <br> <transaction_body><br>**COMMIT;**|working via [transaction](#transactions) |way_of_work|
+
+## Data types
+
+|Data type|Discription| Structure| Example|
+|---|---|---|---|
+|numeric|exact numeric of selectable precision| numeric(<number_of_digits>,<number_of_decimal_digits>)|numeric(5,2)  =>  555.55|
+
+* Full list: [click](https://www.postgresql.org/docs/16/datatype.html)
+
 
 ## Constraints
 ### [Primary key](#terms)
@@ -307,6 +334,21 @@ ALTER TABLE <table_name> ADD CONSTRAINT <constraint_name> CHECK (<rule_columns_v
 --example
 ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender ='Male' or gender='Female');
 ```
+### Examples 
+* Adding constraints at the table creation
+    ```SQL
+    CREATE TABLE person_discounts (
+        id BIGINT PRIMARY KEY,
+        person_id BIGINT NOT NULL,
+        pizzeria_id BIGINT NOT NULL,
+        discount numeric(5,2) DEFAULT 0,
+        CONSTRAINT fk_discounts_person_id FOREIGN KEY (person_id) REFERENCES person(id),
+        CONSTRAINT fk_discounts_pizzeria_id FOREIGN KEY (pizzeria_id) REFERENCES pizzeria(id),
+        UNIQUE(person_id, pizzeria_id),
+        CHECK (discount<=100 AND discount>=0)
+    );
+    ```
+
 
 ## Tables connection
 
@@ -410,6 +452,18 @@ FROM
         JOIN pizzeria ON menu.pizzeria_id=pizzeria.id
     ORDER BY person_name,pizza_name,pizzeria_name;
     --multi join
+
+    --example 4
+    SELECT pr.address AS address,  pz.name AS name, COUNT(*) AS count_of_orders
+    FROM person_visits pv
+        JOIN person pr ON pv.person_id=pr.id
+        JOIN pizzeria pz ON pv.pizzeria_id=pz.id
+        JOIN person_order po ON pv.person_id=po.person_id
+        JOIN menu m ON po.menu_id=m.id
+                    AND pz.id=m.pizzeria_id
+    GROUP BY pz.name, pr.address
+    ORDER BY address, name;
+        --multi join + 2 multicolumn join
     ```
 
 #### [Left join](#terms)
@@ -548,20 +602,43 @@ FROM
 
 ## Sequence
 
-#### Check && increase the sequence
+#### Creating Sequence
+```SQL
+CREATE SEQUENCE <sequence_name>
+    START WITH <start_val>
+    INCREMENT BY <step_val>
+    <restrains>;
+
+-- Example
+CREATE SEQUENCE seq_person_discounts
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE     --The sequence can start from any value, and there is no lower bound
+    NO MAXVALUE     --The sequence can grow indefinitely, and there is no upper bound.
+    CACHE 1;        --the database will pre-allocate and store 1 sequence value in memory for faster access
+```
+
+#### Connection sequence to a table
+```SQL
+-- making so id column will take value and be autoincreased with this sequence
+ALTER TABLE person_discounts
+ALTER COLUMN id SET DEFAULT nextval('seq_person_discounts');
+```
+
+#### Setting value to a sequence
+```SQL
+SELECT setval('seq_person_discounts', (SELECT MAX(id) FROM person_discounts));
+```
+
+
+#### Example of work with sequence
 
 ```SQL 
 \d person
 --       Column      |          Type          | Collation | Nullable |              Default               
 -- ------------------+------------------------+-----------+----------+------------------------------------
 --  id               | bigint                 |           | not null | nextval('person_id_seq'::regclass)
---  first_name       | character varying(70)  |           | not null | 
---  last_name        | character varying(70)  |           | not null | 
---  gender           | character varying(7)   |           | not null | 
---  date_of_birth    | date                   |           | not null | 
---  country_of_birth | character varying(100) |           | not null | 
---  email            | character varying(250) |           |          | 
---  car_id           | bigint                 |           |          | 
+--  ...
 SELECT * FROM person_id_seq;
 --  last_value | log_cnt | is_called 
 -- ------------+---------+-----------
@@ -569,15 +646,7 @@ SELECT * FROM person_id_seq;
 SELECT * FROM person ORDER BY id;
 --  id | first_name | last_name | gender | date_of_birth | country_of_birth |           email           | car_id 
 -- ----+------------+-----------+--------+---------------+------------------+---------------------------+--------
---   1 | Jack       | ONeill    | Male   | 2067-11-25    | Russia           | jack_o_gate@gmail.com     |      5
---   2 | Johnny     | Cash      | Male   | 1944-04-05    | USA              |                           |       
---   3 | Lizzy      | Rickson   | Female | 2045-09-01    | Japan            |                           |       
---   4 | Immanuel   | Cousins   | Male   | 2046-11-27    | United States    | icousins0@bloomberg.com   |      3
---   5 | Ariella    | Trapp     | Female | 1983-02-28    | Peru             | atrapp1@state.gov         |      2
---   6 | Robina     | Ullrich   | Female | 1961-05-21    | Tunisia          |                           |      1
---   7 | Madeleine  | O' Dornan | Female | 2066-09-25    | Brazil           |                           |       
---   8 | Tiffanie   | Reekie    | Female | 2093-03-21    | China            | treekie4@google.com.au    |       
---   9 | Faunie     | Witterick | Female | 2041-01-27    | China            | fwitterick5@go.com        |      4
+--  ...
 --  10 | Raimundo   | Morrott   | Male   | 2086-10-08    | Iran             | rmorrott6@theguardian.com |       
 SELECT nextval('person_id_seq'::regclass);
 --  nextval 
@@ -592,18 +661,11 @@ insert into person (first_name, last_name, gender, date_of_birth, country_of_bir
 SELECT * FROM person ORDER BY id;
 --  id | first_name | last_name  | gender | date_of_birth | country_of_birth |           email           | car_id 
 -- ----+------------+------------+--------+---------------+------------------+---------------------------+--------
---   1 | Jack       | ONeill     | Male   | 2067-11-25    | Russia           | jack_o_gate@gmail.com     |      5
---   2 | Johnny     | Cash       | Male   | 1944-04-05    | USA              |                           |       
---   3 | Lizzy      | Rickson    | Female | 2045-09-01    | Japan            |                           |       
---   4 | Immanuel   | Cousins    | Male   | 2046-11-27    | United States    | icousins0@bloomberg.com   |      3
---   5 | Ariella    | Trapp      | Female | 1983-02-28    | Peru             | atrapp1@state.gov         |      2
---   6 | Robina     | Ullrich    | Female | 1961-05-21    | Tunisia          |                           |      1
---   7 | Madeleine  | O' Dornan  | Female | 2066-09-25    | Brazil           |                           |       
---   8 | Tiffanie   | Reekie     | Female | 2093-03-21    | China            | treekie4@google.com.au    |       
---   9 | Faunie     | Witterick  | Female | 2041-01-27    | China            | fwitterick5@go.com        |      4
+--  ...
 --  10 | Raimundo   | Morrott    | Male   | 2086-10-08    | Iran             | rmorrott6@theguardian.com |       
 --  14 | Delmore    | Castellani | Male   | 2056-08-09    | Poland           | dcastellani1k@reddit.com  |       
 ```
+
 #### Restart the sequence
 ```SQL
 SELECT nextval('person_id_seq'::regclass); -- x5
@@ -616,6 +678,7 @@ SELECT * FROM person_id_seq;
 -- ------------+---------+-----------
 --          14 |       0 | f
 ```
+
 
 ## Common Table Expression (CTE)
 
@@ -885,6 +948,46 @@ ON menu (pizzeria_id, pizza_name);
     * The email column will be unique only for rows where status = 'active'. Inactive users can have duplicate email addresses.
 
 
+## [Comments](#sql-commands-and-functions-list)
+
+#### Adding comments
+```SQl
+COMMENT ON TABLE <table_name> IS '<comment>';
+COMMENT ON COLUMN <column_name> IS '<comment>';
+```
+
+#### Viewing table comments
+```SQl
+-- to see the table info + comments
+\d+ <table_name>
+-- to see the table's comments
+SELECT obj_description('<table_name>'::regclass);
+```
+
+#### Viewing column comments
+```SQL
+SELECT column_name, col_description('<table_name>'::regclass, ordinal_position)
+FROM information_schema.columns
+WHERE table_name = '<table_name>';
+```
+
+#### Examples
+```SQL
+COMMENT ON TABLE person_discounts IS 'This table contains personal discounts of people included in the DB.';
+COMMENT ON COLUMN person_discounts.id IS 'This column contains unique IDs for person-pizzeria pare.';
+-- to see the table info + comments
+\d+ person_discounts
+-- to see the table's comments
+SELECT obj_description('person_discounts'::regclass);
+-- to see each column comments
+SELECT column_name, col_description('person_discounts'::regclass, ordinal_position)
+FROM information_schema.columns
+WHERE table_name = 'person_discounts';
+```
+
+## [Transactions](#theory)
+
+
 ## Extensions
 
 * PostgreSQL is designed to be easily extensible. For this reason, extensions loaded into the database can function just like features that are built in.
@@ -1092,6 +1195,17 @@ SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING C
 --example 3.2
 SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING country_of_birth<'K' ORDER BY country_of_birth;
 --return the list of UNIQUE countries sorted alphabetically that name starts with any letter befor "K", with the number of people from each country 
+
+--example 4.1
+SELECT 
+    address, 
+    ROUND((MAX(age::numeric)-(MIN(age::numeric)/MAX(age::numeric))),2) AS formula, 
+    ROUND(AVG(age),2) AS average, 
+    ((MAX(age)-(MIN(age)/MAX(age)))>AVG(age)) AS comparison
+FROM person
+GROUP BY address
+ORDER BY address;
+-- complex group by
 ```
 
 ### Use of functions
@@ -1328,6 +1442,12 @@ ORDER BY person_name1, person_name2;
 ### Alter 
 ```SQL
 ALTER TABLE person_discounts ALTER COLUMN discount SET DEFAULT 0;
+```
+
+### If exists
+```SQL
+CREATE UNIQUE INDEX IF NOT EXISTS idx_person_discounts_unique 
+ON person_discounts (person_id, pizzeria_id);
 ```
 
 
