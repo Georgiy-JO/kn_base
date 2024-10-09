@@ -6,7 +6,7 @@
 1. [Theory](#theory)
     1.1. [Terms](#terms) \
     1.2. [Anomalies](#anomalies)
-2. [instalation](#instalationgeneral)
+2. [Installation](#instalationgeneral)
 3. [Entering DB shell](#entering-database-shell)
 4. [Creating user](#creating-a-user)
 5. [Creating DB](#creating-database)
@@ -37,37 +37,38 @@
 16. [Index](#index)
 17. [Comments](#comments)
 18. [Transactions](#transactions)
-19. [Functions] (#functions)
-1. [Extensions](#extensions)
-. [Examples](#examples) \
-    18.1. [Create table](#create-table-no-constrains)\
-    18.2. [Create table](#create-table-with-constrains)\
-    18.3. [Insert values into table](#insert-values-into-table)\
-    18.4. [Sorted output](#sorted-output) \
-    18.5. [Unique output](#unique-output) \
-    18.6. [Selective output](#selective-output) \
-    18.7. [Summarizing result](#summarizing-result) \
-    18.8. [Use of functions](#use-of-functions) \
-    18.9. [Simple calculations](#simple-calculations) \
-    18.10. [Table calculations](#table-calculations) \
-    18.11. [Null handling](#null-handling) \
-    18.12. [Timestamp](#timestamp) \
-    18.13. [Structure changes](#structure-changes) \
-    18.14. [Data changes](#data-changes) \
-    18.15. [Conflict handler](#conflict-handler) \
-    18.16. [Formated output](#formated-output)\
-    18.17. [Case(if-else)](#if----else-aka-case) \
-    18.18. [Generate series](#generate-series) \
-    18.19. [Greatest && Least](#greatest--least) \
-    18.20. [Alter](#alter) \
-    18.21. [If exists](#if-exists) 
-. [Export data](#export-data) \
-    19.1. [CSV](#csv)
-. [Links](#links)
+19. [Functions](#functions)
+20. [Extensions](#extensions)
+21. [Examples](#examples) \
+    21.1. [Create table](#create-table-no-constrains)\
+    21.2. [Create table](#create-table-with-constrains)\
+    21.3. [Insert values into table](#insert-values-into-table)\
+    21.4. [Sorted output](#sorted-output) \
+    21.5. [Unique output](#unique-output) \
+    21.6. [Selective output](#selective-output) \
+    21.7. [Summarizing result](#summarizing-result) \
+    21.8. [Use of functions](#use-of-functions) \
+    21.9. [Simple calculations](#simple-calculations) \
+    21.10. [Table calculations](#table-calculations) \
+    21.11. [Null handling](#null-handling) \
+    21.12. [Timestamp](#timestamp) \
+    21.13. [Structure changes](#structure-changes) \
+    21.14. [Data changes](#data-changes) \
+    21.15. [Conflict handler](#conflict-handler) \
+    21.16. [Formatted output](#formated-output)\
+    21.17. [Case(if-else)](#if----else-aka-case) \
+    21.18. [Generate series](#generate-series) \
+    21.19. [Greatest && Least](#greatest--least) \
+    21.20. [Alter](#alter) \
+    21.21. [If exists](#if-exists) \
+    21.22. [More function examples](#more-function-examples)
+22. [Export data](#export-data) \
+    22.1. [CSV](#csv)
+23. [Links](#links)
 
 ## File description
 
-* Foulder [table_examples](table_examples) contain some *SQL* files that can be inported into DB, those are used as examples in text below.
+* Folder [table_examples](table_examples) contain some *SQL* files that can be imported into DB, those are used as examples in text below.
     |File|Description|Tables|
     |----|-----------|---|
     | [car.sql](table_examples/car.sql)|BD full of car info|car|
@@ -76,7 +77,7 @@
     | [connected_uuid.sql](table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
     | [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
 
-* *DICM* foulder countains illustrations for the file. 
+* *DICM* folder contains illustrations for the file. 
 
 
 ## Theory
@@ -86,32 +87,35 @@
 |**(SQL) Structured Query Language**|the database language by which we can perform certain operations on the existing database, and we can also use this language to create a database.|
 |**DDL (Data Definition Language)**|consists of the SQL commands that can be used to define the database schema, deals with descriptions of the database schema and is used to create and modify the structure of database objects in the database (**CREATE**, **DROP**, **ALTER**, **TRUNCATE**, **COMMENT**, **RENAME**).|
 |**DML (Data Manipulation Language)**|refers to SQL statements that are used to manage and manipulate data in a database: **INSERT**, **UPDATE**, **DELETE**, **LOCK**, **CALL**, **EXPLAIN PLAN**.<br> These commands modify the data within the database without altering the structure of the tables.|
-|**DQL (Data Query Language)**|performs queries on the data within schema objectsts to get some schema relation based on the query passed to it, allows getting data from the database and imposing order upon it (**SELECT**).|
+|**DQL (Data Query Language)**|performs queries on the data within schema objects to get some schema relation based on the query passed to it, allows getting data from the database and imposing order upon it (**SELECT**).|
 |**DCL (Data Control Language)**|includes commands such as **GRANT** and **REVOKE** which mainly deal with the rights, permissions, and other controls of the database system. |
 |**TCL (Transaction Control Language)**|transactions group a set of tasks into a single execution unit, each transaction begins with a specific task and ends when all the tasks in the group are successfully completed, if any of the tasks fail, the transaction fails (**BEGIN TRANSACTION**, **COMMIT**, **ROLLBACK**, **SAVEPOINT**).|
 |[**Set operations**](#set-operations)|**UNION**, **INTERSECT**, **EXCEPT**.|
 |[**CTE**](#common-table-expression-cte)|Common Table Expression (**WITH** ... **AS (**...**)**).|
-|**BIGSERIAL** |spesial data type that is *BIGINT* and has auto incrimination function.|
+|**BIGSERIAL** |special data type that is *BIGINT* and has auto incrimination function.|
 |[**primary key**](#primary-key)| Value that uniquely identify a record in the table (unique for any and all rows, not NULL).|
-|[**UNIQUE** constraint](#unique-constraint)|Value that must bw unique for every row, but can be NULL. the constraint would not allow to add a new row with the similar to some other data in the constraint column.|
-|[**CHECK** constraint](#check-constraint)|Allow to list values the particular column can have or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule.|
+|[**UNIQUE** constraint](#unique-constraint)|Value that must be unique for every row, but can be NULL. The constraint would not allow to add a new row with the similar to some other data in the constraint column.|
+|[**CHECK** constraint](#check-constraint)|Allow listing values the particular column can have, or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule.|
 |[**foreign key**](#foreign-key-relationship)|Unique value that reference *primary key* from another table (!!types of foreign key column and primary key from another table column must be same!!).|
 |[**join**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data.|
-|[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output  that data and all other data from the first table.|
+|[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output that data and all other data from the first table.|
 |[**cross join**](#cross-join)|*CROSS JOIN* allow to output all possible combinations of two tables in SQL.|
 |[**NATURAL JOIN**](#natural-join)|A *NATURAL JOIN* in *SQL* is a type of join that automatically combines two tables based on columns with the same names and compatible data types. It simplifies the process by eliminating the need to explicitly specify the join condition. However, it can be risky because it relies entirely on column names, which may unintentionally match columns you don’t want to join.|
 |[**FULL JOIN**](#full-join) <br>(or **FULL OUTER JOIN**)|is used to combine rows from two tables, returning all rows from both tables, regardless of whether there is a match between them. If a row from one table doesn't have a match in the other table, the result will include that row with NULL values for the columns from the other table.|
-|[**Sequence**](#sequence)|set of autoincrease numbers,  autocreated  with setting of *SERIAL* and *BIGSERIAL* data tipes.|
-|["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows to insert data into a table by selecting values from another table or query result.|
-|[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data itselfe, instead, it presents data derived from one or more tables.|
+|[**Sequence**](#sequence)|set of auto-increase numbers, auto-created with setting of *SERIAL* and *BIGSERIAL* data types.|
+|["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows inserting data into a table by selecting values from another table or query result.|
+|[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data it selfe, instead, it presents data derived from one or more tables.|
 |[**MATHERIALIZED VIEW**](#materialized-view)|a database object that stores the result of a query **physically on disk**, rather than just being a virtual table like a regular view (can significantly improve query performance, especially for complex queries or large datasets due to it's saved nature).|
 |[**INDEX**](#index)|a database object used to speed up the retrieval of rows by creating an additional data structure, improves the performance of **SELECT** queries by allowing the database to quickly locate the rows without having to scan the entire table.|
 |[**TRANSACTION**](#transactions)|Transactions group a set of tasks into a single execution unit. Allow several people to work with DB at the same time and deal with anomalies.|
 |[**Anomalies**](#anomalies)|Anomalies in the relational model refer to inconsistencies or errors that can arise when working with relational databases, specifically in the context of data insertion, deletion, and modification. |
+|[**Functions**](#functions)| Set of commands that can be activated/called together|
+|[**Trigger**](#functions)|An SQL trigger is a database object that automatically executes a specified set of SQL statements in response to certain events on a particular table, such as an INSERT, UPDATE, or DELETE operation.|
+|[**\$\<comment>\$**](#functions)|In PostgreSQL, the syntax $<comment>$ is called dollar quoting. It's a way to enclose a string literal in a function or procedure definition. Same dollar quoting start or end one function or procedure.|
 
 ### [Anomalies](#theory)
 
-Database theory has 4 foundametal data anomalies (physical anomalies):
+Database theory has 4 fundamental data anomalies (physical anomalies):
 * Lost Update Anomaly;
 * Dirty Reads Anomaly;
 * Non-repeatable Reads Anomaly;
@@ -143,13 +147,13 @@ The most common way to illustrate anomalies is to use several [transactions](#tr
 
 ## Pre_Work
 
-#### [Instalation.general](https://www.postgresql.org/download/)
-#### [Instalation.fedora](https://developer.fedoraproject.org/tech/database/postgresql/about.html)
+#### [Installation.general](https://www.postgresql.org/download/)
+#### [Installation.fedora](https://developer.fedoraproject.org/tech/database/postgresql/about.html)
 
 ### !
 
 * In Windows use **SQL Shell** or **pqAdmin**.
-* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```) or your own user with sertain database, or use **pqAdmin**.
+* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```) or your own user with certain database, or use **pgAdmin**.
 
 
 ## Entering database shell
@@ -157,7 +161,7 @@ The most common way to illustrate anomalies is to use several [transactions](#tr
 1. Linux -> *terminal* -> user **postgres**;
 2. ```psql```.
 
-### Linux 2 (for sertain DB)
+### Linux 2 (for certain DB)
 1. ```psql -h <address> -U <user> -p <gate> <db_name> ```.
 
 ### Windows
@@ -174,7 +178,7 @@ The most common way to illustrate anomalies is to use several [transactions](#tr
 
 
 ## Creating database
-### DB Shell
+### DB shell
 1. Enter database shell;
 2. 
     ```SQL
@@ -214,19 +218,19 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |\q|exit|
 |\l|list databases|
 |\\?|PSQL commands help|
-|help|general db shell cammands help|
+|help|general db shell commands help|
 |\h| SQL commands help|
-|\d| show list of tables amd sequences in DB|
-|\dt| show only list of tables  in DB|
+|\d| show list of tables and sequences in DB|
+|\dt| show only list of tables in DB|
 |\d <table_name>| show table info|
 |\i <file_name>|execute commands from file (be careful: windows -' \\', linux && psql -' / '!) |
-|\x|change to another data interpritation (allow to show big tables better) <br> - aka. change colomns into rows in output|
+|\x|change to another data interpretation (allow showing big tables better) <br> - aka. change columns into rows in output|
 
 ## SQL+ commands and functions list 
 
 * All SQL command lines end with **';'**!
 * *NULL* handling:[📗](#null-handling).
-* SQL comparison opperators(**>**,**<**,**>=**,**<=**,**=**,**<>**) can be used on numbers, lines, dates etc.
+* SQL comparison operators(**>**,**<**,**>=**,**<=**,**=**,**<>**) can be used on numbers, lines, dates etc.
 * "**%**" - any character(s); "**_**" - any *single* character.
 * For data analyses can be used [aggregate functions](https://www.postgresql.org/docs/16/functions-aggregate.html) (*COUNT*, [etc](#use-of-functions)).
 * Calculation examples:[📙](#simple-calculations)[📘](#table-calculations).
@@ -240,44 +244,45 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |---|---|---|
 |**CREATE DATABASE** <db_name>; |create DB |create<br>structure_change<br>command|
 |**DROP DATABASE** <db_name>; |delete DB|delete<br>structure_change<br>command|
-|**CREATE TABLE** <table_name> ( <br> <colunm_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <colunm_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|[create table](#create-table-no-constrains)|create<br>structure_change<br>command|
+|**CREATE TABLE** <table_name> ( <br> <column_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <column_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|[create table](#create-table-no-constrains)|create<br>structure_change<br>command|
 |**DROP TABLE** <table_name>; |delete table|delete<br>structure_change<br>command|
 |**INSERT INTO** <table_name> (<list_of_columns>) <br> **VALUES** (<list_of_values>);|insert records|data_change<br>command|
 |**INSERT INTO** <table_name> (<list_of_columns>) <br> **SELECT** <columns_made_with_select>;|[insert records](#insert-values-into-table)|data_change<br>command|
 |**SELECT * FROM** <table_name>|print the table (instead of "*" can be *name_of_columns* to return this columns)|output_data<br>command|
-|**DISTINCT**|goes after select to [remove](#unique-output) dublicates|output_data<br>filter<br>command|
+|**DISTINCT**|goes after select to [remove](#unique-output) duplicates|output_data<br>filter<br>command|
 |**ORDER BY** <column_name>|goes after <table_name> to order the output|sort<br>output_data<br>command|
 |SELECT * FROM <table_name> **WHERE** <column_name>='<data_example>' **AND/OR** <other_condition>|[selective output](#selective-output) be like (constructions may be more complex and use "()")|filter<br>output_data<br>command|
 |SELECT * FROM <table_name> WHERE <column_name> **IN** **(**<data_example_1>, <data_example_2>, ..**)**|[selective output](#selective-output) with several values ​​of interest (can be inverted with **NOT**)|filter<br>output_data<br>command|
 |SELECT * FROM <table_name> WHERE <column_name> **EXISTS** **(**  **)**| [**EXISTS**](#selective-output)  keyword in *SQL* is a logical operator used in **WHERE** clauses to check the existence of rows returned by a subquery(!!). It returns *TRUE* if the subquery finds at least one row and *FALSE* if no rows are found(can be inverted with **NOT**)|filter<br>output_data<br>command|
-|SELECT * FROM <table_name> WHERE <column_name> **BETWEEN** <data_example_begining> **AND** <data_example_END>|[selective output](#selective-output) with the range of values ​​of interest|filter<br>output_data<br>command|
+|SELECT * FROM <table_name> WHERE <column_name> **BETWEEN** <data_example_beginning> **AND** <data_example_END>|[selective output](#selective-output) with the range of values ​​of interest|filter<br>output_data<br>command|
 |SELECT * FROM <table_name> WHERE <column_name> **LIKE** '<data_pattern>'|[selective output](#selective-output) based on similar pattern in the values of interest|filter<br>output_data<br>command|
 |**ILIKE** '<data_pattern>'|similar to **LIKE** but is not case sensitive |filter<br>output_data<br>command|
 |**LIMIT** \<number>|put at the end of the command to limit the number of rows in output|limit<br>output_data<br>command|
 |**OFFSET** \<number> |put at the end of the command *but* before **LIMIT** to exclude first <number> rows from output |limit<br>output_data<br>command|
 |**FETCH FIRST** \<number> **ROW ONLY**;| same as **LIMIT**|limit<br>output_data<br>command|
 |**GROUP BY** <column_name>|[used](#summarizing-result) after the *<table_name>* to group/summarize identical data from the column |output_data<br>filter<br>data_analyses<br>command|
-|**COUNT(**\<argument(<column_name>/*/etc)>**)**|function (will appear as a column) [used](#summarizing-result) to summerize unique data from <argument> based on **GROUP BY** column data|output_data<br>data_analyses<br>function|
+|**COUNT(**\<argument(<column_name>/*/etc)>**)**|function (will appear as a column) [used](#summarizing-result) to summarize unique data from <argument> based on **GROUP BY** column data|output_data<br>data_analyses<br>function|
 |GROUP BY <column_name>**HAVING** <rule>|must be [used](#summarizing-result) with **GROUP BY** and take place right after it, can specify (filter) the output |output_data<br>filter<br>command|
 |<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data<br>command|
-|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the begining of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses<br>function|
+|**CASE WHEN** <condition_1> **THEN** <value_1> <br>**WHEN** <condition_2> **THEN** <value_2> <br>**ELSE**<value_3> <br>**END**|[if-else](#if----else-aka-case) for SQL|command <br> output_data <br> data_analyses|
+|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the beginning of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses<br>function|
 |**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses<br>function|
 |**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|gen_data<br>function|
-|NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calclations|gen_data<br>data_analyses|
+|NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calculations|gen_data<br>data_analyses|
 |**EXTRACT(**<the_part_of_data> **FROM** NOW()**)**|[used](#timestamp) to get the particular part of timestamp|filter<br>data_analyses<br>function|
 |**AGE(**<time_to>,<time_from>**)**|[calculate](#timestamp) the age (aka. time difference)|data_analyses<br>function|
-|**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on it's parameters (aka. *<rule>*)|data_change<br>command|
+|**DELETE** FROM <table_name> WHERE <rule>|[deleting](#data-changes) rows from table based on its parameters (aka. *<rule>*)|data_change<br>command|
 |**ALTER** TABLE <table_name> <the_change>|[used](#alter) to modify the structure of an existing table, column or view.|change_table<br>structure_change<br>command|
 |ALTER TABLE <table_name> **ADD** <adding_changes>|command used to [add structure changes](#structure-changes) to the table|change_table<br>structure_change<br>command|
 |ALTER TABLE <table_name> ADD **CONSTRAINT** <constraint_name> <constraint_itself>|command used to add a [new constraint](#unique-constraint)  to the table|change_table<br>structure_change<br>command|
 |**UPDATE** <table_name> **SET** <column_name>='<new_data>' WHERE <rule>|[updating](#data-changes) rows selected by the *<rule>* with the *<new_data>* to the *<column_name>*|data_change<br>command|
 |**ON CONFLICT** <column_name>/<other_conflict_case> **DO** <command_to_perform_in_case_of_conflict>|handling [conflict](#conflict-handler) situations, can be used only with *<column_name>* that is either a *primal key* or a *unique constraint* |data_change<br>error<br>command|
-|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow to handle [conflict](#conflict-handler) with doing nothing|data_change<br>error<br>command|
+|ON CONFLICT <column_name>/<other_conflict_case> DO **NOTHING**|allow handling [conflict](#conflict-handler) with doing nothing|data_change<br>error<br>command|
 |ON CONFLICT <column_name>/<other_conflict_case> DO UPDATE set <column_name_to_replace>=**EXCLUDED.**<column_name_new_info>|in case of a [conflict](#conflict-handler) replace existing info with new one for given columns otherwise add a new row|data_change<br>error<br>command|
-|<column_name> <data_type> **REFERENCES** <other_table_name>(<column_of_the_table>)|parameter of the colunm to [create](#foreign-key-relationship) [connected](#terms) to another table column|create<br>table_connection<br>command|
+|<column_name> <data_type> **REFERENCES** <other_table_name>(<column_of_the_table>)|parameter of the column to [create](#foreign-key-relationship) [connected](#terms) to another table column|create<br>table_connection<br>command|
 |SELECT <columns_names> FROM <table_1_name> **JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#join) the [connected](#terms) data from tables (**!**will output only rows that have data in both/all tables)|output_data<br>table_connection<br>filter<br>command|
 |SELECT <columns_names> FROM <table_1_name> **LEFT JOIN** <table_2_name> **ON** <table_1_name>.<foreign_key_column_t1> = <table_2_name>.<foreign_key_column_t2>|allow to [output](#left-join) the [connected](#terms) data from tables (**!**will output rows that have data in both/all tables and other rows from the first table)|output_data<br>table_connection<br>filter<br>command|
-|**CASCADE**| added to the end after deletion allow to delete ad the dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change<br>command|
+|**CASCADE**| added to the end after deletion allow deleting dependences and foreign keys (**!** is a dangerous practice) |change_table<br>data_change<br>command|
 |**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>gen_data|
 |SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter<br>function|
 |<column_name> **default** <default_data>| [add default data](#create-table-with-constrains) to the table's column settings|change_table<br>data_change<br>command|
@@ -301,22 +306,44 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**CREATE UNIQUE INDEX** <index_name> **ON** <table_name> (<column_name>) <br> **DROP UNIQUE INDEX** <index_name> |to [create / delete](#unique-index) an ***unique*** index|create<br>filter<br>output_data<br>delete<br>command|
 |**CREATE UNIQUE INDEX** <index_name> **ON** <table_name> (<column_name>) **WHERE** <condition_for_unique_rows>|to [create](#partial-unique-index) an ***partially unique*** index|create<br>filter<br>output_data<br>delete<br>command|
 |**EXPLAIN ANALYZE**<any_command>| put before any command to return the command execution info (including time it takes)|get_info<br>command|
-|**UPPER(**<column/data>**)**|change all leters from the column/data into upper case|output_data<br>data_change<br>function|
-|**IF NOT EXISTS**|allows to create new entities ([ex. index](#if-exists)) or preform another action only in case one with same name does not exist or something else not exists |change_table<br>create|
-|**IF EXISTS**|same as previous, but in case of existence |change_table|
-|**COMMENT ON** TABLE <table_name> **IS** '<comment>';<br>**COMMENT ON** COLUMN <column_name> **IS** '<comment>';|adding [comments](#comments) to table or column|change_table|
-|**START TRANSACTION;** <br> <transaction_body><br>**COMMIT;**|working via [transaction](#transactions) |way_of_work|
+|**UPPER(**<column/data>**)**|change all letters from the column/data into upper case|output_data<br>data_change<br>function|
+|**IF NOT EXISTS**|allows creating new entities ([ex. index](#if-exists)) or preform another action only in case one with same name does not exist or something else not exists |change_table<br>create|
+|**IF EXISTS**|same as previous, but in case of existence |change_table<br>command|
+|**COMMENT ON** TABLE <table_name> **IS** '<comment>';<br>**COMMENT ON** COLUMN <column_name> **IS** '<comment>';|adding [comments](#comments) to table or column|change_table<br>command|
+|**START TRANSACTION;** <br> <transaction_body><br>**COMMIT;**|working via [transaction](#transactions) |way_of_work<br>command|
+|**CREATE FUNCTION** <function_name>(<input_variables_list>)<br>**RETURNS** <type_of_refurning_variable> **AS** \$$<br>    <function_body><br>    RETURN <returning_variable>;<br>\$$ **LANGUAGE** <language_of_function>;|[Creating](#functions) of function|function<br>command<br>create|
+|**CREATE TRIGGER** <trigger_name><br>**AFTER/BEFORE** <action_to_activate_trigger> **ON** <table_name><br><more_parameters_for_trigger_activation><br>EXECUTE FUNCTION <function_name>(<parameter>)/<triggered_action>;|[Trigger](#terms) [creation](#functions)|command<br>create|
+|**DROP FUNCTION** IF EXISTS <function_name> |Deleting function (add CASCADE at the end to delete the connected triggers)|function<br>command<br>delete|
+|**DROP TRIGGER** IF EXISTS <trigger_name> **ON** <table_name>|Deleting a trigger.|command<br>delete|
+|**unnest(**<an_array>**)**| function to expand the input array into a set of rows|function<br>output_data|
+|**ROW_NUMBER()**|This is a window function in SQL that [assigns](#insert-values-into-table) a unique, sequential number to each row within the result set of a query. It always generates a distinct sequential number for each row, even if there are duplicate values in the ordering column.|function<br>output_data<br>gen_data|
+|<a_function> **OVER (**<column_name>**)**|[defines](#insert-values-into-table) how the window function operates on the result set.|function<br>command|
 
 ## Data types
 
-|Data type|Discription| Structure| Example|
+|Data type|Description| Structure| Example|
 |---|---|---|---|
-|numeric|exact numeric of selectable precision| numeric(<number_of_digits>,<number_of_decimal_digits>)|numeric(5,2)  =>  555.55|
+|**integer**|whole numbers (integers) without decimal points (max number depends: **INT**, **BIGINT**, **SMALLINT**, **TINYINT**)|INT/INTEGER|amount **INTEGER** => 5|
+|**numeric**|exact numeric of selectable precision| NUMERIC(precision, scale) |price **numeric(5,2)**  =>  555.55|
+|**decimal**|same as *numeric*|decimal(precision, scale)|same as *numeric*|
+|**FLOAT**/**REAL**|floating-point numbers (can store very large or very small numbers but may not be precise)|FLOAT <br> REAL|pi_constant **FLOAT**|
+|**SERIAL**/**BIGSERIAL**|Auto-incrementing integers (32-bit and 64-bit)|SERIAL<br>BIGSERIAL|id SERIAL PRIMARY KEY|
+* **precision**: Total number of digits that the number can have (both to the left and right of the decimal point).
+* **scale**: The number of digits to the right of the decimal point.
 
 * Full list: [click](https://www.postgresql.org/docs/16/datatype.html)
 
 
 ## Constraints
+
+### Global adding constraint syntaxes 
+```SQL
+ALTER TABLE <table_name>
+ADD CONSTRAINT <constraint_name>
+<TYPE_OF_CONSTRAINT> (<column_name>)
+<extra_parameters>;
+```
+
 ### [Primary key](#terms)
 
 #### ***Remove*** an existing *primary key* constraint: 
@@ -383,6 +410,23 @@ ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender ='Male' or gen
 ### [Foreign key (Relationship)](#terms)
 * includes: [**REFERENCES**](#sql-commands-list)
 #### Examples of creating connected tables:  [1](table_examples/connected.sql), [2](#create-table-with-constrains)
+```SQL
+-- creating foreign key constraint with setting name
+-- on table creation
+CREATE TABLE discounts (
+    discount_id INT PRIMARY KEY,
+    person_id INT,
+    amount DECIMAL(10, 2),
+    CONSTRAINT fk_discounts_person_id
+    FOREIGN KEY (person_id) 
+    REFERENCES person(person_id)
+);
+-- addint the constraint
+ALTER TABLE discounts
+ADD CONSTRAINT fk_discounts_person_id
+FOREIGN KEY (person_id)
+REFERENCES person(person_id);
+```
 
 #### To ***add*** new values if connection column exists can be done by simple **update** (!Uniqueness if it exists will give warnings if you give same values)
 ```SQL 
@@ -425,8 +469,6 @@ SELECT * FROM car WHERE id>5;
 ```
 
 ### Simple use example
-* person table (id, name, age, gender, address);
-* person_order table (id, person_id, menu_id, order_date).
 ```SQL
 SELECT person.name AS name 
 FROM person, person_order 
@@ -512,7 +554,7 @@ FROM
     ```
 
 #### [Cross join](#terms)
-* Example - all posible combinations of two columns:
+* Example - all possible combinations of two columns:
     ```SQL
     SELECT * FROM person
     CROSS JOIN pizzeria
@@ -748,8 +790,8 @@ SELECT * FROM person_id_seq;
 
 ## Recursive queries 
 
-* allow to build trees
-* allow to do recursion
+* allow building trees
+* allow doing recursion
 
 #### Syntax
 ```SQL
@@ -768,7 +810,7 @@ SELECT * FROM <CTE_name>;
 ```
 
 #### Examples
-* Factorial with recurtion
+* Factorial via recursion
     ```SQL
     WITH RECURSIVE r AS (
         -- begining values of recursion
@@ -928,16 +970,16 @@ WHERE conditions;
 * index types: 
     * b-tree index aka. balanced tree -default one; 
         ![b-tree index](DICM/th_4.png?raw=true "b-tree index for alphabetic based column")
-    * function-based indndex - index structure is based on some function, not just a table;
-    * clustered index - data in table sorted tha same way as the index;
+    * function-based index - index structure is based on some function, not just a table;
+    * clustered index - data in table sorted the same way as the index;
     * bitmap index - index structure is a 2D table;
         ![bitmap index](DICM/th_5.png?raw=true "bitmap index for employee with 'at work status'")
     * etc...
-* SQL can use indexes ***automaticaly*** in search if there are any or you can force SQL to use indexes by blocking the usual search: ```SET enable_seqscan = OFF;```.
+* SQL can use indexes ***automaticaly*** in search if there are any, or you can force SQL to use indexes by blocking the usual search: ```SET enable_seqscan = OFF;```.
 * **INDEX** speed up *search*, but slow down *INSERT*, *DELETE*, *UPDATE*.
     ![don't use when](DICM/th_6.png?raw=true "don't use when")
 * Index can be created for several columns.
-* **Claster index** is created automaticaly if there is a primary key (others **handmade indexes** are unclustered).
+* **Claster index** is created automatically if there is a primary key (others **handmade indexes** are not clustered).
 * Indexes are most useful on columns that are frequently used in **WHERE** clauses, **JOIN** conditions, and **ORDER BY** clauses.
     |![th_7](DICM/th_7.png)|![th_8](DICM/th_8.png)|
     |---|---|
@@ -1080,7 +1122,138 @@ COMMIT;
 ```
 
 
-## Functions 
+## [Functions](#terms)
+
+* Functions can be written in different SQL related languages (with different standards and abilities). The language used in function must be specified while creating it:
+    * [pl/pgsql](#trigger-activated-plpgsql-function)
+    * sql
+
+### Syntaxes
+#### Main function creation and use structure
+```SQL
+-- cration
+CREATE FUNCTION <function_name>(<parameter>)
+RETURNS <type_of_refurning_variable AS $$
+    <function_body>
+    RETURN <returning_variable>;
+$$ LANGUAGE <language_of_function>;
+-- usage
+SELECT <function_name>(<parameter>)...;
+-- or be called by [triggers](#terms)
+```
+#### Deleting functions and triggers 
+* [Done via *DROP*](#sql-commands-and-functions-list).
+
+#### To see function list: ```\df```
+#### To see table info (inc. triggers):```\d person```
+
+### Examples of functions
+
+#### [Trigger](#terms) activated pl/pgsql function 
+* ***Trigger data type*** is a special data type that keep information that was taken(**OLD**), brought (**NEW**) or changed in  the table by command that triggered the function activation.
+* FIRST create a function THEN trigger that activates it!
+* Trigger creation syntaxes:
+    ```SQL
+    CREATE TRIGGER <trigger_name>
+    AFTER/BEFORE <action_to_activate_trigger> ON <table_name>
+    <more_parameters_for_trigger_activation>
+    EXECUTE FUNCTION <function_name>(<parameter>)/<what_trigger_does>;
+    ```
+* **TG_OP** - variable representing action that triggered the function
+* **IF/ELSIF/ELSE** syntaxes is brought by pl/pgsql language.  
+
+Example 1: 
+```SQL
+-- creating the auditor function with no input parameters
+CREATE OR REPLACE FUNCTION fnc_trg_person_insert_audit()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO person_audit (row_id, name, age, gender, address)
+    VALUES (NEW.id, NEW.name, NEW.age, NEW.gender, NEW.address);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+--the function is get activated by the trigger and save a copy of inserted parameters to another table
+
+-- create the trigger
+CREATE TRIGGER trg_person_insert_audit
+AFTER INSERT ON person
+FOR EACH ROW
+EXECUTE FUNCTION fnc_trg_person_insert_audit();
+--the trigger got activated after any insert to person table and it calls fnc_trg_person_insert_audit function
+```
+Example 2:
+```SQL
+-- creating the auditor function
+CREATE OR REPLACE FUNCTION  fnc_trg_person_audit()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO person_audit (row_id, name, age, gender, address)
+        VALUES (NEW.id, NEW.name, NEW.age, NEW.gender, NEW.address);
+        RETURN NEW;
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO person_audit
+            (type_event, row_id, name, age, gender, address)
+        VALUES 
+            ('U', OLD.id, OLD.name, OLD.age, OLD.gender, OLD.address);
+        RETURN OLD;
+    ELSE
+        INSERT INTO person_audit 
+            (type_event, row_id, name, age, gender, address)
+        VALUES
+            ('D', OLD.id, OLD.name, OLD.age, OLD.gender, OLD.address);
+        RETURN OLD;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- creating the trigger
+CREATE OR REPLACE TRIGGER trg_person_audit
+AFTER INSERT OR UPDATE OR DELETE ON person
+FOR EACH ROW
+EXECUTE FUNCTION fnc_trg_person_audit();
+```
+
+#### Directly called SQL function
+```SQL
+-- the function is written in SQL language
+-- creating function that got VARCHAR for the input (with 'female' if the function was called with no input) the input variable is called "pgender"
+-- the function returns a table (the table columns must be listed)
+CREATE OR REPLACE FUNCTION fnc_persons (pgender VARCHAR DEFAULT 'female')
+RETURNS TABLE (id INTEGER, name VARCHAR, age INTEGER, gender VARCHAR, address VARCHAR)
+LANGUAGE SQL
+AS $$
+    SELECT *
+    FROM person
+    WHERE gender=pgender;
+$$;
+
+-- ways to call the function
+select * from fnc_persons('male');
+select * from fnc_persons(pgender := 'male');
+select * from fnc_persons(); -- as default will be 'female'
+```
+* Table returning function in pl/pgsql: [click](#more-function-examples)
+
+#### Directly called pl/pgsql function 
+```SQL
+-- creating function that calculates minimum value from input array
+CREATE OR REPLACE FUNCTION func_minimum (VARIADIC arr NUMERIC[])
+RETURNS NUMERIC
+AS $BODY$
+BEGIN
+    RETURN (SELECT MIN(in_put) FROM unnest(arr) AS in_put);
+END;
+$BODY$ LANGUAGE plpgsql;
+
+-- calling function
+SELECT func_minimum(VARIADIC arr => ARRAY[10.0, -1.0, 5.0, 4.4]);
+-- or
+SELECT func_minimum(VARIADIC ARRAY[10.0, -1.0, 5.0, 4.4]);
+```
+* The **VARIADIC** keyword indicates that the function takes a variable number of arguments, which are stored in an array *arr* of type *NUMERIC[]*.
+* It uses the **unnest** function to expand the input array arr into a set of rows
 
 
 ## Extensions
@@ -1151,6 +1324,15 @@ CREATE TABLE person_discounts (
     CHECK (discount<=100 AND discount>=0)
 );
 ```
+```SQL
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    order_date DATE DEFAULT NOW()::DATE;,    -- Sets the default to the current date
+    status VARCHAR(20) DEFAULT 'Pending'     -- Default value of 'Pending' for status
+);
+
+```
+
 
 ### Insert values into table
 ```SQL
@@ -1199,6 +1381,7 @@ SELECT DISTINCT
     END) AS discount
 FROM order_number;
 ```
+* *ORDER BY person_id* tells the window function to order the rows based on the value in the *person_id* column - it determines the order in which the row numbers are assigned.
 
 
 ### Sorted output
@@ -1356,10 +1539,10 @@ SELECT id, make, model, price AS origin_price, ROUND(price * .8,2) AS "20_percen
 ```
 
 ### Null handling
-* Equal *NULL* and opposite of this one are: ```<column_name> IS NULL``` and  ```<column_name> IS NOT NULL```.
+* Equal *NULL* and opposite of this one are: ```<column_name> IS NULL``` and ```<column_name> IS NOT NULL```.
 ```SQL
 --example 1 (COALESCE)
-SELECT first_name, last_name, COALESCE(email, 'no email provided')  FROM person;
+SELECT first_name, last_name, COALESCE(email, 'no email provided') FROM person;
 --if email is null, then 'no email provided' will be shown instead
 
 --example 2 (NULLIF)
@@ -1485,7 +1668,7 @@ temp_db=# SELECT * FROM person WHERE id= 445;
 --  445 | Simonius   | Undethov  | Male   | 1990-08-27    | Sweden           | sdethloffc9@mm-monkey.ua.com | 
 ```
 
-### Formated output
+### Formatted output
 ```SQL
 SELECT name || ' (age:'|| age||',gender:'||gender||',address:'||address||')' from person;
 --or
@@ -1545,6 +1728,35 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_person_discounts_unique
 ON person_discounts (person_id, pizzeria_id);
 ```
 
+### More [function](#functions) examples
+```SQl
+-- creating function
+CREATE OR REPLACE FUNCTION fnc_person_visits_and_eats_on_date(
+        pperson VARCHAR DEFAULT 'Dmitriy', 
+        pprice NUMERIC(5,2) DEFAULT 500,
+        pdate DATE DEFAULT '2022-01-08')
+RETURNS TABLE (pizzeria VARCHAR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT DISTINCT pz.name FROM person_visits pv
+        JOIN pizzeria pz ON pv.pizzeria_id=pz.id
+        JOIN person pr ON pv.person_id=pr.id
+        JOIN menu m ON pz.id=m.pizzeria_id
+    WHERE pr.name=pperson 
+        AND m.price<pprice
+        AND pv.visit_date=pdate;
+END;
+$$;
+
+-- callign function differently
+-- #1
+select * from fnc_person_visits_and_eats_on_date(pprice := 800);
+-- #2
+select * from fnc_person_visits_and_eats_on_date(pperson := 'Anna',pprice := 1300,pdate := '2022-01-01');
+select * from fnc_person_visits_and_eats_on_date('Anna',1300,'2022-01-01');
+```
 
 
 ## Export data
