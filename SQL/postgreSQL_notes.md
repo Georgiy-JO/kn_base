@@ -37,6 +37,7 @@
 16. [Index](#index)
 17. [Comments](#comments)
 18. [Transactions](#transactions)
+19. [Functions] (#functions)
 1. [Extensions](#extensions)
 . [Examples](#examples) \
     18.1. [Create table](#create-table-no-constrains)\
@@ -105,11 +106,38 @@
 |[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data itselfe, instead, it presents data derived from one or more tables.|
 |[**MATHERIALIZED VIEW**](#materialized-view)|a database object that stores the result of a query **physically on disk**, rather than just being a virtual table like a regular view (can significantly improve query performance, especially for complex queries or large datasets due to it's saved nature).|
 |[**INDEX**](#index)|a database object used to speed up the retrieval of rows by creating an additional data structure, improves the performance of **SELECT** queries by allowing the database to quickly locate the rows without having to scan the entire table.|
-|[**TRANSACTION**](#transactions)||
-|[**Anomalies**](#anomalies)||
+|[**TRANSACTION**](#transactions)|Transactions group a set of tasks into a single execution unit. Allow several people to work with DB at the same time and deal with anomalies.|
+|[**Anomalies**](#anomalies)|Anomalies in the relational model refer to inconsistencies or errors that can arise when working with relational databases, specifically in the context of data insertion, deletion, and modification. |
 
-### [Anomalies](#transactions)
+### [Anomalies](#theory)
 
+Database theory has 4 foundametal data anomalies (physical anomalies):
+* Lost Update Anomaly;
+* Dirty Reads Anomaly;
+* Non-repeatable Reads Anomaly;
+* Phantom Read Anomaly.
+
+Therefore, there are different [isolation levels](#transaction-isolation-levels) in ANSI SQL standard that prevent known anomalies.
+
+![th_10](DICM/th_10.png)
+
+From one point of view, this matrix should be a standard for any Relational Database, but reality... looks a bit different.
+||| |
+| --- | --- | --- |
+| PostgreSQL | ![th_11](DICM/th_11.png) |
+| Oracle | ![th_12](DICM/th_12.png) |
+| MySQL | ![th_13](DICM/th_13.png) |
+
+Nowadays, IT community found a set of new anomalies based on Database Model (logical view):
+- Read Skew Anomaly;
+- Write Skew Anomaly;
+- Serialization Anomaly;
+- Fan Traps Anomaly;
+- Chasm Traps Anomaly;
+- Data Model Loops Anomaly;
+- etc.
+
+The most common way to illustrate anomalies is to use several [transactions](#transactions) at the same time with different isolation levels.
 
 * [off top] Remember! The [Curve of Usefulness](DICM/th_9.png) of detailed data over time decrease but the value of aggregated data increase.
 
@@ -986,6 +1014,73 @@ WHERE table_name = 'person_discounts';
 ```
 
 ## [Transactions](#theory)
+
+### Transaction isolation levels
+
+|Level|Description|
+|-----|-----------|
+|**REPEATABLE READ**|ensures that once a transaction reads data, it will always see the same data throughout the entire transaction, even if other transactions modify or commit changes to the data during that time.|
+|**READ COMMITTED**|ensures that a transaction can only see data that has been committed by other transactions. This means that any changes made by another transaction that are not yet committed are invisible to a transaction.|
+|**SERIALIZABLE**|the isolation level is the highest level of transaction isolation in PostgreSQL. It ensures complete isolation between transactions, meaning that transactions are executed as if they were run serially, one after the other, even if they are executed concurrently. This prevents all forms of concurrency anomalies, such as dirty reads, non-repeatable reads, and phantom reads.|
+|**READ UNCOMMITTED**|Specifies that statements can read rows that have been modified by other transactions but not yet committed, do not issue shared locks to prevent other transactions from modifying data read by the current transaction.|
+
+### Transaction related commands 
+#### Starting the transaction
+```SQL
+BEGIN TRANSACTION;
+--or
+START TRANSACTION;
+```
+#### Setting an isolation level
+```SQL
+-- after begining of transaction
+SET TRANSACTION ISOLATION LEVEL <name_of_isolation_level>;
+-- or
+-- at the begining of transaction
+START TRANSACTION ISOLATION LEVEL <name_of_isolation_level>;
+```
+#### Check the current isolation level
+```SQL
+SHOW TRANSACTION ISOLATION LEVEL;
+```
+#### Committing the transaction
+```SQL 
+COMMIT;
+```
+#### Rolling back the transaction
+* Stop and exit without committing, rolling back all changes made during the transaction.
+```SQL
+ROLLBACK;
+```
+
+### Anomalies examples
+
+|Anomaly/Error|Isolation level| Scheme | Result|
+|---|---------------|-------|-------|
+|**Lost Update** Anomaly|**READ COMMITTED**|![scheme_1](DICM/th_14.png)|Session_2 *UPDATE* will not work until the transaction of session_1 is completed via *COMMIT*. <br> After the transaction of session_1 was committed the session_2 *UPDATE* lost the "**lock**" and was finished.|
+|**Lost Update** Anomaly|**REPEATABLE READ**|![scheme_1](DICM/th_14.png)|**Lock** the *UPDATE* of session_2 until the *COMMIT* of the session_1 transaction. <br> After session_1 *COMMIT* will return an error and won't allow UPDATE until the *COMMIT* of session_2. <br> *COMMIT* of session_2 transaction will result in forced **ROLLBACK**.|
+| **Non-Repeatable Reads** Anomaly|**READ COMMITTED**|![scheme_2](DICM/th_15.png)|The second *SELECT* of session_1 will return the updated in session_2 value.|
+| **Non-Repeatable Reads** Anomaly|**SERIALIZABLE**|![scheme_2](DICM/th_15.png)|The second *SELECT* of session_1 will return the same not updated value, only the *SELECT* that is after the session_1 *COMMIT* will return the changed in session_2 value.|
+|**Phantom Reads** Anomaly|**READ COMMITTED**|![scheme_3](DICM/th_16.png)|Second and third summing in session_1 will include value inserted in session_2.|
+|**Phantom Reads** Anomaly|**REPEATABLE READ**|![scheme_3](DICM/th_16.png)|Second summing in session_1 will not include value inserted in session_2, only the one that goes after the session_1 commit (the third one) will.|
+|**DEADLOCK**||![scheme_4](DICM/th_17.png)|After both transactions got **locked** PSQL killed the [session_2](DICM/sh_3.png) transaction so only *UPDATE*s from TRANSACTION [session_1](DICM/sh_2.png) stayed.|
+
+* In different isolation levels some operations are getting "**locked**" by SQL in case they overlap operations from other transactions or may be affected by them.
+* A ***DEADLOCK*** is a situation in a database where two or more transactions are unable to proceed because they are each waiting for the other to release a resource (such as a lock) that they need in order to continue, effectively causing them to become stuck indefinitely unless the deadlock is detected and resolved. In most database systems (inc. PostgreSQL), deadlock detection and resolving is automatic, it chooses one of the transactions to abort. 
+
+### Example
+```SQL
+START TRANSACTION ISOLATION LEVEL REPEATABLE READ ; 
+SHOW TRANSACTION ISOLATION LEVEL;
+select SUM(rating) from pizzeria;
+INSERT INTO pizzeria (id, name,rating) 
+VALUES (11, 'Kazan Pizza 2', 4);     
+select SUM(rating) from pizzeria;
+COMMIT;
+```
+
+
+## Functions 
 
 
 ## Extensions
