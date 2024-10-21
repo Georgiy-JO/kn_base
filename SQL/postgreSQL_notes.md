@@ -1,11 +1,16 @@
-# PostgreSQL 101 (psql ver. 2.0)
+# SQL 101 (psql ver. 2.0)
 
 ### Contents:
 
 0. [File description](#file-description)
-1. [Theory](#theory)
+1. [Theory](#theory) \
+    1.1. [RDB](#rdb)
     1.1. [Terms](#terms) \
-    1.2. [Anomalies](#anomalies)
+    1.2. [Anomalies](#anomalies) \
+    1.3. [Normalization](#normalization) \
+    1.4. [DWH and ODS](#dwh-sql-and-ods) \
+        1.4.1. [DWH SQL](#dwh-sql) \
+        1.4.2. [ODS](#ods)
 2. [Installation](#instalationgeneral)
 3. [Entering DB shell](#entering-database-shell)
 4. [Creating user](#creating-a-user)
@@ -36,7 +41,8 @@
 15. [View](#view)
 16. [Index](#index)
 17. [Comments](#comments)
-18. [Transactions](#transactions)
+18. [Transactions](#transactions) \
+    18.1. [ACID](#acid) 
 19. [Functions](#functions)
 20. [Extensions](#extensions)
 21. [Examples](#examples) \
@@ -61,9 +67,14 @@
     21.19. [Greatest && Least](#greatest--least) \
     21.20. [Alter](#alter) \
     21.21. [If exists](#if-exists) \
-    21.22. [More function examples](#more-function-examples)
+    21.22. [More function examples](#more-function-examples) \
+    21.23. [Round](#round) \
+    21.24. [Number of rows in a table](#count-number-of-rows-in-a-table)
 22. [Export data](#export-data) \
     22.1. [CSV](#csv)
+23. [Notes](#notes) \
+    23.1. [SQL vs PL/pgSQL](#sql-vs-plpgsql) \
+    23.2. [Reserved named table](#table-user) 
 23. [Links](#links)
 
 ## File description
@@ -81,6 +92,54 @@
 
 
 ## Theory
+
+### RDB
+
+**Relational Database (RDB)** is a type of database where data is organized into tables (also called relations) consisting of rows and columns. Each table represents an entity, with rows (records) storing instances of entities, and columns (fields) storing attributes or characteristics of those entities.
+
+#### Main characteristics of a relational database:
+##### Tables:
+* Data is organized into tables, each with a unique name. In a table, rows represent individual records, and columns represent the attributes of those records.
+##### Rows and Columns:
+* **Rows (records):** Each row represents an individual object or instance of an entity, such as a record of a specific customer, employee, or product.
+* **Columns (fields):** Each column represents an attribute or characteristic of the entity, such as name, birthdate, or address.
+##### Primary Key:
+* Every table must have a primary key—one or more fields that uniquely identify each record in the table. The primary key ensures that each record is unique.
+##### Foreign Key:
+* Foreign keys are used to establish relationships between tables. A foreign key refers to the primary key of another table, allowing data to be linked across tables and ensuring data integrity.
+##### Relationships:
+* A key concept of relational databases is the ability to create relationships between tables. These relationships can be "one-to-many," "many-to-many," or "one-to-one," allowing for the organization of complex data structures while maintaining their interrelations.
+
+#### Examples of RDB:
+* MySQL
+* PostgreSQL
+* Oracle
+
+#### Characteristics and kinds of NOT RDB:
+##### **Hierarchical or Network Data Model**
+   - **Hierarchical databases** are organized in a tree-like structure, where data is stored in a parent-child hierarchy. An example is IBM IMS.
+   - **Network databases** represent a structure where each node can have multiple connections to other nodes. This is a complex structure, different from tables in relational databases. An example is the CODASYL database model.
+##### **NoSQL Databases**
+   - **Document-oriented databases** (e.g., MongoDB) use a data structure based on documents, not tables. In such databases, data is stored in JSON or BSON documents.
+   - **Graph databases** (e.g., Neo4j) organize data as nodes and edges, which model complex relationships. They are designed to work with graph structures, not tables.
+   - **Key-value databases** (e.g., Redis) store data as key-value pairs and do not have complex relationships between data as in relational databases.
+   - **Column-oriented databases** (e.g., Cassandra) store data in columns, which allows for efficient processing of large datasets but differs from the organization of data in rows and columns in relational databases.
+##### **Lack of a Strict Data Structure**
+   - Relational databases require a strict schema (structure), where each table column must have a predefined data type (e.g., INT, VARCHAR). In contrast, some database systems, such as NoSQL, may work with data that doesn't require a predefined schema or can change dynamically.
+##### **Lack of Relationships Between Tables**
+   - Relational databases support the concept of relationships between tables via foreign keys (FOREIGN KEY) and allow for complex queries using JOIN. If a database system does not support such relationships or does not use the concept of foreign keys, it does not qualify as a relational database.
+##### **File Systems**
+   - **File systems** (e.g., NTFS, FAT) store data as files and folders and do not provide mechanisms for creating structured tables, primary and foreign keys, or performing complex SQL queries. These are not databases, but systems for file storage.
+##### **No Support for SQL**
+   - Relational databases involve the use of **SQL** (Structured Query Language) for working with data. If a system does not support SQL or an equivalent language for working with tables, it cannot be classified as a relational database.
+##### **Unstructured Data**
+   - **Unstructured data**, such as media files, audio, video, or text documents without an explicit data schema, do not fit the concept of relational databases. Relational databases require a clear structure and organization of data in rows and columns.
+
+#### Examples of NOT RDB:
+* MongoDB
+* Neo4j
+
+
 ### Terms
 |Term|Def|
 |---|---|
@@ -97,7 +156,7 @@
 |[**UNIQUE** constraint](#unique-constraint)|Value that must be unique for every row, but can be NULL. The constraint would not allow to add a new row with the similar to some other data in the constraint column.|
 |[**CHECK** constraint](#check-constraint)|Allow listing values the particular column can have, or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule.|
 |[**foreign key**](#foreign-key-relationship)|Unique value that reference *primary key* from another table (!!types of foreign key column and primary key from another table column must be same!!).|
-|[**join**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data.|
+|[**join**/**INNER JOIN**](#join)|Return the data that is common in several tables. If you have *foreign key* that is present in several tables it connects those and data in them, *Join* will output only that data.|
 |[**left join**](#left-join)|Return the data that is common in several tables + all data from first table. If you have *foreign key* that is present in several tables it connects those and data in them, *left join* will output that data and all other data from the first table.|
 |[**cross join**](#cross-join)|*CROSS JOIN* allow to output all possible combinations of two tables in SQL.|
 |[**NATURAL JOIN**](#natural-join)|A *NATURAL JOIN* in *SQL* is a type of join that automatically combines two tables based on columns with the same names and compatible data types. It simplifies the process by eliminating the need to explicitly specify the join condition. However, it can be risky because it relies entirely on column names, which may unintentionally match columns you don’t want to join.|
@@ -111,9 +170,16 @@
 |[**Anomalies**](#anomalies)|Anomalies in the relational model refer to inconsistencies or errors that can arise when working with relational databases, specifically in the context of data insertion, deletion, and modification. |
 |[**Functions**](#functions)| Set of commands that can be activated/called together|
 |[**Trigger**](#functions)|An SQL trigger is a database object that automatically executes a specified set of SQL statements in response to certain events on a particular table, such as an INSERT, UPDATE, or DELETE operation.|
-|[**\$\<comment>\$**](#functions)|In PostgreSQL, the syntax $<comment>$ is called dollar quoting. It's a way to enclose a string literal in a function or procedure definition. Same dollar quoting start or end one function or procedure.|
+|[**\$\<comment>\$**](#functions)|Double Dollar Sign Delimiters  are used as a delimiter to indicate the beginning and end of the function body. In PostgreSQL, the syntax $<comment>$ is called dollar quoting or f custom delimiter. It's a way to enclose a string literal in a function or procedure definition. Same dollar quoting start or end one function or procedure. |
+|[**DWH SQL**](#dwh-sql)|Data Warehouse SQL|
+|[**ODS**](#ods)|Operational Data Store|
+| [**CAP**](#cap)|Consistency, Availability, Partition tolerance|
+|[**ACID**](#acid)|Atomicity, Consistency, Isolation, Durability|
+|**CRUD**|Four main data related operations: Create, Read, Update, Delete|
 
 ### [Anomalies](#theory)
+
+Fundamental data anomalies refer to inconsistencies, irregularities, or errors in the structure, content, or relationships of data within a database or dataset. 
 
 Database theory has 4 fundamental data anomalies (physical anomalies):
 * Lost Update Anomaly;
@@ -144,6 +210,197 @@ Nowadays, IT community found a set of new anomalies based on Database Model (log
 The most common way to illustrate anomalies is to use several [transactions](#transactions) at the same time with different isolation levels.
 
 * [off top] Remember! The [Curve of Usefulness](DICM/th_9.png) of detailed data over time decrease but the value of aggregated data increase.
+
+### Normalization 
+
+Normalization is a database design process that organizes data to minimize redundancy and dependency. The main objective is to divide large tables into smaller, related tables and define relationships between them.
+
+Key Concepts of Normalization:
+* Redundancy: Repetition of data that should be minimized to save space and prevent inconsistencies.
+* Dependency: Relationships between data where one piece of data relies on another.
+
+Normalization usually progresses through a series of stages called normal forms. Each stage has a set of conditions that must be met to progress to the next one. 
+
+#### First Normal Form (1NF)
+
+A table is in 1NF if:
+* All attributes are atomic (i.e., each column contains indivisible values, no multiple values like arrays or lists).
+* Each record (row) is unique, meaning the table must have a primary key.
+* Rows' order does not matter.
+* Each column contains one data type and has unique name.
+
+```diff
+--- FROM 
+Student | Subjects
+--------|----------
+John    | Math, English
+Sara    | Biology, Physics
+--- TO
+Student | Subject
+--------|---------
+John    | Math
+John    | English
+Sara    | Biology
+Sara    | Physics
+```
+
+#### Second Normal Form (2NF)
+
+A table is in 2NF if:
+* It is in 1NF.
+* No partial dependency exists (i.e., all non-key attributes are fully dependent on the primary key, not just part of it).
+```diff
+--- FROM 
+OrderID | ProductID | ProductName | Quantity
+--------|-----------|-------------|---------
+1       | 101       | Laptop      | 2
+2       | 102       | Monitor     | 1
+--- TO
+Orders Table:
+OrderID | ProductID | Quantity
+--------|-----------|---------
+1       | 101       | 2
+2       | 102       | 1
+
+Products Table:
+ProductID | ProductName
+----------|-------------
+101       | Laptop
+102       | Monitor
+```
+* Here, ProductName depends only on ProductID, not on OrderID, which causes redundancy. 
+
+#### Third Normal Form (3NF)
+
+A table is in 3NF if:
+* It is in 2NF.
+* There is no transitive dependency (i.e., non-key attributes depend only on the primary key, not other non-key attributes).
+```diff
+--- FROM 
+StudentID | StudentName | Department | DepartmentLocation
+----------|-------------|------------|-------------------
+1         | John        | Physics    | Building A
+2         | Sara        | Chemistry  | Building B
+--- TO
+Students Table:
+StudentID | StudentName | Department
+----------|-------------|------------
+1         | John        | Physics
+2         | Sara        | Chemistry
+
+Departments Table:
+Department | DepartmentLocation
+-----------|-------------------
+Physics    | Building A
+Chemistry  | Building B
+```
+* Here, DepartmentLocation depends on Department, not directly on StudentID.
+
+#### Higher Normal Forms
+There are higher normal forms (4NF, 5NF), which deal with more specific types of dependency issues, but 3NF is usually sufficient for most practical database designs.
+
+### Benefits of Normalization:
+* **Reduced Redundancy**: Data is stored only once, eliminating duplicate entries.
+* **Improved Data Integrity**: Consistent updates in one place reduce the risk of anomalies.
+* **Easier Maintenance**: A well-structured database is easier to maintain and extend.
+
+
+! However, over-normalization can lead to complexity and performance issues in some cases due to excessive joins, so sometimes denormalization (intentionally introducing redundancy) may be used to optimize performance in read-heavy databases.
+
+### DWH SQL and ODS
+
+#### DWH SQL
+
+**DWH SQL** refers to **Data Warehouse SQL**, which is the use of SQL (Structured Query Language) within the context of a **Data Warehouse (DWH)**. A Data Warehouse is a large repository of structured data optimized for querying and analysis, typically for business intelligence (BI) purposes.
+
+##### Key Concepts in DWH SQL:
+
+1. **Data Warehousing**: 
+   - A data warehouse consolidates data from different sources (e.g., transactional systems, databases) into a central repository.
+   - It's optimized for read-heavy operations and complex queries, making it different from traditional OLTP (Online Transaction Processing) databases that focus on write-heavy transactions.
+2. **ETL (Extract, Transform, Load)**:
+   - Data is first **Extracted** from various sources, **Transformed** to fit a consistent structure and format, and **Loaded** into the data warehouse. This process is often managed through SQL operations in data warehousing.
+3. **Star and Snowflake Schema**:
+   - In a data warehouse, data is usually organized in star or snowflake schemas, which are designed for efficient querying. These schemas consist of fact tables (which store quantitative data) and dimension tables (which store descriptive data, like dates, product names, etc.).
+4. **Aggregated Data**:
+   - Data in a warehouse is often aggregated, summarized, or indexed for faster query performance. SQL is used to define and retrieve this summarized data.
+5. **SQL Queries for Reporting**:
+   - In a data warehouse, SQL is often used to generate reports, perform trend analysis, or perform data mining tasks. These queries tend to be more complex than those in transactional databases, focusing on large-scale aggregation, filtering, and joins.
+6. **Data Warehousing Technologies**:
+   - DWH SQL is typically used in specialized database systems that are optimized for data warehousing, such as Amazon Redshift, Google BigQuery, Snowflake, or Teradata, in addition to traditional databases like Oracle, SQL Server, or PostgreSQL.
+
+##### Key DWH SQL Features:
+- **Analytical Functions**: DWH SQL often uses window functions (like `RANK()`, `ROW_NUMBER()`, `SUM() OVER`) to perform complex calculations over partitions of data.
+- **Partitioning**: Many DWH systems use partitioned tables to optimize performance, allowing SQL queries to only scan relevant partitions.
+- **Materialized Views**: Precomputed result sets that improve performance of frequent, complex queries.
+
+
+#### ODS
+
+An **Operational Data Store (ODS)** is a type of database that integrates data from multiple sources to provide a real-time or near real-time consolidated view of operational data. It serves as an intermediate layer between transactional systems (OLTP) and more analytical systems like Data Warehouses (DWH).
+
+##### Key Features of an ODS:
+1. **Real-Time or Near Real-Time Data**: Unlike data warehouses, which are designed for historical data and complex queries, ODS systems are updated frequently (in real-time or near real-time) to reflect the latest operational data.
+2. **Data Consolidation**: An ODS collects and consolidates data from multiple source systems (like CRM, ERP, financial systems) into a single location. This enables organizations to have a unified view of current operations.
+3. **Short-Term Data Storage**: ODS typically stores current or recent data, not historical data. It’s meant for operational decision-making, where real-time data is more important than long-term historical trends.
+4. **Supports Operational Reporting**: The ODS can be queried to generate up-to-the-minute reports that reflect current operational status, such as inventory levels, customer transactions, or recent orders.
+5. **Data Integration and Transformation**: Data from various operational systems may have different formats and structures. An ODS performs minimal data transformation (compared to a data warehouse), mainly integrating and harmonizing data in a unified format.
+
+##### Key Benefits of ODS:
+- **Real-Time Decision Making**: Provides up-to-the-minute operational data for quick decision-making.
+- **Data Integration**: Combines data from different sources to give a unified view.
+- **Supports Transactional and Operational Processes**: Ensures that daily operations have access to the most current data without bogging down transactional systems.
+
+##### Typical Use Cases of an ODS:
+1. **Customer Service**: Provides agents with real-time data on customer accounts, transactions, and support tickets.
+2. **Inventory Management**: Tracks current stock levels across multiple warehouses or stores in real-time.
+3. **Order Processing**: Keeps track of real-time order status, shipping updates, and delivery details.
+4. **Fraud Detection**: Real-time monitoring of transactions to detect unusual patterns and potential fraud.
+
+#### ODS vs Data Warehouse:
+- **Purpose**: 
+   - An **ODS** is used for **operational** reporting and decision-making, providing near real-time data.
+   - A **Data Warehouse (DWH)** is designed for **strategic and analytical** reporting, usually focusing on historical data for trend analysis.
+   
+- **Data Freshness**: 
+   - ODS contains **up-to-date, current data** and is refreshed frequently.
+   - A Data Warehouse usually contains **historical, aggregated, and summarized data**, refreshed periodically (e.g., daily, weekly).
+
+- **Storage Duration**:
+   - ODS holds **short-term data**, typically current data.
+   - A Data Warehouse holds **long-term, historical data** for analysis.
+
+- **Complexity**:
+   - ODS focuses on simple, quick queries and operational reporting.
+   - A Data Warehouse supports complex queries and large-scale analytics.
+
+
+### CAP
+
+#### What is CAP?
+The **CAP theorem** (also known as **Brewer's theorem**) is a fundamental principle in distributed systems that describes the trade-offs a system must make when trying to achieve **Consistency**, **Availability**, and **Partition Tolerance** simultaneously. The theorem states that **a distributed system can only guarantee two out of the three** properties at the same time, not all three. Here's a breakdown of each concept:
+
+1. **Consistency**:
+- Every read from the database returns the most recent write. In other words, all nodes in the system have the same data at any given time. When you query a node, it should always return up-to-date and consistent data.
+- Example: In a banking system, if you deposit money, and then immediately check your balance, consistency ensures that the system reflects the deposited amount in the query result.
+2. **Availability**:
+- Every request (read or write) receives a response, even if some of the system's nodes are down. The system remains operational and available to serve requests at all times.
+- Example: A web service remains available and responsive even during server failures, but the data you get may not always be up-to-date.
+3. **Partition Tolerance**:
+- The system continues to function even if there is a "partition" or communication breakdown between nodes in the distributed network. In other words, the system can handle network failures where nodes cannot communicate with each other.
+- Example: If a network connection between two data centers is lost, partition tolerance ensures that each data center can still function independently.
+
+#### The CAP Trade-off:
+The CAP theorem states that in a distributed system, you can only choose two out of the following three:
+- **Consistency** and **Availability** without Partition Tolerance: This means your system is consistent and always available as long as there are no network failures. However, in the case of a partition, the system might have to sacrifice either availability or consistency.
+- **Consistency** and **Partition Tolerance** without Availability: In this case, when a partition happens, the system prioritizes consistency but might stop serving some requests (losing availability) until the partition is resolved.
+- **Availability** and **Partition Tolerance** without Consistency: The system remains available and tolerant of network partitions, but the data you read may not be consistent (you may read stale data until the partition is resolved).
+
+#### Practical Applications:
+- **CP Systems (Consistency + Partition Tolerance)**: These systems sacrifice availability for the sake of consistency during network partitions. Databases like **HBase** and **MongoDB** in certain configurations fall into this category. When a partition occurs, the system may stop serving some requests until the data can be made consistent.
+- **AP Systems (Availability + Partition Tolerance)**: These systems prioritize availability and partition tolerance, but may sacrifice consistency (eventual consistency is often used). Systems like **Cassandra** and **Amazon DynamoDB** are examples of AP systems. During a partition, the system remains available but may return outdated data until consistency is restored.
+- **CA Systems (Consistency + Availability)**: In theory, these systems exist only in environments where partition tolerance is not a concern (like a single-node system). Since network partitions are inevitable in real-world distributed systems, achieving CA fully in distributed databases is not feasible.
+
 
 ## Pre_Work
 
@@ -245,6 +502,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**CREATE DATABASE** <db_name>; |create DB |create<br>structure_change<br>command|
 |**DROP DATABASE** <db_name>; |delete DB|delete<br>structure_change<br>command|
 |**CREATE TABLE** <table_name> ( <br> <column_1 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)> \<Constrains, if there are any> <br> <column_2 name> <[data type](https://www.postgresql.org/docs/16/datatype.html)><br>);|[create table](#create-table-no-constrains)|create<br>structure_change<br>command|
+|ALTER TABLE <table_name> **MODIFY** <column_name> \<datatype> \<constraint>;|modifying table columns |change_table<br>command|
 |**DROP TABLE** <table_name>; |delete table|delete<br>structure_change<br>command|
 |**INSERT INTO** <table_name> (<list_of_columns>) <br> **VALUES** (<list_of_values>);|insert records|data_change<br>command|
 |**INSERT INTO** <table_name> (<list_of_columns>) <br> **SELECT** <columns_made_with_select>;|[insert records](#insert-values-into-table)|data_change<br>command|
@@ -265,7 +523,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |GROUP BY <column_name>**HAVING** <rule>|must be [used](#summarizing-result) with **GROUP BY** and take place right after it, can specify (filter) the output |output_data<br>filter<br>command|
 |<column>**AS**<new_column_name>|(aka. Alias) allow you to set a [name or rename](#table-calculations) any column in output|output_data<br>command|
 |**CASE WHEN** <condition_1> **THEN** <value_1> <br>**WHEN** <condition_2> **THEN** <value_2> <br>**ELSE**<value_3> <br>**END**|[if-else](#if----else-aka-case) for SQL|command <br> output_data <br> data_analyses|
-|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the beginning of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handling) all the *NULL* values with the *<replacement_of_NULL>*|output_data<br>filter<br>data_analyses<br>function|
+|- **COALESCE(**<column_name>**)**<br>- **COALESCE(**<column_name>, '<replacement_of_NULL>**)**|- return the column but remove *NULL* values from the beginning of the column (until frirst not *NULL*)<br>- return the column and [replace](#null-handling) all the *NULL* values with the *<replacement_of_NULL>* <br> In summery the [COALESCE()](#coalesce) function in SQL returns the first non-NULL value from the list of arguments provided. It checks each argument in the order they are provided and returns the first one that is not NULL|output_data<br>filter<br>data_analyses<br>function|
 |**NULLIF(**<value_1>,<value_2>**)**|[return](#null-handling) *<value_1>* if *<value_1>*!=*<value_2>* and *NULL* if *<value_1>*==*<value_2>* |data_analyses<br>function|
 |**NOW()**|returns [timestamp](#timestamp):"YYYY-MM-DD HH:MM:SS.MILSEC+TimeZone|gen_data<br>function|
 |NOW() +/- **INTERVAL** '<the_interval>|[used](#timestamp) for time calculations|gen_data<br>data_analyses|
@@ -286,7 +544,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**nextval('**<sequence_name>**'::regclass)**;|+1 for *last_value* of the [sequence](#sequence)|data_change<br>gen_data|
 |SELECT <columns_names> FROM <table_1_name> JOIN/LEFT JOIN <table_2_name> **USING** <column_name_that_is_identical_in_both_tables>|[simplefy](#example-of-using-extensions-in-work-uuid) *JOIN* and *LEFT JOIN* in case connected columns have same name|output_data<br>table_connection<br>filter<br>function|
 |<column_name> **default** <default_data>| [add default data](#create-table-with-constrains) to the table's column settings|change_table<br>data_change<br>command|
-|ALTER TABLE <table_name> ALTER COLUMN <column_name> <br> **SET DEFAULT** <default_value;>| set default value to existing column|change_table<br>data_change<br>command|
+|ALTER TABLE <table_name> ALTER COLUMN <column_name> <br> **SET DEFAULT** <default_value;> <br><br> ALTER TABLE <table_name> ALTER COLUMN <column_name> DROP DEFAULT;| set/delete default value to existing column|change_table<br>data_change<br>command|
 |**EXCEPT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
 |**INTERSECT**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
 |**UNION**|[Set operations](#set-operations)|output_data<br>table_connection<br>filter<br>command|
@@ -299,7 +557,7 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 |**FLOOR(**\<value>**)**|floor function|gen_data<br>data_change<br>function|
 |**CREATE VIEW** <view_name> <selection><br>**REPLACE VIEW**<view_name> <selection><br>**DROP VIEW**<view_name> |used to [create / update / delete](#view) a [**view**](#theory)|create<br>filter<br>output_data<br>delete<br>command|
 |CREATE **MATERIALIZED** VIEW <view_name> <selection><br>REPLACE **MATERIALIZED** VIEW<view_name> <selection><br>DROP **MATERIALIZED** VIEW <view_name> **REFRESH MATERIALIZED** VIEW <view_name>|used to [create / update / delete / refresh](#view) a **materialized** [**view**](#theory)|create<br>filter<br>output_data<br>delete<br>structure_change<br>command|
-|**ROUND(**\<data>**)**|round the data ad bring it to INTEGER|data_change<br>output_data<br>gen_data<br>function|
+|**ROUND(**\<number>, \<decimals>**)**<br>**ROUND(**\<data>**)**|[round](#round) number to set decimals (can be negative) <br>round the data and bring it to INTEGER|data_change<br>output_data<br>gen_data<br>function|
 |ORDER BY **RANDOM()**|In PostgreSQL, you can use the **RANDOM()** function to order the rows randomly.|output_data<br>sort<br>function|
 |WITH **RECURSIVE** <recursion_CTE_name> AS (<CTE>) |to [use](#recursive-queries) recursive [Common Table Expression](#common-table-expression-cte) |output_data<br>data_analyses<br>gen_data<br>command|
 |**CREATE INDEX** <index_name> **ON** <table_name> (<column_name>) <br> **DROP INDEX** <index_name> |to [create / delete](#index) an index|create<br>filter<br>output_data<br>delete<br>command|
@@ -335,6 +593,41 @@ psql -h localhost -U jackoneill -p 5432  temp_db
 
 
 ## Constraints
+
+* If any data change in table goes against a constraint the change will be canceled. 
+
+### Simple constraints
+
+#### NOT NULL
+
+```SQL
+-- the table creation
+-- theory
+CREATE TABLE table_name (
+    column_name datatype NOT NULL,
+    other_column datatype
+);
+-- implementation 
+CREATE TABLE employees (
+    employee_id INT NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50)
+);
+
+-- addint to existing table
+-- theory
+ALTER TABLE table_name
+MODIFY column_name datatype NOT NULL;
+-- implementation 
+ALTER TABLE employees
+MODIFY first_name VARCHAR(50) NOT NULL;
+```
+
+* same can be done using [check constraint](#check-constraint):
+```SQL
+ALTER TABLE employees
+ADD CONSTRAINT ch_nn_employees CHECK (first_name IS NOT NULL);
+```
 
 ### Global adding constraint syntaxes 
 ```SQL
@@ -1055,16 +1348,29 @@ FROM information_schema.columns
 WHERE table_name = 'person_discounts';
 ```
 
+
 ## [Transactions](#theory)
 
-### Transaction isolation levels
+### ACID
 
-|Level|Description|
-|-----|-----------|
-|**REPEATABLE READ**|ensures that once a transaction reads data, it will always see the same data throughout the entire transaction, even if other transactions modify or commit changes to the data during that time.|
-|**READ COMMITTED**|ensures that a transaction can only see data that has been committed by other transactions. This means that any changes made by another transaction that are not yet committed are invisible to a transaction.|
-|**SERIALIZABLE**|the isolation level is the highest level of transaction isolation in PostgreSQL. It ensures complete isolation between transactions, meaning that transactions are executed as if they were run serially, one after the other, even if they are executed concurrently. This prevents all forms of concurrency anomalies, such as dirty reads, non-repeatable reads, and phantom reads.|
-|**READ UNCOMMITTED**|Specifies that statements can read rows that have been modified by other transactions but not yet committed, do not issue shared locks to prevent other transactions from modifying data read by the current transaction.|
+Key Concepts of Transactions:
+* **Atomicity**: All operations in the transaction are treated as a single "atomic" unit. If any part of the transaction fails, the whole transaction fails, and the database is rolled back to its previous state.
+* **Consistency**: The transaction must ensure that the database remains consistent before and after the transaction. Any rules or constraints of the database (such as foreign key constraints) should be respected.
+* **Isolation**: Each transaction must be isolated from others. The changes made in one transaction should not be visible to others until the transaction is complete (depending on isolation levels).
+* **Durability**: Once a transaction is committed, its changes are permanent, even in the event of a system failure.
+
+
+### [Transaction isolation levels](#links)
+
+* Isolation level refers to the degree to which the operations in one transaction are isolated from other concurrent transactions in a database. It controls how and when the changes made by one transaction become visible to other transactions, and it also determines how multiple transactions can interact with each other when running at the same time.
+
+* There are four main isolation levels:
+    |Level|Description|
+    |-----|-----------|
+    |**REPEATABLE READ**|ensures that once a transaction reads data, it will always see the same data throughout the entire transaction, even if other transactions modify or commit changes to the data during that time.|
+    |**READ COMMITTED**|ensures that a transaction can only see data that has been committed by other transactions. This means that any changes made by another transaction that are not yet committed are invisible to a transaction.|
+    |**SERIALIZABLE**|the isolation level is the highest level of transaction isolation in PostgreSQL. It ensures complete isolation between transactions, meaning that transactions are executed as if they were run serially, one after the other, even if they are executed concurrently. This prevents all forms of concurrency anomalies, such as dirty reads, non-repeatable reads, and phantom reads.|
+    |**READ UNCOMMITTED**|Specifies that statements can read rows that have been modified by other transactions but not yet committed, do not issue shared locks to prevent other transactions from modifying data read by the current transaction.|
 
 ### Transaction related commands 
 #### Starting the transaction
@@ -1124,8 +1430,14 @@ COMMIT;
 
 ## [Functions](#terms)
 
-* Functions can be written in different SQL related languages (with different standards and abilities). The language used in function must be specified while creating it:
-    * [pl/pgsql](#trigger-activated-plpgsql-function)
+* Types of SQL Functions:
+    * Scalar Functions: Return a single value based on the input.
+    * Table-Valued Functions (TVFs): Return a table of data.
+    * Stored Procedures: Perform actions and can return data but are called differently than functions.
+
+
+* Functions can be written in different SQL related languages ([with different standards and abilities](#sql-vs-plpgsql)). The language used in function must be specified while creating it:
+    * [pl/pgsql](#trigger-activated-plpgsql-function) - **Procedural Language/PostgreSQL** is the procedural language for PostgreSQL that extends SQL with control structures (loops, conditions, etc.).
     * sql
 
 ### Syntaxes
@@ -1143,6 +1455,15 @@ SELECT <function_name>(<parameter>)...;
 ```
 #### Deleting functions and triggers 
 * [Done via *DROP*](#sql-commands-and-functions-list).
+
+#### Creating a variable inside function:
+```SQL
+CREATE FUNCTION <function_name>(<parameter>)
+RETURNS <type_of_refurning_variable AS $$
+BEGIN 
+    DECLARE <new_variable_name> <type>;
+END $$ LANGUAGE <language_of_func
+```
 
 #### To see function list: ```\df```
 #### To see table info (inc. triggers):```\d person```
@@ -1758,6 +2079,31 @@ select * from fnc_person_visits_and_eats_on_date(pperson := 'Anna',pprice := 130
 select * from fnc_person_visits_and_eats_on_date('Anna',1300,'2022-01-01');
 ```
 
+### Round
+```SQL
+SELECT ROUND(123.4567, 2);
+-- 123.46
+SELECT ROUND(123.4567, 0);
+-- 123
+SELECT ROUND(123.4567);
+-- 123
+SELECT ROUND(123.4567, -2);
+-- 100
+```
+
+### Count number of rows in a table
+```SQL
+SELECT COUNT(*) FROM person_discounts;
+```
+
+### Coalesce
+It is often used to provide a default value when dealing with NULL fields.
+
+```SQL
+Copy code
+SELECT COALESCE(salary, 5000) FROM employees;
+```
+This would return the value of salary for each employee, but if the salary is *NULL*, it will return *5000* as a default.
 
 ## Export data
 ### CSV
@@ -1767,11 +2113,94 @@ select * from fnc_person_visits_and_eats_on_date('Anna',1300,'2022-01-01');
 \copy (SELECT person.first_name, person.last_name, car.make, car.model, car.price FROM person LEFT JOIN car ON person.car_id=car.id) TO '/home/<user_name>/Downloads/output.csv' DELIMITER ',' CSV HEADER; 
 ```
 
+## Notes
+
+### SQL vs PL/pgSQL
+
+SQL functions and PL/pgSQL functions in PostgreSQL have distinct characteristics and use cases:
+
+#### 1. **Language Type**:
+- **SQL Functions**: 
+  - Written purely in SQL. 
+  - They can only execute SQL statements, such as SELECT, INSERT, UPDATE, or DELETE.
+- **PL/pgSQL Functions**:
+  - Written in PL/pgSQL, a procedural language specifically designed for PostgreSQL.
+  - They can include control structures like loops and conditionals, allowing for more complex logic.
+
+#### 2. **Control Structures**:
+- **SQL Functions**:
+  - Cannot contain control-flow structures (e.g., loops or conditionals).
+  - Suitable for straightforward operations like calculations or simple data manipulation.
+  
+- **PL/pgSQL Functions**:
+  - Can include conditionals (`IF`, `CASE`), loops (`FOR`, `WHILE`), and exception handling (`BEGIN...EXCEPTION`).
+  - Suitable for complex tasks that require procedural logic.
+
+#### 3. **Return Types**:
+- **SQL Functions**:
+  - Typically return a single value, such as a scalar type (e.g., `INTEGER`, `TEXT`) or a single row of a table.
+  
+- **PL/pgSQL Functions**:
+  - Can return complex data types, such as composite types (records), tables, or sets of rows.
+  - They can also return multiple rows or values using cursors.
+
+#### 4. **Performance**:
+- **SQL Functions**:
+  - May be more efficient for simple operations because they are directly executed as a single SQL statement.
+  
+- **PL/pgSQL Functions**:
+  - May have a performance overhead due to the additional procedural constructs. However, for complex logic, they can minimize the number of database round trips.
+
+#### 5. **Use Cases**:
+- **SQL Functions**:
+  - Ideal for simple calculations, aggregations, or data transformations where only SQL is needed.
+  
+- **PL/pgSQL Functions**:
+  - Best suited for business logic, complex data manipulations, batch processing, and operations that require multiple SQL statements or conditional logic.
+
+#### 6. **Error Handling**:
+- **SQL Functions**:
+  - Limited error handling capabilities.
+  
+- **PL/pgSQL Functions**:
+  - Robust error handling using the `EXCEPTION` block, allowing you to catch and handle errors gracefully.
+
+#### Example:
+
+##### SQL Function:
+```sql
+CREATE OR REPLACE FUNCTION get_employee_count(department_id INT)
+RETURNS INTEGER AS $$
+BEGIN
+    RETURN (SELECT COUNT(*) FROM employees WHERE dept_id = department_id);
+END;
+$$ LANGUAGE SQL;
+```
+
+##### PL/pgSQL Function:
+```sql
+CREATE OR REPLACE FUNCTION get_employee_details(department_id INT)
+RETURNS TABLE(id INT, name TEXT) AS $$
+BEGIN
+    RETURN QUERY SELECT id, name FROM employees WHERE dept_id = department_id;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+
+### Table 'user'
+* Table name *user* is a reserved keyword in your SQL database system - it returns username.
+
+If you have a table with this name use single quotes:
+```SQL 
+SELECT * FROM `user`;
+```
 
 ## Links 
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/);
 - [Data generator](https://mockaroo.com/) [🖼️](/DICM/sh_1.png);
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
 - [SQL index video article](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
+- [Transaction isolation levels and anomalies](https://youtu.be/yVlCjzJAOOo?si=7lq67WvldOzgTfQs)
 - [PostgreSQL Tutorial](https://www.tutorialspoint.com/postgresql/index.htm) - not checked;
 - [One more guide](https://docs.fedoraproject.org/en-US/quick-docs/postgresql/) - not checked;
