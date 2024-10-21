@@ -1,17 +1,17 @@
 # SQL 101 (psql ver. 2.0)
 
-### Contents:
+## Contents:
 
 0. [File description](#file-description)
-1. [Theory](#theory) \
-    1.1. [RDB](#rdb)
-    1.1. [Terms](#terms) \
-    1.2. [Anomalies](#anomalies) \
-    1.3. [Normalization](#normalization) \
-    1.4. [DWH and ODS](#dwh-sql-and-ods) \
-        1.4.1. [DWH SQL](#dwh-sql) \
-        1.4.2. [ODS](#ods)
-2. [Installation](#instalationgeneral)
+1. [Theory](#theory)  
+    1.1. [RDB](#rdb)  
+    1.2. [Terms](#terms)  
+    1.3. [Anomalies](#anomalies)  
+    1.4. [Normalization](#normalization)  
+    1.5. [DWH and ODS](#dwh-sql-and-ods)  
+    -  [DWH SQL](#dwh-sql)  
+    -  [ODS](#ods)
+2. [Installation](#installationgeneral)
 3. [Entering DB shell](#entering-database-shell)
 4. [Creating user](#creating-a-user)
 5. [Creating DB](#creating-database)
@@ -19,61 +19,62 @@
 7. [DB shell command list](#database-shell-commands-list)
 8. [SQL commands list](#sql-commands-and-functions-list)
 9. [Data types](#data-types)
-10. [Constraints](#constraints) \
-    10.1. [Primary key](#primary-key) \
-    10.2. [Unique constraint](#unique-constraint) \
+10. [Constraints](#constraints)  
+    10.1. [Primary key](#primary-key-1)  
+    10.2. [Unique constraint](#unique-constraint)  
     10.3. [Check constraint](#check-constraint) 
-11. [Tables connection](#tables-connection) \
-    11.1. [Foreign key](#foreign-key-relationship) \
-    11.2. [Joins](#joins) \
-        11.2.1. [Join](#join) \
-        11.2.2. [Left join](#left-join) \
-        11.2.3 [Cross join](#cross-join) \
-        11.2.4. [Natural join](#natural-join) \
-        11.2.5. [Full join](#full-join)\
-    11.3. [Set operations](#set-operations) \
-        11.3.1. [UNION](#union) \
-        11.3.2. [INTERSECT](#intersect) \
-        11.3.3. [EXCEPT](#except)
+11. [Tables connection](#tables-connection)  
+    11.1. [Foreign key](#foreign-key-relationship)  
+    11.2. [Joins](#joins)  
+    - [Join](#join)  
+    - [Left join](#left-join)  
+    - [Cross join](#cross-join)  
+    - [Natural join](#natural-join)  
+    - [Full join](#full-join)
+
+    11.3. [Set operations](#set-operations)  
+    - [UNION](#union)  
+    - [INTERSECT](#intersect)  
+    - [EXCEPT](#except)
 12. [Sequence](#sequence)
 13. [Common Table Expression (CTE)](#common-table-expression-cte)
 14. [Recursive queries](#recursive-queries)
 15. [View](#view)
 16. [Index](#index)
 17. [Comments](#comments)
-18. [Transactions](#transactions) \
+18. [Transactions](#transactions)  
     18.1. [ACID](#acid) 
 19. [Functions](#functions)
 20. [Extensions](#extensions)
-21. [Examples](#examples) \
-    21.1. [Create table](#create-table-no-constrains)\
-    21.2. [Create table](#create-table-with-constrains)\
-    21.3. [Insert values into table](#insert-values-into-table)\
-    21.4. [Sorted output](#sorted-output) \
-    21.5. [Unique output](#unique-output) \
-    21.6. [Selective output](#selective-output) \
-    21.7. [Summarizing result](#summarizing-result) \
-    21.8. [Use of functions](#use-of-functions) \
-    21.9. [Simple calculations](#simple-calculations) \
-    21.10. [Table calculations](#table-calculations) \
-    21.11. [Null handling](#null-handling) \
-    21.12. [Timestamp](#timestamp) \
-    21.13. [Structure changes](#structure-changes) \
-    21.14. [Data changes](#data-changes) \
-    21.15. [Conflict handler](#conflict-handler) \
-    21.16. [Formatted output](#formated-output)\
-    21.17. [Case(if-else)](#if----else-aka-case) \
-    21.18. [Generate series](#generate-series) \
-    21.19. [Greatest && Least](#greatest--least) \
-    21.20. [Alter](#alter) \
-    21.21. [If exists](#if-exists) \
-    21.22. [More function examples](#more-function-examples) \
-    21.23. [Round](#round) \
-    21.24. [Number of rows in a table](#count-number-of-rows-in-a-table)
-22. [Export data](#export-data) \
+21. [Examples](#examples)  
+    21.1. [Create table](#create-table-no-constrains)  
+    21.2. [Insert values into table](#insert-values-into-table)  
+    21.3. [Sorted output](#sorted-output)  
+    21.4. [Unique output](#unique-output)  
+    21.5. [Selective output](#selective-output)  
+    21.6. [Summarizing result](#summarizing-result)  
+    21.7. [Use of functions](#use-of-functions)  
+    21.8. [Simple calculations](#simple-calculations)  
+    21.9. [Table calculations](#table-calculations)  
+    21.10. [Null handling](#null-handling)  
+    21.11. [Timestamp](#timestamp)  
+    21.12. [Structure changes](#structure-changes)  
+    21.13. [Data changes](#data-changes)  
+    21.14. [Conflict handler](#conflict-handler)  
+    21.15. [Formatted output](#formatted-output)\
+    21.16. [Case(if-else)](#if----else-aka-case)  
+    21.17. [Generate series](#generate-series)  
+    21.18. [Greatest && Least](#greatest--least)  
+    21.19. [Alter](#alter)  
+    21.20. [If exists](#if-exists)  
+    21.21. [More function examples](#more-function-examples)  
+    21.22. [Round](#round)  
+    21.23. [Number of rows in a table](#count-number-of-rows-in-a-table)  
+    21.24. [Coalesce](#coalesce)
+22. [Export data](#export-data)  
     22.1. [CSV](#csv)
-23. [Notes](#notes) \
-    23.1. [SQL vs PL/pgSQL](#sql-vs-plpgsql) \
+23. [Notes](#notes)  
+    23.1. [SQL vs PL/pgSQL](#sql-vs-plpgsql)  
     23.2. [Reserved named table](#table-user) 
 23. [Links](#links)
 
@@ -98,17 +99,17 @@
 **Relational Database (RDB)** is a type of database where data is organized into tables (also called relations) consisting of rows and columns. Each table represents an entity, with rows (records) storing instances of entities, and columns (fields) storing attributes or characteristics of those entities.
 
 #### Main characteristics of a relational database:
-##### Tables:
-* Data is organized into tables, each with a unique name. In a table, rows represent individual records, and columns represent the attributes of those records.
-##### Rows and Columns:
-* **Rows (records):** Each row represents an individual object or instance of an entity, such as a record of a specific customer, employee, or product.
-* **Columns (fields):** Each column represents an attribute or characteristic of the entity, such as name, birthdate, or address.
-##### Primary Key:
-* Every table must have a primary key—one or more fields that uniquely identify each record in the table. The primary key ensures that each record is unique.
-##### Foreign Key:
-* Foreign keys are used to establish relationships between tables. A foreign key refers to the primary key of another table, allowing data to be linked across tables and ensuring data integrity.
-##### Relationships:
-* A key concept of relational databases is the ability to create relationships between tables. These relationships can be "one-to-many," "many-to-many," or "one-to-one," allowing for the organization of complex data structures while maintaining their interrelations.
+1. Tables:
+    * Data is organized into tables, each with a unique name. In a table, rows represent individual records, and columns represent the attributes of those records.
+2. Rows and Columns:
+    * **Rows (records):** Each row represents an individual object or instance of an entity, such as a record of a specific customer, employee, or product.
+    * **Columns (fields):** Each column represents an attribute or characteristic of the entity, such as name, birthdate, or address.
+3. Primary Key:
+    * Every table must have a primary key—one or more fields that uniquely identify each record in the table. The primary key ensures that each record is unique.
+4. Foreign Key:
+    * Foreign keys are used to establish relationships between tables. A foreign key refers to the primary key of another table, allowing data to be linked across tables and ensuring data integrity.
+5. Relationships:
+    * A key concept of relational databases is the ability to create relationships between tables. These relationships can be "one-to-many," "many-to-many," or "one-to-one," allowing for the organization of complex data structures while maintaining their interrelations.
 
 #### Examples of RDB:
 * MySQL
@@ -116,23 +117,23 @@
 * Oracle
 
 #### Characteristics and kinds of NOT RDB:
-##### **Hierarchical or Network Data Model**
+* **Hierarchical or Network Data Model**
    - **Hierarchical databases** are organized in a tree-like structure, where data is stored in a parent-child hierarchy. An example is IBM IMS.
    - **Network databases** represent a structure where each node can have multiple connections to other nodes. This is a complex structure, different from tables in relational databases. An example is the CODASYL database model.
-##### **NoSQL Databases**
+* **NoSQL Databases**
    - **Document-oriented databases** (e.g., MongoDB) use a data structure based on documents, not tables. In such databases, data is stored in JSON or BSON documents.
    - **Graph databases** (e.g., Neo4j) organize data as nodes and edges, which model complex relationships. They are designed to work with graph structures, not tables.
    - **Key-value databases** (e.g., Redis) store data as key-value pairs and do not have complex relationships between data as in relational databases.
    - **Column-oriented databases** (e.g., Cassandra) store data in columns, which allows for efficient processing of large datasets but differs from the organization of data in rows and columns in relational databases.
-##### **Lack of a Strict Data Structure**
+* **Lack of a Strict Data Structure**
    - Relational databases require a strict schema (structure), where each table column must have a predefined data type (e.g., INT, VARCHAR). In contrast, some database systems, such as NoSQL, may work with data that doesn't require a predefined schema or can change dynamically.
-##### **Lack of Relationships Between Tables**
+* **Lack of Relationships Between Tables**
    - Relational databases support the concept of relationships between tables via foreign keys (FOREIGN KEY) and allow for complex queries using JOIN. If a database system does not support such relationships or does not use the concept of foreign keys, it does not qualify as a relational database.
-##### **File Systems**
+* **File Systems**
    - **File systems** (e.g., NTFS, FAT) store data as files and folders and do not provide mechanisms for creating structured tables, primary and foreign keys, or performing complex SQL queries. These are not databases, but systems for file storage.
-##### **No Support for SQL**
+* **No Support for SQL**
    - Relational databases involve the use of **SQL** (Structured Query Language) for working with data. If a system does not support SQL or an equivalent language for working with tables, it cannot be classified as a relational database.
-##### **Unstructured Data**
+* **Unstructured Data**
    - **Unstructured data**, such as media files, audio, video, or text documents without an explicit data schema, do not fit the concept of relational databases. Relational databases require a clear structure and organization of data in rows and columns.
 
 #### Examples of NOT RDB:
@@ -141,6 +142,7 @@
 
 
 ### Terms
+
 |Term|Def|
 |---|---|
 |**(SQL) Structured Query Language**|the database language by which we can perform certain operations on the existing database, and we can also use this language to create a database.|
@@ -151,7 +153,6 @@
 |**TCL (Transaction Control Language)**|transactions group a set of tasks into a single execution unit, each transaction begins with a specific task and ends when all the tasks in the group are successfully completed, if any of the tasks fail, the transaction fails (**BEGIN TRANSACTION**, **COMMIT**, **ROLLBACK**, **SAVEPOINT**).|
 |[**Set operations**](#set-operations)|**UNION**, **INTERSECT**, **EXCEPT**.|
 |[**CTE**](#common-table-expression-cte)|Common Table Expression (**WITH** ... **AS (**...**)**).|
-|**BIGSERIAL** |special data type that is *BIGINT* and has auto incrimination function.|
 |[**primary key**](#primary-key)| Value that uniquely identify a record in the table (unique for any and all rows, not NULL).|
 |[**UNIQUE** constraint](#unique-constraint)|Value that must be unique for every row, but can be NULL. The constraint would not allow to add a new row with the similar to some other data in the constraint column.|
 |[**CHECK** constraint](#check-constraint)|Allow listing values the particular column can have, or a rule values must follow (ex. price>0), will not allow to set a value to the column that is against the rule.|
@@ -162,7 +163,6 @@
 |[**NATURAL JOIN**](#natural-join)|A *NATURAL JOIN* in *SQL* is a type of join that automatically combines two tables based on columns with the same names and compatible data types. It simplifies the process by eliminating the need to explicitly specify the join condition. However, it can be risky because it relies entirely on column names, which may unintentionally match columns you don’t want to join.|
 |[**FULL JOIN**](#full-join) <br>(or **FULL OUTER JOIN**)|is used to combine rows from two tables, returning all rows from both tables, regardless of whether there is a match between them. If a row from one table doesn't have a match in the other table, the result will include that row with NULL values for the columns from the other table.|
 |[**Sequence**](#sequence)|set of auto-increase numbers, auto-created with setting of *SERIAL* and *BIGSERIAL* data types.|
-|["**INSERT-SELECT**"](#insert-values-into-table) pattern|allows inserting data into a table by selecting values from another table or query result.|
 |[**VIEW**](#view)|a virtual table based on the result set of a `SELECT` query that does not store data it selfe, instead, it presents data derived from one or more tables.|
 |[**MATHERIALIZED VIEW**](#materialized-view)|a database object that stores the result of a query **physically on disk**, rather than just being a virtual table like a regular view (can significantly improve query performance, especially for complex queries or large datasets due to it's saved nature).|
 |[**INDEX**](#index)|a database object used to speed up the retrieval of rows by creating an additional data structure, improves the performance of **SELECT** queries by allowing the database to quickly locate the rows without having to scan the entire table.|
@@ -173,7 +173,7 @@
 |[**\$\<comment>\$**](#functions)|Double Dollar Sign Delimiters  are used as a delimiter to indicate the beginning and end of the function body. In PostgreSQL, the syntax $<comment>$ is called dollar quoting or f custom delimiter. It's a way to enclose a string literal in a function or procedure definition. Same dollar quoting start or end one function or procedure. |
 |[**DWH SQL**](#dwh-sql)|Data Warehouse SQL|
 |[**ODS**](#ods)|Operational Data Store|
-| [**CAP**](#cap)|Consistency, Availability, Partition tolerance|
+|[**CAP**](#cap)|Consistency, Availability, Partition tolerance|
 |[**ACID**](#acid)|Atomicity, Consistency, Isolation, Durability|
 |**CRUD**|Four main data related operations: Create, Read, Update, Delete|
 
@@ -313,7 +313,7 @@ There are higher normal forms (4NF, 5NF), which deal with more specific types of
 
 **DWH SQL** refers to **Data Warehouse SQL**, which is the use of SQL (Structured Query Language) within the context of a **Data Warehouse (DWH)**. A Data Warehouse is a large repository of structured data optimized for querying and analysis, typically for business intelligence (BI) purposes.
 
-##### Key Concepts in DWH SQL:
+#### Key Concepts in DWH SQL:
 
 1. **Data Warehousing**: 
    - A data warehouse consolidates data from different sources (e.g., transactional systems, databases) into a central repository.
@@ -329,7 +329,7 @@ There are higher normal forms (4NF, 5NF), which deal with more specific types of
 6. **Data Warehousing Technologies**:
    - DWH SQL is typically used in specialized database systems that are optimized for data warehousing, such as Amazon Redshift, Google BigQuery, Snowflake, or Teradata, in addition to traditional databases like Oracle, SQL Server, or PostgreSQL.
 
-##### Key DWH SQL Features:
+#### **Key DWH SQL Features:**
 - **Analytical Functions**: DWH SQL often uses window functions (like `RANK()`, `ROW_NUMBER()`, `SUM() OVER`) to perform complex calculations over partitions of data.
 - **Partitioning**: Many DWH systems use partitioned tables to optimize performance, allowing SQL queries to only scan relevant partitions.
 - **Materialized Views**: Precomputed result sets that improve performance of frequent, complex queries.
@@ -339,19 +339,19 @@ There are higher normal forms (4NF, 5NF), which deal with more specific types of
 
 An **Operational Data Store (ODS)** is a type of database that integrates data from multiple sources to provide a real-time or near real-time consolidated view of operational data. It serves as an intermediate layer between transactional systems (OLTP) and more analytical systems like Data Warehouses (DWH).
 
-##### Key Features of an ODS:
+#### Key Features of an ODS:
 1. **Real-Time or Near Real-Time Data**: Unlike data warehouses, which are designed for historical data and complex queries, ODS systems are updated frequently (in real-time or near real-time) to reflect the latest operational data.
 2. **Data Consolidation**: An ODS collects and consolidates data from multiple source systems (like CRM, ERP, financial systems) into a single location. This enables organizations to have a unified view of current operations.
 3. **Short-Term Data Storage**: ODS typically stores current or recent data, not historical data. It’s meant for operational decision-making, where real-time data is more important than long-term historical trends.
 4. **Supports Operational Reporting**: The ODS can be queried to generate up-to-the-minute reports that reflect current operational status, such as inventory levels, customer transactions, or recent orders.
 5. **Data Integration and Transformation**: Data from various operational systems may have different formats and structures. An ODS performs minimal data transformation (compared to a data warehouse), mainly integrating and harmonizing data in a unified format.
 
-##### Key Benefits of ODS:
+#### Key Benefits of ODS:
 - **Real-Time Decision Making**: Provides up-to-the-minute operational data for quick decision-making.
 - **Data Integration**: Combines data from different sources to give a unified view.
 - **Supports Transactional and Operational Processes**: Ensures that daily operations have access to the most current data without bogging down transactional systems.
 
-##### Typical Use Cases of an ODS:
+#### Typical Use Cases of an ODS:
 1. **Customer Service**: Provides agents with real-time data on customer accounts, transactions, and support tickets.
 2. **Inventory Management**: Tracks current stock levels across multiple warehouses or stores in real-time.
 3. **Order Processing**: Keeps track of real-time order status, shipping updates, and delivery details.
@@ -408,9 +408,8 @@ The CAP theorem states that in a distributed system, you can only choose two out
 #### [Installation.fedora](https://developer.fedoraproject.org/tech/database/postgresql/about.html)
 
 ### !
-
 * In Windows use **SQL Shell** or **pqAdmin**.
-* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```) or your own user with certain database, or use **pgAdmin**.
+* In Linux use *terminal* enter user **postgres** (```sudo su - postgres```), your own user with certain database name, or use **pgAdmin**.
 
 
 ## Entering database shell
@@ -2167,7 +2166,7 @@ SQL functions and PL/pgSQL functions in PostgreSQL have distinct characteristics
 
 #### Example:
 
-##### SQL Function:
+* SQL Function:
 ```sql
 CREATE OR REPLACE FUNCTION get_employee_count(department_id INT)
 RETURNS INTEGER AS $$
@@ -2177,7 +2176,7 @@ END;
 $$ LANGUAGE SQL;
 ```
 
-##### PL/pgSQL Function:
+* PL/pgSQL Function:
 ```sql
 CREATE OR REPLACE FUNCTION get_employee_details(department_id INT)
 RETURNS TABLE(id INT, name TEXT) AS $$
@@ -2201,6 +2200,6 @@ SELECT * FROM `user`;
 - [Data generator](https://mockaroo.com/) [🖼️](/DICM/sh_1.png);
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
 - [SQL index video article](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
-- [Transaction isolation levels and anomalies](https://youtu.be/yVlCjzJAOOo?si=7lq67WvldOzgTfQs)
+- [Transaction isolation levels and anomalies voiced article](https://youtu.be/yVlCjzJAOOo?si=7lq67WvldOzgTfQs)
 - [PostgreSQL Tutorial](https://www.tutorialspoint.com/postgresql/index.htm) - not checked;
 - [One more guide](https://docs.fedoraproject.org/en-US/quick-docs/postgresql/) - not checked;
