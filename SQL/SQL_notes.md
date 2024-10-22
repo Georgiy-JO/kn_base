@@ -2201,5 +2201,6 @@ SELECT * FROM `user`;
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
 - [SQL index video article](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
 - [Transaction isolation levels and anomalies voiced article](https://youtu.be/yVlCjzJAOOo?si=7lq67WvldOzgTfQs)
+- [Task to study and practice](https://github.com/Georgiy-JO/sql_training_projects?tab=readme-ov-file)
 - [PostgreSQL Tutorial](https://www.tutorialspoint.com/postgresql/index.htm) - not checked;
 - [One more guide](https://docs.fedoraproject.org/en-US/quick-docs/postgresql/) - not checked;
