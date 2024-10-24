@@ -6,3 +6,4 @@
 
 ## Contents:
 - [SQL](/SQL/SQL_notes.md)
+- [git tips](/DevOps/git_notes.md)
