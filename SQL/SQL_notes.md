@@ -80,14 +80,14 @@
 
 ## File description
 
-* Folder [table_examples](table_examples) contain some *SQL* files that can be imported into DB, those are used as examples in text below.
+* Folder **table_examples** contain some *SQL* files that can be imported into DB, those are used as examples in text below.
     |File|Description|Tables|
     |----|-----------|---|
-    | [car.sql](table_examples/car.sql)|BD full of car info|car|
-    | [person.sql](table_examples/person.sql)|BD full of personal info|person|
-    | [connected_1.sql](table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
-    | [connected_uuid.sql](table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
-    | [connected_2.sql](table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
+    | [car.sql](/SQL/table_examples/car.sql)|BD full of car info|car|
+    | [person.sql](/SQL/table_examples/person.sql)|BD full of personal info|person|
+    | [connected_1.sql](/SQL/table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
+    | [connected_uuid.sql](/SQL/table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
+    | [connected_2.sql](/SQL/table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
 
 * *DICM* folder contains illustrations for the file. 
 
@@ -701,7 +701,7 @@ ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender ='Male' or gen
 
 ### [Foreign key (Relationship)](#terms)
 * includes: [**REFERENCES**](#sql-commands-list)
-#### Examples of creating connected tables:  [1](table_examples/connected.sql), [2](#create-table-with-constrains)
+#### Examples of creating connected tables:  [1](table_examples/connected_1.sql), [2](#create-table-with-constrains)
 ```SQL
 -- creating foreign key constraint with setting name
 -- on table creation
@@ -1261,15 +1261,15 @@ WHERE conditions;
     ```
 * index types: 
     * b-tree index aka. balanced tree -default one; 
-        ![b-tree index](DICM/th_4.png?raw=true "b-tree index for alphabetic based column")
+        ![b-tree index](DICM/th_4.png "b-tree index for alphabetic based column")
     * function-based index - index structure is based on some function, not just a table;
     * clustered index - data in table sorted the same way as the index;
     * bitmap index - index structure is a 2D table;
-        ![bitmap index](DICM/th_5.png?raw=true "bitmap index for employee with 'at work status'")
+        ![bitmap index](DICM/th_5.png "bitmap index for employee with 'at work status'")
     * etc...
 * SQL can use indexes ***automaticaly*** in search if there are any, or you can force SQL to use indexes by blocking the usual search: ```SET enable_seqscan = OFF;```.
 * **INDEX** speed up *search*, but slow down *INSERT*, *DELETE*, *UPDATE*.
-    ![don't use when](DICM/th_6.png?raw=true "don't use when")
+    ![don't use when](DICM/th_6.png "don't use when")
 * Index can be created for several columns.
 * **Claster index** is created automatically if there is a primary key (others **handmade indexes** are not clustered).
 * Indexes are most useful on columns that are frequently used in **WHERE** clauses, **JOIN** conditions, and **ORDER BY** clauses.
@@ -2197,7 +2197,7 @@ SELECT * FROM `user`;
 
 ## Links 
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/);
-- [Data generator](https://mockaroo.com/) [🖼️](/DICM/sh_1.png);
+- [Data generator](https://mockaroo.com/) [🖼️](/SQL/DICM/sh_1.png);
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
 - [SQL index video article](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
 - [Transaction isolation levels and anomalies voiced article](https://youtu.be/yVlCjzJAOOo?si=7lq67WvldOzgTfQs)
