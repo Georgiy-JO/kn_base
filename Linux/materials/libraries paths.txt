@@ -1,0 +1,35 @@
+library paths:
+/usr/include/lzma
+/usr/include/lzma/**
+${workspaceFolder}/**
+/usr/include/gstreamer-1.0/gst/check
+/usr/include/gstreamer-1.0
+/usr/include/glib-2.0
+/usr/include/glib-2.0/**
+/lib/**
+/var/**
+/usr/lib/gcc/x86_64-redhat-linux/13/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../../x86_64-redhat-linux/lib/x86_64-redhat-linux/13/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../../x86_64-redhat-linux/lib/../lib64/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../x86_64-redhat-linux/13/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../../lib64/
+/lib/x86_64-redhat-linux/13/
+/lib/../lib64/
+/usr/lib/x86_64-redhat-linux/13/
+/usr/lib/../lib64/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../../x86_64-redhat-linux/lib/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../
+/lib/
+/usr/lib/
+/var/lib/flatpak/runtime/org.freedesktop.Sdk/x86_64/22.08/1ddba5e92137b828b8179a21f774a3be0b7bc01e4ffcadb902bf4d0af509679b/files/include/gstreamer-1.0/gst/
+/usr/include/
+
+programs paths:
+/usr/libexec/gcc/x86_64-redhat-linux/13/
+/usr/libexec/gcc/x86_64-redhat-linux/13/
+/usr/libexec/gcc/x86_64-redhat-linux/
+/usr/lib/gcc/x86_64-redhat-linux/13/
+/usr/lib/gcc/x86_64-redhat-linux/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../../x86_64-redhat-linux/bin/x86_64-redhat-linux/13/
+/usr/lib/gcc/x86_64-redhat-linux/13/../../../../x86_64-redhat-linux/bin/
+

@@ -1,8 +1,27 @@
 # My little knowledge base
 
-![Face picture](misc/reading-owl.png?raw=true "a meme")
+![Face picture](misc/reading-owl.png "a meme")
 
 * ***NOTE***: This repository is a personal knowledge base, and it's not intended to be a professional or full thesaurus or dictionary. Information in it is focused on practical field, please seek more information in other source if you need to. 
 
 ## Contents:
-- [SQL](/SQL/SQL_notes.md)
+- **SQL**
+    - [SQL](/SQL/SQL_notes.md)
+- **DevOps**    
+    - [Git tips](/DevOps/Git_notes.md)
+    - [Virtual machine](/DevOps/VM_notes.md)
+    - [Markdown and Obsidian](/DevOps/MD_notes.md)
+    - [Docker](/DevOps/Docker_notes.md)
+    - [CICD](/DevOps/CICD_notes.md)
+    - [Code editors](/DevOps/Code_editors.md)
+- **Linux**
+    - [Linux](/Linux/Linux_notes.md)
+        - [SSH](/Linux/Linux_parts/SSH_stuff.md)
+- **C**
+    - [C main](/C&C++/C_notes.md)
+        - [Tools](Tools_notes.md)
+        - [Code samples](Code_notes.md)
+- **Bash and SH**
+    - [Bash and sh](/Bash/Bash_notes.md)
+- **Instruments**
+    - [Telegram bot](/Instruments/Tlgbot_notes.md)
