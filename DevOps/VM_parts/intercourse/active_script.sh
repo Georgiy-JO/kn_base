@@ -3,7 +3,7 @@
 # Active commands 0-8
 VAR_1=$2
 VAR_URL="<repository_address>"
-VAR_TOKEN="<project_tocken>"
+VAR_TOKEN="<registration_token>"
 VAR_USR="cave_j"
 #PW - 5th church
 

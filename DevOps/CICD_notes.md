@@ -74,13 +74,13 @@ All the CICD pipeline steps are execute an the device you provide and prepare.
 curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash
 sudo apt-get install gitlab-runner -y
 ```
-2. Start GitLab-Runner and set the *URL* and *TOKEN* of the current project (these can be got from the GitLab website)
+2. Start GitLab-Runner and set the *URL* and security *TOKEN* (these can be got from the GitLab website)
 ```bash
 sudo gitlab-runner start
 sudo gitlab-runner register \
 --non-interactive \
 --url <repository_URL> \
---registration-token <project_token>\
+--registration-token <registration_token>\
 --executor "shell" \
 --description "CICD"
 ```
