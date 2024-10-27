@@ -23,8 +23,8 @@ There are several ways to bring files to a *virtual machine*, like *SCP* or sett
 3. Start the Guest Machine.
 4. 
 ```Bash
-sudo mkdir -p /mnt/my_shared_folder
-sudo mount -t vboxsf my_shared_folder /mnt/my_shared_folder
+sudo mkdir -p /<way_to_folder>/my_shared_folder
+sudo mount -t vboxsf my_shared_folder /<full_way_to_folder>/my_shared_folder
 ```
 5. You can now access the shared folder from both machines.
 

@@ -13,5 +13,5 @@ Leave the "Mount point" field blank.
 Click "OK" to save the shared folder settings.
 Start the Guest Machine.
 
-sudo mkdir -p /mnt/my_shared_folder
-sudo mount -t vboxsf my_shared_folder /mnt/my_shared_folder
+sudo mkdir -p /mnt/my_shared_folder	#mnt is not mandatory
+sudo mount -t vboxsf my_shared_folder /mnt/my_shared_folder	#mnt is not mandatory
