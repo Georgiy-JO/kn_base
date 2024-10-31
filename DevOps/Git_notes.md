@@ -11,24 +11,33 @@
 
 
 ## Commands and flags
+### Table 1
 
-| Command                                                                                                                 | Meaning                                                                                                              | Kind            | Orbs |
-| ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------- | ---- |
-| ```git config --global user.name "New Author Name"```<br>```git config --global user.email "<email@address.example>"``` | setting personal information in local git                                                                            | command<br>flag | 🟡   |
-| ```git clone <repository-url>```                                                                                        | creates a local copy of a remote repository                                                                          | command         | 🟢   |
-| ```git fetch <remote_repo> <remote_branch>``` <br> ```git fetch <remote_repo>```                                        | downloads commits, files, and refs from a remote repository into a local repo                                        | command         | 🟢   |
-| ```git pull <remote_repo>/<remote_branch>```                                                                            | combines two operations: `git fetch` and `git merge`. It updates your local branch with changes from a remote branch | command         | 🟢   |
-| ```git add <files>```                                                                                                   | add files to the commit                                                                                              | command         | 🟢   |
-| ```git commit -m"<massage>"```                                                                                          | committing changes with the certain massage                                                                          | command<br>flag | 🟢   |
-| ```git push <remote_repo> <remote_branch>```                                                                            | uploads local repository content to a remote repository                                                              | command         | 🟢   |
-| ```--author="Author Name <email@address.com>"```                                                                        | set an author of particular commit                                                                                   | flag            | 🔴   |
-| ```git checkout -b <new_branch_name>```                                                                                 | change a current branch into new one                                                                                 | command<br>flag | 🟢   |
-| ```git checkout <existing_branch_name```                                                                                | change into another existing branch                                                                                  | command         | 🟢   |
-| ```git branch```                                                                                                        | check your local branch list and what branch you are in                                                              | command         | 🟢   |
-| ```git merge <another_branch>```                                                                                        | allows to integrate (combine) the changes made in one branch into another (from other branch into current one)       | command         | 🟢   |
-| ```git reflog```                                                                                                        | show the commit list                                                                                                 | command         | 🔴   |
-| ```git branch -d <branch_name>```<br>```git branch -D <branch_name>```                                                  | delete local branch                                                                                                  | command<br>flag | 🔴   |
-| ```git push -d <remote_repo> <branchname>``` <br>```git push <remote_repo> --delete <branch_name>```                    | deleting remote branch                                                                                               | command<br>flag | 🔴   |
+| Command                                                                                                                 | Meaning                                   | Kind            | Orbs |
+| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | --------------- | ---- |
+| ```git config --global user.name "New Author Name"```<br>```git config --global user.email "<email@address.example>"``` | setting personal information in local git | command<br>flag | 🟡   |
+| ```--author="Author Name <email@address.com>"```                                                                        | set an author of particular commit        | flag            | 🔴   |
+| ```git reflog```                                                                                                        | show the commit list                      | command         | 🔴   |
+| ```git branch -d <branch_name>```<br>```git branch -D <branch_name>```                                                  | delete local branch                       | command<br>flag | 🔴   |
+| ```git push -d <remote_repo> <branchname>``` <br>```git push <remote_repo> --delete <branch_name>```                    | deleting remote branch                    | command<br>flag | 🔴   |
+| `git log -1 --pretty=%B`                                                                                                | get the last commit's massage             | command<br>flag | 🔴   |
+### Table 2
+
+| Command                                                                          | Meaning                                                                                                              | Kind            | Orbs |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------- | ---- |
+| ```git clone <repository-url>```                                                 | creates a local copy of a remote repository                                                                          | command         | 🟢   |
+| ```git fetch <remote_repo> <remote_branch>``` <br> ```git fetch <remote_repo>``` | downloads commits, files, and refs from a remote repository into a local repo                                        | command         | 🟢   |
+| ```git pull <remote_repo>/<remote_branch>```                                     | combines two operations: `git fetch` and `git merge`. It updates your local branch with changes from a remote branch | command         | 🟢   |
+| ```git add <files>```                                                            | add files to the commit                                                                                              | command         | 🟢   |
+| ```git commit -m"<massage>"```                                                   | committing changes with the certain massage                                                                          | command<br>flag | 🟢   |
+| ```git push <remote_repo> <remote_branch>```                                     | uploads local repository content to a remote repository                                                              | command         | 🟢   |
+| ```git checkout -b <new_branch_name>```                                          | change a current branch into new one                                                                                 | command<br>flag | 🟢   |
+| ```git checkout <existing_branch_name```                                         | change into another existing branch                                                                                  | command         | 🟢   |
+| ```git branch```                                                                 | check your local branch list and what branch you are in                                                              | command         | 🟢   |
+| ```git merge <another_branch>```                                                 | allows to integrate (combine) the changes made in one branch into another (from other branch into current one)       | command         | 🟢   |
+| `git status`                                                                     | get the current git repository status                                                                                | command         | 🟢   |
+| git log                                                                          | get the repository log (list of commits with information)                                                            | command         | 🟢   |
+
 ## Connected files
 - `.gitignor` - list of files to avoid tracking by git.
 - `.gitattributes` - specifically formatted list of types of big files to be pushed the special way.  
