@@ -2,5 +2,5 @@
 
 ## Contents
 
-1. [Tools of programmer](Tools_notes.md)  
-2. [Code samples](Code_notes.md)
+1. [Tools of programmer](/C&C++/C_parts/Tools_notes.md)  
+2. [Code samples](/C&C++/C_parts/Code_notes.md)

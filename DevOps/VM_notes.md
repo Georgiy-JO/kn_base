@@ -30,7 +30,7 @@ sudo mount -t vboxsf my_shared_folder /<full_way_to_folder>/my_shared_folder
 
 ### Use
 You can use shared folder for file exchange, for example pass pre-written script files from host machine to VM.
-Folder /DevOps/VM_parts/intercourse is an example of this kind of folder use.
+Folder */DevOps/materials/intercourse* is an example of this kind of folder use.
 
 ## Links:
 * [SSH and TCP forwarding](/Linux/Linux_parts/SSH_stuff.md)

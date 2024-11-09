@@ -30,7 +30,10 @@ Example:
 ```bash
 curl -X POST -s -o /dev/null -d chat_id=$VAR_BOT_ID -d text="$VAR_result" https://api.telegram.org/bot$VAR_BOT_TOCKEN/sendMessage
 ```
-
+### Files of bot control
+- Controlling bot for GitLab CICD: /Instruments/materians/bot_controls_gitlab.sh
+- Controlling bot for GitHub CICD: /Instruments/materians/bot_controls_github.sh
 
 ## Links
 * [Example of using bot for CICD of a project](https://github.com/Georgiy-JO/the_matrices_C_pet) 
+* [Bot API notes](https://core.telegram.org/bots/api)

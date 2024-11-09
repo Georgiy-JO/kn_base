@@ -1,28 +1,28 @@
 # Some notes and tips about Linux
 
 ## Contents
-
-- [[#Useful commands, utilities and daemons|Useful commands, utilities and daemons]]
-	- [[#Useful commands, utilities and daemons#Table 1|Table 1]]
-	- [[#Useful commands, utilities and daemons#Table 2|Table 2]]
-	- [[#Useful commands, utilities and daemons#Table 3|Table 3]]
-	- [[#Useful commands, utilities and daemons#Table 4|Table 4]]
-	- [[#Useful commands, utilities and daemons#\*0 (restart audio system)|\*0 (restart audio system)]]
-	- [[#Useful commands, utilities and daemons#\*8 (chmod)|\*8 (chmod)]]
+- [[#Useful commands, utilities, daemons, etc.|Useful commands, utilities, daemons, etc.]]
+	- [[#Useful commands, utilities, daemons, etc.#Table 1|Table 1]]
+	- [[#Useful commands, utilities, daemons, etc.#Table 2|Table 2]]
+	- [[#Useful commands, utilities, daemons, etc.#Table 3|Table 3]]
+	- [[#Useful commands, utilities, daemons, etc.#Table 4|Table 4]]
+	- [[#Useful commands, utilities, daemons, etc.#\*0 (restart audio system)|\*0 (restart audio system)]]
+	- [[#Useful commands, utilities, daemons, etc.#\*8 (chmod)|\*8 (chmod)]]
+		- [[#\*8 (chmod)#Symbolic mode|Symbolic mode]]
 		- [[#\*8 (chmod)#Numeric mode|Numeric mode]]
 - [[#Server Ubuntu installation|Server Ubuntu installation]]
 - [[#Fedora after installation setting up|Fedora after installation setting up]]
 - [[#SSH and TCP forwarding|SSH and TCP forwarding]]
 - [[#OS family|OS family]]
 - [[#Extra|Extra]]
-	- [[#Extra#[Fedora ultimate update script](/Linux/materials/Scripts/update.sh)|Fedora update script]]
-	- [[#Extra#[Fedora libraries paths](/Linux/materials/libraries%20paths.txt)|Fedora libraries paths]]
+	- [[#Extra#[Fedora ultimate update script](/Linux/materials/Scripts/update.sh)|Fedora ultimate update script]]
+	- [[#Extra#[Fedora libraries paths](/Linux/materials/libraries%20paths.txt)|Fedora libraries locations]]
 - [[#Links:|Links:]]
 
 
 * ***`Ctrl+Shift+C` stop the current process***
 * [Standard shell: **sh**, **bash**. ](/Bash/Bash_notes.md)
-## Useful commands, utilities and daemons
+## Useful commands, utilities, daemons, etc.
 🔴🟡🟢
 * tag-list: *system*, *install*, *file*, *management*, *memory*, *network*.
 
@@ -33,7 +33,9 @@
 | `uname`                                                                    | command  is used to display system information (`uname` stands for "Unix name")                                                                            | system                | -                                              | 🟡  |
 | `chmod`                                                                    | command-line utility used to change the file system modes (permissions) of files and directories [(*8)](#8-chmod)                                          | file<br>management    | -                                              | 🟡  |
 | `locate \<something>`                                                      | find something                                                                                                                                             | file<br>management    | -                                              | 🟡  |
-| `xdg-open`                                                                 | Open file accordingly                                                                                                                                      | File<br>management    | -                                              | 🟡  |
+| `xdg-open`                                                                 | Open file accordingly                                                                                                                                      | file<br>management    | -                                              | 🟡  |
+| `diff`                                                                     | command compares the contents of the two files *9                                                                                                          | file                  | -                                              | 🟡  |
+| `/dev/null`                                                                | which is a special file that discards all data written to it.                                                                                              | management<br>file    | -                                              | 🟡  |
 | `sudo dnf clean all`                                                       | clean temple                                                                                                                                               | install               | RPM-based Linux distributions (such as Fedora) | 🟡  |
 | `sudo dnf clean dbcache`                                                   | clean cache                                                                                                                                                | install               | RPM-based Linux distributions (such as Fedora) | 🟡  |
 | `sudo dnf remove`                                                          | deleting some installed package/app/etc                                                                                                                    | install<br>management | RPM-based Linux distributions (such as Fedora) | 🟡  |
@@ -46,7 +48,7 @@
 | `sshpass -p '\<password>' <SCP/SSH> ...`                                   | allow to automate **SSH** and **SCP**, aka pass the password in the line of the command                                                                    | management<br>network | install separately                             | 🟡  |
 | `ip r`                                                                     | view the current routing table [(*6)](#6)                                                                                                                  | network               | -                                              | 🟢  |
 | `ipcalc`<br>`ipcalc-jodies`<br>`ipcalk`                                    | perform calculations related to IP addresses and subnets                                                                                                   | network               | differ in different systems                    | 🟢  |
-| ps                                                                         | information about the currently running processes                                                                                                          | management            | -                                              | 🟡  |
+| `ps`                                                                       | information about the currently running processes                                                                                                          | management            | -                                              | 🟡  |
 ### Table 2
 
 | Command                                                                       | Meaning                                                                                                                                                                                                                                                                                                                                                      | Tag                 | System                                         | Orb |
@@ -191,6 +193,10 @@ chmod 644 filename
 | ---------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | -R                     | Apply changes recursively to all files and directories within a specified directory. | `chmod -R 755 directory_name`                  |
 | --reference=<ref_file> | Set the mode of the files to the same as that of the reference file.                 | `chmod --reference=reference_file target_file` |
+
+### \*9
+- If the files are identical, `diff` will not produce any output and will return an exit status of 0. 
+- If the files differ, `diff` will output the differences and return a non-zero exit status.
 
 ## Server Ubuntu installation 
 [Example](/DevOps/VM_parts/installation)

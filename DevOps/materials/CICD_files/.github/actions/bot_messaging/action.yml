@@ -1,0 +1,30 @@
+name: 'Bot messaging'
+description: 'This action sends CICD job and step info via telegram bot.'
+
+inputs:
+  bot_token:
+    description: 'Telegram bot API token for url'
+    required: true
+  chat_id:
+    description: 'Telegram chat ID'
+    required: true
+  job_status:
+    description: 'Stores the status of the job'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Creating empty comment file if needed
+      shell: bash
+      run: echo "" >> src/VAR.txt
+
+    - name: Sending message
+      shell: bash
+      env:
+        BOT_URL_API_TOKEN: ${{ inputs.bot_token }}
+        CHAT_ID: ${{ inputs.chat_id }}
+        JOB_STATUS: ${{ inputs.job_status }}
+      run: sh ./.github/bot_controls.sh
+  
+

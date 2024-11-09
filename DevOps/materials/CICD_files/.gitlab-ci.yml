@@ -1,0 +1,202 @@
+stages:
+  - pre-build
+  - build
+  - post-build
+  - test
+  - post-test
+  - coverage
+  - extra 
+
+
+format-check-main:
+  stage: pre-build
+  script:
+    - cd src
+    - clang-format --style=Google -n *.c *.h
+    - clang-format --style=Google -i *.c *.h
+    - if ! git diff --quiet; then
+    -   exit 1
+    - fi
+  allow_failure: true
+
+
+format-check-test:
+  stage: pre-build
+  script:
+    - cd src/tests
+    - clang-format --style=Google -n *.c
+    - clang-format --style=Google -i *.c
+    - if ! git diff --quiet; then
+    -   exit 1
+    - fi
+  allow_failure: true
+
+
+cpp-check:
+  stage: pre-build
+  script:
+    - cd src 
+    - make cpp_check &> CPP_CHECK.txt
+    - cat CPP_CHECK.txt
+    - echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
+    - if [ $(cat VAR.txt) -gt 3 ]; then  #*
+    -   echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
+    -   exit 1
+    - fi
+    - echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
+  artifacts:
+    when: on_failure
+    paths:
+      - src/CPP_CHECK.txt
+    expire_in: 5 days
+  allow_failure: true
+#* -can adjust how many CPP-check issues may be for successfull pass
+
+valgrind-check:
+  stage: post-test
+  script:
+    - cd src
+    - make valgrind_me
+    - grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" RESULT_VALGRIND.txt > VAR.txt
+    - if [ $(grep -oP "[0-9]+" VAR.txt) -ne 0 ]; then 
+    -   echo "| $(grep . VAR.txt) error(s)" > VAR.txt
+    -   exit 1
+    - fi
+    - echo "" > VAR.txt
+  artifacts:
+    when: always
+    paths:
+      - src/RESULT_VALGRIND.txt
+    expire_in: 5 days
+  needs:
+    - building-job-lib
+    - testing-job
+  allow_failure: true
+
+
+verter-check:
+  stage: post-build
+  script:
+    - cd materials/build/
+    - sh run.sh > RESULT_VERTER.txt
+    - cat RESULT_VERTER.txt
+    - if [ $(grep "Style test result" RESULT_VERTER.txt | grep -oP "[0-9]") -eq 0 ]; then
+    -   echo "| style failed" > VAR.txt
+    - fi
+    - if [ $(grep "Build result" RESULT_VERTER.txt | grep -oP "[0-9]") -eq 0 ]; then
+    -  echo "$(cat VAR.txt) & build fail" > VAR.txt
+    - fi
+    - if [ $(grep "fail" VAR.txt | wc -l) -ne 0 ]; then 
+    -  mv VAR.txt ../../src/VAR.txt
+    -  exit 1
+    - fi
+    - echo "" >> VAR.txt
+    - mv VAR.txt ../../src/VAR.txt
+  needs:
+    - building-job-lib
+  allow_failure: true
+  # artifacts:
+  #   when: on_failure
+  #   paths:
+  #     - materials/build/RESULT_VERTER.txt
+  #   expire_in: 5 days 
+
+
+building-job-lib:
+  stage: build
+  script:
+    - cd src
+    - make all
+    - if [ -f s21_matrix.a]; then
+    -   echo "| library not found" > VAR.txt
+    -   exit 1
+    - fi
+    - echo "" > VAR.txt
+
+
+testing-job:
+  stage: test
+  script:
+    - cd src
+    - make test > RESULT_TEST.txt
+    - cat RESULT_TEST.txt
+    - grep "Checks" RESULT_TEST.txt > VAR.txt
+    - if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
+    -   exit 1
+    - fi
+  needs:
+    - building-job-lib
+  artifacts: 
+    when: on_failure
+    paths:
+      - src/RESULT_TEST.txt
+    expire_in: 5 days
+
+
+gcovr-job:
+  stage: coverage
+  script:
+    - cd src
+    - make gcov_report > TEMP_COV.txt
+    - cat TEMP_COV.txt
+    - grep -oP "Lines executed:\K[0-9]+" TEMP_COV.txt | grep -oP "[0-9]+" | tail -1 > VAR.txt
+    - if [ $(grep . VAR.txt) -lt 95 ]; then #*
+    -   echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
+    -   exit 1
+    - fi
+    - echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
+  needs:
+    - building-job-lib
+    - testing-job
+  artifacts:
+    when: always
+    paths:
+      - build/coverage
+    expire_in: 5 days
+  allow_failure: true
+#* -can adjust how many % of lines may be not covered for successfull pass
+
+
+clean-test-job:
+  stage: extra
+  script:
+    - cd src
+    - make s21_matrix.a
+    - make clean
+    - if ! git diff --quiet; then
+    -   echo "| library st cleaning error" > VAR.txt
+    -   exit 1
+    - fi
+    - make all
+    - make clean
+    - if ! git diff --quiet; then
+    -   echo "| all st cleaning error" > VAR.txt
+    -   exit 1
+    - fi
+    - make test
+    - make clean
+    - if ! git diff --quiet; then
+    -   echo "| test st cleaning error" > VAR.txt
+    -   exit 1
+    - fi
+    - make gcov_report
+    - make clean
+    - if ! git diff --quiet; then
+    -   echo "| gcov st cleaning error" > VAR.txt
+    -   exit 1
+    - fi
+  needs:
+    - building-job-lib
+    - testing-job
+    - gcovr-job
+  allow_failure: true
+
+
+after_script:
+  - if [ $CI_JOB_NAME == "format-check-main" ] || [ $CI_JOB_NAME == "format-check-test" ]; then 
+  -   echo "" > src/VAR.txt
+  - fi
+  - sh ./bot_controls.sh
+# Comment required jobs: cpp-check(PRE-BUILD), building-job-lib(BUILD), verter-check(POST-BUILD), testing-job(TEST), \
+#                        valgrind-check (POST-TEST), gcovr-job(COVERAGE), clean-test-job(EXTRA).
+# Comment free jobs: format-check-main(PRE-BUILD), format-check-test(PRE-BUILD).     

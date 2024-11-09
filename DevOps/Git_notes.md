@@ -21,6 +21,7 @@
 | ```git branch -d <branch_name>```<br>```git branch -D <branch_name>```                                                  | delete local branch                       | command<br>flag | 🔴   |
 | ```git push -d <remote_repo> <branchname>``` <br>```git push <remote_repo> --delete <branch_name>```                    | deleting remote branch                    | command<br>flag | 🔴   |
 | `git log -1 --pretty=%B`                                                                                                | get the last commit's massage             | command<br>flag | 🔴   |
+| `git diff`<br> `git diff --quiet`                                                                                       | show the changes made from last commit (flag allows to silence the output)             | command<br>flag | 🟡   |
 ### Table 2
 
 | Command                                                                          | Meaning                                                                                                              | Kind            | Orbs |
@@ -33,10 +34,10 @@
 | ```git push <remote_repo> <remote_branch>```                                     | uploads local repository content to a remote repository                                                              | command         | 🟢   |
 | ```git checkout -b <new_branch_name>```                                          | change a current branch into new one                                                                                 | command<br>flag | 🟢   |
 | ```git checkout <existing_branch_name```                                         | change into another existing branch                                                                                  | command         | 🟢   |
-| ```git branch```                                                                 | check your local branch list and what branch you are in                                                              | command         | 🟢   |
+| ```git branch```                                                                 | check your local branch list and what branch you are in (`--show-current` - will make it show only current)          | command<br>flag | 🟡   |
 | ```git merge <another_branch>```                                                 | allows to integrate (combine) the changes made in one branch into another (from other branch into current one)       | command         | 🟢   |
 | `git status`                                                                     | get the current git repository status                                                                                | command         | 🟢   |
-| git log                                                                          | get the repository log (list of commits with information)                                                            | command         | 🟢   |
+| `git log`                                                                        | get the repository log (list of commits with information)                                                            | command         | 🟢   |
 
 ## Connected files
 - `.gitignor` - list of files to avoid tracking by git.

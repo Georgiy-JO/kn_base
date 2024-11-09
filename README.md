@@ -19,9 +19,15 @@
         - [SSH](/Linux/Linux_parts/SSH_stuff.md)
 - **C**
     - [C main](/C&C++/C_notes.md)
-        - [Tools](Tools_notes.md)
-        - [Code samples](Code_notes.md)
+        - [Tools](/C&C++/C_parts/Tools_notes.md)
+        - [Code samples](/C&C++/C_parts/Code_notes.md)
 - **Bash and SH**
     - [Bash and sh](/Bash/Bash_notes.md)
 - **Instruments**
-    - [Telegram bot](/Instruments/Tlgbot_notes.md)
+    - [Telegram bot](/Instruments/TgBot_notes.md)
+
+## Extra
+
+### Repository templates 
+- [Empty repository](https://github.com/Georgiy-JO/gh_gen_template)
+- [Empty, for 2 separate repositories](https://github.com/Georgiy-JO/2_rep_template)

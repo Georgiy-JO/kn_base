@@ -1,11 +1,25 @@
 # Some programs that can help or may be needed for C projects
 
+## Contents
+- [[#GCC|GCC]]
+- [[#Clang-format|Clang-format]]
+- [[#CPP-check|CPP-check]]
+- [[#Valgrind|Valgrind]]
+- [[#Check library|Check library]]
+- [[#Makefile|Makefile]]
+- [[#Gcov and Gcovr|Gcov and Gcovr]]
+- [[#Git|Git]]
+- [[#Notes|Notes]]
+	- [[#Notes#Ultimate installation - Ubuntu|Ultimate installation - Ubuntu]]
+
+
 ## GCC 
 ***Compiler***
 The GCC (GNU Compiler Collection) is a powerful tool used to compile programs written in languages like C, C++, and others.
 ### Installation
-#### Linux
+#### Linux (Ubuntu)
 ```bash
+sudo apt install gcc
 ```
 
 ### Use
@@ -83,7 +97,7 @@ gcc object.o -o executable
 #### Linux (example for ubuntu)
 ```bash
 # last version
-sudo apt-get install clang-format
+sudo apt-get install clang-format 
 
 # particuler version (17th) 
 wget https://apt.llvm.org/llvm.sh
@@ -111,7 +125,12 @@ clang-format -n --style=Google
 
 ## CPP-check
  Static analysis tool for C and C++ code that helps identify bugs, undefined behavior, memory leaks, and other issues in your code.
- 
+
+### Installation 
+#### Linux (ubuntu)
+```Shell
+sudo apt install cppcheck 
+```
 ### Use
 ```bash
 # check headers or code files
@@ -130,6 +149,13 @@ cppcheck <list_of_files>
 
 ## Valgrind
 A powerful programming tool used for memory debugging, memory leak detection, and profiling in programs written in languages like C and C++.
+
+### Installation
+#### Linux (Ubuntu)
+```Shell
+sudo apt valgrind 
+
+```
 
 ### Use
 ```bash
@@ -174,4 +200,152 @@ Valgrind includes several tools, but the most commonly used one is **Memcheck**
 | -log-file=\<file>                 | Specifies the file where Valgrind will write its output.                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ## Check library
+Check is a unit testing framework designed for C programming. It provides a simple interface for defining unit tests, allowing developers to focus on writing tests without much overhead. Tests are executed in a separate address space, which helps catch assertion failures and errors like segmentation faults.
+
+### Installation
+#### Linux (Ubuntu)
+```Shell
+sudo apt-get install check 
+```
+
+### Use
+Added to a c file as a library allow to use functions to compare output or result of execution of your functions with prepared values or results of calculation.
+
+#### [Example](/C&C++/materials/tetris_tests.c)
+* see [Notes/links](#links-1)
+
+### Links
 * [Checking function list](https://libcheck.github.io/check/doc/check_html/check_4.html#Convenience-Test-Functions)
+
+## Makefile
+A `Makefile` is a special file used by the `make` build automation tool to compile and link programs. It contains rules defining how to build your project, including which files need to be compiled and how to link them together.
+
+### Installation
+#### Linux (Ubuntu)
+```Shell
+ sudo apt install make  
+```
+### Use
+Can be used via terminal from the folder where Makefile is located: ```make <target> ```.
+
+#### Basic Structure of a Makefile
+A simple Makefile typically includes:
+- **Variables**: For compiler, flags, and source files.
+- **Targets**: The output files or actions.
+- **Rules**: Instructions on how to build the targets.
+
+Here’s a simple example of a Makefile for a C project that consists of multiple source files:
+```shell
+# Compiler
+CC = gcc
+# Compiler flags
+CFLAGS = -Wall -g
+# Linker flags (if needed)
+LDFLAGS = 
+
+# Source files
+SRCS = main.c utils.c math_operations.c
+# Object files (replace .c with .o)
+OBJS = $(SRCS:.c=.o)
+# Executable name
+TARGET = my_program
+
+# Default target
+all: $(TARGET)
+# Rule to build the executable
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+# Rule to compile source files into object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+# Clean up build files
+clean:
+	rm -f $(OBJS) $(TARGET)
+    
+# Phony targets
+.PHONY: all clean
+```
+
+- -**.PHONY**: This tells `make` that `all` and `clean` are not files but commands.
+
+
+#### [Example](/C&C++/materials/Makefile)
+* see [Notes/links](#links-1)
+
+
+
+## Gcov and Gcovr
+`gcov` and `gcovr` are tools used in C and C++ programming for code coverage analysis. They help developers understand which parts of their code are being exercised by tests, which can be crucial for improving test coverage and ensuring code quality.
+
+#### **gcov**
+`gcov` is a test coverage program that is part of the GNU Compiler Collection (GCC). It analyzes the execution of a program to determine which parts of the code were executed and how many times. It generates a report showing which lines of code were executed and which were not, providing a clear view of the test coverage.
+
+#### **gcovr**
+`gcovr` is a Python script that provides a convenient way to use `gcov` and generate coverage reports. It simplifies the process of running `gcov` and can produce reports in various formats, such as HTML, XML, and text. It can also aggregate coverage data from multiple source files.
+
+
+### Installation
+#### Linux (Ubuntu)
+```Shell
+  sudo apt-get install gcovr
+  sudo apt-get install gcov 
+```
+
+### Use
+
+1. **Compile your code with coverage flags:**  
+	- `-fprofile-arcs` 
+	- `-ftest-coverage`
+
+```Bash	
+gcc -fprofile-arcs -ftest-coverage -o my_program my_program.c
+```
+    
+2. **Run your program:**   
+    - Execute your program as you normally would. T
+    - his will generate `.gcda` files that contain execution counts.
+    
+3. **Generate coverage reports:** 
+    - Run `gcov` on your source file to generate a coverage report. 
+    - This will create a `.gcov` file with the coverage information.
+    
+```bash
+gcov my_program.c
+```
+
+4. **View the gcov report:** 
+    - The `.gcov` file will contain the source code with annotations indicating which lines were executed and how many times.
+    
+4. **View the gcovr report:** 
+    - Use `gcovr` to generate a coverage report.
+```Shell
+# to generate a simple text report:
+gcovr 
+# to generate an HTML report:
+gcovr -r . --html --html-details -o coverage.html
+```
+- Here, `-r .` specifies the root directory for the report, and `--html` options create an HTML report.
+#### Example
+
+* see [Notes/links](#links-1)
+
+## Git 
+### Installation
+#### Linux (Ubuntu)
+```shell
+sudo apt install git-all
+```
+
+### [Info](/DevOps/Git_notes.md)
+
+
+## Notes
+### Ultimate installation - Ubuntu
+```Shell
+  sudo apt update && sudo apt-get update
+  sudo apt install valgrind cppcheck clang-format gcc make git-all -y
+  sudo apt-get install check gcovr -y
+  sudo apt-get install gcov -y
+```
+### Links
+[Example of the "Check" testing, Makefile and report creation](https://github.com/Georgiy-JO/te-tris_pet)

@@ -1,0 +1,323 @@
+name: CI_try
+
+# Controls when the workflow will run
+on:
+  # push:                                         # pause the automatic CICD run
+    # branches: [ "develop" ]
+  workflow_dispatch: #for manual starts
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  format-check-main:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checking code style of main code files
+        run: |
+          cd src
+          clang-format --style=Google -n *.c *.h
+          clang-format --style=Google -i *.c *.h
+          if ! git diff --quiet; then
+            exit 1
+          fi
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+    continue-on-error: true
+
+
+  format-check-tests:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checking code style of test files
+        run: |
+          cd src/tests
+          clang-format --style=Google -n *.c
+          clang-format --style=Google -i *.c
+          if ! git diff --quiet; then
+            exit 1
+          fi
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+    continue-on-error: true
+
+
+  cpp-check:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checking C++/C code with CppCheck
+        run: |
+          cd src 
+          make cpp_check &> CPP_CHECK.txt
+          cat CPP_CHECK.txt
+          echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
+          if [ $(cat VAR.txt) -gt 3 ]; then                                                   #*
+            echo "$(grep . VAR.txt) issue(s)" > VAR.txt
+            exit 1
+          fi
+          echo "$(grep . VAR.txt) issue(s)" > VAR.txt
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: failure() 
+        with:
+          name: cpp-check-error-list
+          path: src/CPP_CHECK.txt 
+          retention-days: 5    
+
+    continue-on-error: true
+  #* -can adjust how many CPP-check issues may exist for successfull pass
+
+
+  valgrind-check:    
+    runs-on: self-hosted
+    needs: [building-lib-job, testing-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: C++/C code with Valgrind
+        run: |
+          cd src
+          make valgrind_me
+          grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" RESULT_VALGRIND.txt > VAR.txt
+          if [ $(grep -oP "[0-9]+" VAR.txt) -ne 0 ]; then 
+            echo "$(grep . VAR.txt) error(s)" > VAR.txt
+            exit 1
+          fi
+          echo "" > VAR.txt
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: always() 
+        with:
+          name: valgrind-output
+          path: src/RESULT_VALGRIND.txt  
+          retention-days: 5    
+
+    continue-on-error: true
+
+
+  building-lib-job:    
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Building the library
+        run: |
+         cd src
+         make all
+         if [ -f s21_matrix.a]; then
+           echo "library not built" > VAR.txt
+           exit 1
+         fi
+         echo "" > VAR.txt
+    
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+
+  testing-job:
+    runs-on: self-hosted
+    needs: [building-lib-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Runing tests
+        run: |
+          cd src
+          make test > RESULT_TEST.txt || true
+          cat RESULT_TEST.txt
+          grep "Checks" RESULT_TEST.txt >> VAR.txt
+          if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
+            exit 1
+          fi
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: failure() 
+        with:
+          name: tests-results
+          path: src/RESULT_TEST.txt
+          retention-days: 5  
+
+
+  gcovr-job:
+    runs-on: self-hosted
+    needs: [building-lib-job, testing-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checking coverage of code with tests and creating coverage report 
+        run: |
+          cd src
+          make gcov_report > TEMP_COV.txt
+          cat TEMP_COV.txt
+          grep -oP "Lines executed:\K[0-9]+" TEMP_COV.txt | grep -oP "[0-9]+" | tail -1 > VAR.txt
+          if [ $(grep . VAR.txt) -lt 95 ]; then                                               #*
+            echo "Executed $(cat VAR.txt)% lines" > VAR.txt
+            exit 1
+          fi
+          echo "Executed $(cat VAR.txt)% lines" > VAR.txt
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+  
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: build/coverage
+          retention-days: 5  
+
+    continue-on-error: true
+#* -can adjust how many % of lines may be not covered for successfull pass
+          
+
+  clean-test-job:
+    runs-on: self-hosted
+    needs: [building-lib-job, testing-job, gcovr-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparation
+        run: |
+          echo "0" > status.txt
+          touch before.txt
+          touch after.txt
+
+      - name: Library target cleaning test
+        run: |
+          find . -type f -o -type d > before.txt
+          cd src
+          make s21_matrix.a
+          make clean
+          cd ..
+          find . -type f -o -type d > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
+            diff before.txt after.txt | grep '^>' | grep -v './after.txt' || true
+            echo "library st cleaning error" >> src/VAR.txt
+            echo "1" > status.txt            
+          fi
+
+      - name: All target cleaning test
+        run: |
+          find . -type f -o -type d > before.txt
+          cd src
+          make all
+          make clean
+          cd ..
+          find . -type f -o -type d > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
+            diff before.txt after.txt | grep '^>' | grep -v './after.txt' || true
+            echo "all st cleaning error" >> src/VAR.txt
+            echo "1" > status.txt            
+          fi
+
+      - name: Test target cleaning test
+        run: |
+          find . -type f -o -type d > before.txt
+          cd src
+          make test
+          make clean
+          cd ..
+          find . -type f -o -type d > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
+            diff before.txt after.txt | grep '^>' | grep -v './after.txt' || true
+            echo "test st cleaning error" >> src/VAR.txt
+            echo "1" > status.txt            
+          fi
+
+      - name: Coverage target cleaning test
+        run: |
+          find . -type f -o -type d > before.txt
+          cd src
+          make gcov_report
+          make clean
+          cd ..
+          find . -type f -o -type d > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
+            diff before.txt after.txt | grep '^>' | grep -v './after.txt' || true
+            echo "gcov st cleaning error" >> src/VAR.txt
+            echo "1" > status.txt            
+          fi
+
+      - name: Result of job set
+        run: |
+          if [ "$(cat status.txt)" = "1" ]; then
+            exit 1
+          fi
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+    
