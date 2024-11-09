@@ -33,13 +33,14 @@
 | `uname`                                                                    | command  is used to display system information (`uname` stands for "Unix name")                                                                            | system                | -                                              | 🟡  |
 | `chmod`                                                                    | command-line utility used to change the file system modes (permissions) of files and directories [(*8)](#8-chmod)                                          | file<br>management    | -                                              | 🟡  |
 | `locate \<something>`                                                      | find something                                                                                                                                             | file<br>management    | -                                              | 🟡  |
-| `dnf list installed`                                                      | list installed                                                                                                                                               | management    | -                                              | 🟡  |
+| `find `<br>                                                                | find something (*10)                                                                                                                                       | file<br>management    | -                                              | 🟡  |
 | `xdg-open`                                                                 | Open file accordingly                                                                                                                                      | file<br>management    | -                                              | 🟡  |
 | `diff`                                                                     | command compares the contents of the two files *9                                                                                                          | file                  | -                                              | 🟡  |
 | `/dev/null`                                                                | which is a special file that discards all data written to it.                                                                                              | management<br>file    | -                                              | 🟡  |
 | `sudo dnf clean all`                                                       | clean temple                                                                                                                                               | install               | RPM-based Linux distributions (such as Fedora) | 🟡  |
 | `sudo dnf clean dbcache`                                                   | clean cache                                                                                                                                                | install               | RPM-based Linux distributions (such as Fedora) | 🟡  |
 | `sudo dnf remove`                                                          | deleting some installed package/app/etc                                                                                                                    | install<br>management | RPM-based Linux distributions (such as Fedora) | 🟡  |
+| `dnf list installed`                                                       | list installed                                                                                                                                             | management            | RPM-based Linux distributions (such as Fedora) | 🟡  |
 | `neofetch`                                                                 | system info                                                                                                                                                | management<br>system  | install separately                             | 🟢  |
 | `fdisk -l`                                                                 | list the disk partitions and their details                                                                                                                 | memory<br>management  | -                                              | 🟢  |
 | `wget`                                                                     | used to download files from internet                                                                                                                       | management<br>network | -                                              | 🟡  |
@@ -50,6 +51,7 @@
 | `ip r`                                                                     | view the current routing table [(*6)](#6)                                                                                                                  | network               | -                                              | 🟢  |
 | `ipcalc`<br>`ipcalc-jodies`<br>`ipcalk`                                    | perform calculations related to IP addresses and subnets                                                                                                   | network               | differ in different systems                    | 🟢  |
 | `ps`                                                                       | information about the currently running processes                                                                                                          | management            | -                                              | 🟡  |
+
 ### Table 2
 
 | Command                                                                       | Meaning                                                                                                                                                                                                                                                                                                                                                      | Tag                 | System                                         | Orb |
@@ -199,6 +201,11 @@ chmod 644 filename
 - If the files are identical, `diff` will not produce any output and will return an exit status of 0. 
 - If the files differ, `diff` will output the differences and return a non-zero exit status.
 
+### \*10 Find everything associated with the program
+```Shell
+# example for AmnesiaVPN
+sudo find / -iname "*amneziavpn*" 2>/dev/null
+```
 ## Server Ubuntu installation 
 [Example](/DevOps/VM_parts/installation)
 
