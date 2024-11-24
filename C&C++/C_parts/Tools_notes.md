@@ -16,16 +16,23 @@
 ## GCC 
 ***Compiler***
 The GCC (GNU Compiler Collection) is a powerful tool used to compile programs written in languages like C, C++, and others.
+
+| Compiler | Language |
+| --------- | -------- |
+| g++       | C++      |
+| gcc       | C        |
+
 ### Installation
 #### Linux (Ubuntu)
 ```bash
-sudo apt install gcc
+sudo apt install gcc   
+sudo apt install g++    
 ```
-
 ### Use
 Example 1 (simple):
 ```shell
 gcc code.c
+g++ code.cpp
 # result: a.out
 ```
 #### GCC stages
@@ -38,14 +45,17 @@ gcc code.c
     - **Command**: To stop after preprocessing and see the output, use:
 	```bash
 	gcc -E sourcefile.c -o preprocessed.c
+	g++ -E sourcefile.cpp -o preprocessed.i
 	```
  1. Compilation
 	- **Purpose**: This stage translates the preprocessed code into assembly language.
 	- **Key Actions**:
+		- Checks for syntax errors 
 		- Converts the preprocessed code into assembly code, which is a low-level representation of the program.
 	- **Command**: To generate the assembly code, use:
 	```bash
 	gcc -S preprocessed.c -o assembly.s
+	g++ -S preprocessed.i -o assembly.s
 	```
  3. Assembly
 	- **Purpose**: The assembler converts the assembly code into machine code.
@@ -54,6 +64,7 @@ gcc code.c
 	- **Command**: To compile the assembly code into an object file, use:
     ```bash
     gcc -c assembly.s -o object.o
+    g++ -c assembly.s -o object.o
     ```
 4. Linking
 	- **Purpose**: The linker combines one or more object files into a single executable.
@@ -63,10 +74,12 @@ gcc code.c
 	- **Command**: To link the object file and create an executable, use:
     ```bash
     gcc object.o -o executable
+    g++ object.o -o executable
 	```
 
 ##### Summary
 ```bash
+# C
 # Preprocessing 
 gcc -E sourcefile.c -o preprocessed.c 
 # Compilation 
@@ -75,21 +88,32 @@ gcc -S preprocessed.c -o assembly.s
 gcc -c assembly.s -o object.o 
 # Linking 
 gcc object.o -o executable
+
+# C++
+# Preprocessing
+g++ -E sourcefile.cpp -o preprocessed.i
+# Compilation 
+g++ -S preprocessed.i -o assembly.s
+# Assembly 
+g++ -c assembly.s -o object.o
+# Linking 
+g++ object.o -o executable
 ```
+
 
 ### Flags
 
-| Flag                      | Use                                                                                                                                                                                           | Groub       |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| -o                        | specify the output file name at any stage                                                                                                                                                     | Compilation |
-| -E -S -c                  | [GCC stages](#gcc-stages)                                                                                                                                                                     | Compilation |
-| -Wall                     | enable all compiler warnings                                                                                                                                                                  | Error check |
-| -Werror                   |  treat warnings as errors                                                                                                                                                                     | Error check |
-| -Wextra                   | nable additional warning messages that are not included with the `-Wall` option                                                                                                               | Error check |
-| -std=<...><br>`-std=c11`  | specifies that the compiler should conform to the particular standard of the C programming language, in the example C11                                                                       | Compilation |
-| -D<define_name>=\<value>  | a preprocessor directive that defines the macro with a specific value                                                                                                                         | code effect |
-| -D_POSIX_C_SOURCE=200809L | defines the macro `_POSIX_C_SOURCE`, it is used to enable certain features of the POSIX (Portable Operating System Interface) standard in your C code                                         | code effect |
-| -g                        | used to include debugging information in the compiled binary, this information is essential for debugging your program using tools like `gdb` (GNU Debugger) or other debugging environments. | Error check |
+| Flag                                     | Use                                                                                                                                                                                           | Group       |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| -o                                       | specify the output file name at any stage                                                                                                                                                     | Compilation |
+| -E -S -c                                 | [GCC stages](#gcc-stages)                                                                                                                                                                     | Compilation |
+| -Wall                                    | enable all compiler warnings                                                                                                                                                                  | Error check |
+| -Werror                                  |  treat warnings as errors                                                                                                                                                                     | Error check |
+| -Wextra                                  | nable additional warning messages that are not included with the `-Wall` option                                                                                                               | Error check |
+| -std=<...><br>`-std=c11`<br>`-std=c++11` | specifies that the compiler should conform to the particular standard of the C/C++ programming language (examples: C11 and C++11)                                                             | Compilation |
+| -D<define_name>=\<value>                 | a preprocessor directive that defines the macro with a specific value                                                                                                                         | code effect |
+| -D_POSIX_C_SOURCE=200809L                | defines the macro `_POSIX_C_SOURCE`, it is used to enable certain features of the POSIX (Portable Operating System Interface) standard in your C code                                         | code effect |
+| -g                                       | used to include debugging information in the compiled binary, this information is essential for debugging your program using tools like `gdb` (GNU Debugger) or other debugging environments. | Error check |
 
 ## Clang-format 
 ***Code Formatter*** (***code style***)
@@ -272,6 +296,14 @@ clean:
 #### [Example](/C&C++/materials/Makefile)
 * see [Notes/links](#links-1)
 
+### Tips and structure
+
+| Point  | Example                                                   | Description                                                                                             |
+| ------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `@`    | `@rm -f $(OBJS) $(TARGET)`                                | silence the calling of the command in terminal                                                          |
+| `make` | `clean: clean_a`<br>    `rm -f $(STH)`<br>	`make clean_b` | Make targets can be called inside other make targets                                                    |
+| `-s`   | `clean: clean_a`<br>`rm -f $(STH)`<br>`make -s clean_b`   | To suppress the entering and leaving directory messages, you can run make with the -s option like this: |
+
 
 
 ## Gcov and Gcovr
@@ -343,7 +375,7 @@ sudo apt install git-all
 ### Ultimate installation - Ubuntu
 ```Shell
   sudo apt update && sudo apt-get update
-  sudo apt install valgrind cppcheck clang-format gcc make git-all -y
+  sudo apt install valgrind cppcheck clang-format gcc g++ make git-all -y
   sudo apt-get install check gcovr -y
   sudo apt-get install gcov -y
 ```

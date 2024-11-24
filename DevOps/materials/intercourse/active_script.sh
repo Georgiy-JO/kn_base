@@ -151,11 +151,11 @@ elif [ $1 = '9' ]; then
 # 11------------------------------------------------------------------------------------------------------------------------------------
 elif [ $1 = '11' ]; then
   sudo apt update && sudo apt-get update
-  sudo apt install valgrind cppcheck clang-format gcc git-all make -y
+  sudo apt install valgrind cppcheck clang-format gcc g++ git-all make -y
   if [ $? -eq 0 ]; then
-    echo "installed: valgrind, cppcheck, clang-format, gcc, make, git;" >> log.txt
+    echo "installed: valgrind, cppcheck, clang-format, gcc, g++, make, git;" >> log.txt
   else 
-    echo "installation failed: valgrind, cppcheck, clang-format, gcc, make, git;" >> log.txt
+    echo "installation failed: valgrind, cppcheck, clang-format, gcc, g++, make, git;" >> log.txt
   fi
   sudo apt-get install check gcovr -y
   if [ $? -eq 0 ]; then

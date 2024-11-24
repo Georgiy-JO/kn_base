@@ -1,6 +1,7 @@
 # Code samples
 
-## Sort
+## C
+### Sort
 * Swap service function
     ```C
     void swapI(int *a, int *b) {
@@ -10,7 +11,7 @@
     }
     ```
 
-### Bubble sort
+#### Bubble sort
 ```C
 void sort_bubble(int *a, int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -21,7 +22,7 @@ void sort_bubble(int *a, int n) {
 } 
 ```
 
-### Quick sort
+#### Quick sort
 ```C
 void quicksort(int *a, int fs, int ls){
     if(fs<ls){
@@ -43,7 +44,7 @@ void quicksort(int *a, int fs, int ls){
 }
 ```
 
-### Heap sort
+#### Heap sort
 ```C
 void heapsort(int *a, int n){
     for (int i = n / 2 - 1; i >= 0; i--)
@@ -71,9 +72,9 @@ void heappy(int* a, int n, int root) {
 ```
 
 
-## 2-D massive realization
+### 2-D massive realization
 ***EXAMPLES***
-### "Array of arrays" (standard)
+#### "Array of arrays" (standard)
 
 ![Array 1](../media/arr_1.jpg "Array of arrays (standard)")
 
@@ -98,7 +99,7 @@ for (int i=0;i<M;i++)
 free(pointer_array);
 ```
 
-### Array pointing to array
+#### Array pointing to array
 
 ![Array 2](../media/arr_2.jpg "Array pointing to array")
 
@@ -123,7 +124,7 @@ free(values_array);
 free(pointer_array);
 ```
 
-### Single array 
+#### Single array 
 
 ![Array 3](../media/arr_3.jpg "Single array")
 
@@ -147,3 +148,4 @@ for (int i=0;i<M;i++)
 
 free(single_array_matrix);
 ```
+
