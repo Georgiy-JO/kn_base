@@ -1,4 +1,8 @@
 # C++
+- Created in year 1985.
+- Developed by Bjarne Stroustrup.
+- Object-oriented programming (OOP) language.
+- Evolution of C.
 
 ## Libraries 
 
@@ -6,11 +10,11 @@
 | ----------- | -------------- |
 | \<iostream> | input/output   |
 | \<cmath>    | math functions |
-<!-- | \<vector>   | dynamic array  | -->
-| \<algorithm>| algorithms     |
-<!-- | \<string>   | string        | -->
 | \<ctime>    | time related functions  |
 | \<iomanip>  | facilities for manipulating the input and output format of streams |
+<!-- | \<algorithm>| algorithms     | -->
+<!-- | \<vector>   | dynamic array  | -->
+<!-- | \<string>   | string        | -->
 
 
 ## Code situations and examples
@@ -23,7 +27,10 @@
     int a = -5.5; // a is 5
     ```
 - `bool` datatype exists by default (can be `true` or `false`).
-- `const` keyword is used to declare a constant variable, it can be used with functions to prevent modification of the function's parameters.
+- `const` keyword is used to declare a constant variable, it can be used with functions to prevent modification of the function's parameters (secure the data).
+    ```C++
+    void printer (const std::string &data_1, const int &data_2){...}
+    ```
 - `sizeof` operator returns the size of a variable or data type in bytes, it can be used with arrays to get the total size of the array in bytes
 - If a function is described after the `main` function, it must be declared before it.
 - If local and global variable share a same name, function will use the local version, unless you use `::` before the variable name:
@@ -52,6 +59,7 @@
     }
     void fun2(double* passed_array){/*...*/ }
     ```
+- `NULL` = `nullptr`;
 
 
 
@@ -138,6 +146,16 @@ std::string address = "My_street 55, flat 25";
     std::cout << str[3] << std::endl;       //l
     ```
 * There are [methods](#string-methods) to make work with strings simpler.
+* Strings can be easily replaced/swapped/etc:
+    ```C++
+    std::string name1 = "Jack";
+    std::string name2 = "ONeill";
+    std::string tmp;
+    tmp = name1;
+    name1 = name2;
+    name2 = tmp;
+    ```
+
 
 
 ### Namespaces
@@ -246,7 +264,7 @@ x=='Y'?std::cout << "YES":std::cout <<"NO";
 A cycle structure that ease going through an iterable data set.
 - Does not work if the amount of elements is not preset or is unknown.
 
-#### Structure
+#### Syntax
 ```C++
 for( <datatype> <name_single_element> : <anme_of_dataset>){...}
 ```
@@ -263,23 +281,148 @@ for (double dec: decimals){
 }
 ```
 
+### Matrices (2D array)
+- The number of columns must be set with number:
+    ```C++
+    int matrix[][3] = {{1, 2, 3},
+                       {4, 5, 6},
+                       {7, 8, 9}};
+    ```
+- The number of rows can be calculated:
+    ```C++
+    int rows = sizeof(matrix)/sizeof(matrix[0]);
+    ```
+- The number of columns can be calculated:
+    ```C++
+    int columns = sizeof(matrix[0])/sizeof(matrix[0][0]);
+    ```
+
+### Pointers
+Pointers are variables that hold the memory address of another variable.
+- The `&`- *address-of operator* is used to get the memory address of a variable, it can be used to pass variables to functions by reference.
+- The `*` operator is used to get the value of the variable at the memory address or the value of a variable that a pointer is pointing.
+- The `NULL` constant is used to represent a null pointer.
+- To assign a `NULL` constant to a pointer or check if a pointer is `NULL`: ```std::string *pStr=nullptr;```
+- Pointers' names are usually created by adding '**p**' to a variable name (like "**pName**").
+
+#### Examples
+```C++
+std::string str="rock";                              //string
+std::string strs[]={"Rock", "Jazz", "Classics"};     //array of strings
+std::string *pStr=&str;                              //pointer to a string 
+std::string *pStrs[]={(strs+0),(strs+1),(strs+2)};   //array of pointers
+std::string *pStrs2=strs;                            //pointer to an array
+```
+
+#### Passing to function (❗***HINT***)
+Example:
+```C++
+void swap (int x, int y){
+    int temp = x;
+    x = y;
+    y = temp;
+}
+void swap2 (int &x, int &y){
+    int temp = x;
+    x = y;
+    y = temp;
+}
+void swap3 (int* x, int* y){
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+int main(){
+    using namespace std;
+    int x=5, y=10;
+    cout<< x <<" "<<y<<endl;    //5 10
+    swap(x,y);                  //pass values (creates capies inside a function)
+    cout<< x <<" "<<y<<endl;    //5 10
+    swap2(x,y);                 //pass values by refference (actually work with original addresses)
+    cout<< x <<" "<<y<<endl;    //10 5
+    swap3(&x,&y);               //pass addresses and work with addresses
+    cout<< x <<" "<<y<<endl;    //5 10
+    return 0;
+}
+```
+- Same pattern can work with **strings**.
+
+### Dynamic memory  
+Memory that is allocated after the program is already compiled and running. 
+- This memory is allocated in the heap, which is a big segment of the memory assigned to the program.  
+![Memory](/C&C++/media/program_memory.png "Memory of a program")
+- The `new` keyword is used to allocate memory dynamically.
+- The `delete` keyword is used to free the memory.
+
+#### Example
+```C++
+using namespace std;
+
+int **matrix=nullptr;
+int rows=0, columns=0;
+
+cin>>rows;
+cin>>columns;
+
+matrix = new int*[rows];
+for (int i=0;i<rows;i++){
+    matrix[i]=new int[columns];
+}
+
+for (int i=0;i<rows;i++){
+    for (int j=0;j<columns;j++){
+        cin>>matrix[i][j];
+    }
+}
+
+for (int i=0;i<rows;i++){
+    for (int j=0;j<columns;j++){
+        cout<<matrix[i][j]<<" ";
+    }
+cout<<endl;
+}
+
+for (int i=0;i<rows;i++){
+    delete matrix[i];
+}
+delete matrix;
+
+return 0;
+```
+
 
 ## Functions 
 
-| function          | description                 | header/library |
-| ----------------- | --------------------------- | -------------- |
-| `z=std::max(x,y)` | returns maximum             | \<iostream>    |
-| `z=std::min(x,y)` | returns minimum             | \<iostream>    |
-| `z=abs(x)`        | returns absolute value      | \<cmath>       |
-| `z=pow(x,y)`      | returns x to the power of y | \<cmath>       |
-| `z=sqrt(x)`       | returns square root of x    | \<cmath>       |
-| `z=ceil(x)`       | returns the smallest integer >= x <br> (round up)| \<cmath>       |
-| `z=floor(x)`      | returns the largest integer <= x <br> (round down)| \<cmath> |
-| `z=round(x)`      | returns the nearest integer to x | \<cmath>| 
+| function          | description                                        | header/library |
+| ----------------- | -------------------------------------------------- | -------------- |
+| `z=std::max(x,y)` | returns maximum                                    | \<iostream>    |
+| `z=std::min(x,y)` | returns minimum                                    | \<iostream>    |
+| `z=abs(x)`        | returns absolute value                             | \<cmath>       |
+| `z=pow(x,y)`      | returns x to the power of y                        | \<cmath>       |
+| `z=sqrt(x)`       | returns square root of x                           | \<cmath>       |
+| `z=ceil(x)`       | returns the smallest integer >= x <br> (round up)  | \<cmath>       |
+| `z=floor(x)`      | returns the largest integer <= x <br> (round down) | \<cmath>       |
+| `z=round(x)`      | returns the nearest integer to x                   | \<cmath>       |
+| `m =toupper(c)`   | return the uppercase version of c                  | \<iostream>    |
 
 ####  ❗***HINT***
 Function lists:
 - [CMATH](https://cplusplus.com/reference/cmath/)
+
+### Fill()
+- fills a range with a value.
+#### Syntax
+```C++
+std::fill( <beginning_of_range>, <end_of_range>, <value> );
+```
+- Fills with values including beginning and excluding the end.
+#### Example
+```C++
+int length =50;
+string n[length];
+fill( &n[0], &n[length/2], "pizza");
+fill( n + length/2, n + length, "sushi");
+```
 
 ### Tips
 C++ does support **overloaded functions**:
