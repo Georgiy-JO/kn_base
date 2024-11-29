@@ -1,16 +1,17 @@
 # Some programs that can help or may be needed for C projects
 
 ## Contents
-- [[#GCC|GCC]]
-- [[#Clang-format|Clang-format]]
-- [[#CPP-check|CPP-check]]
-- [[#Valgrind|Valgrind]]
-- [[#Check library|Check library]]
-- [[#Makefile|Makefile]]
-- [[#Gcov and Gcovr|Gcov and Gcovr]]
-- [[#Git|Git]]
-- [[#Notes|Notes]]
-	- [[#Notes#Ultimate installation - Ubuntu|Ultimate installation - Ubuntu]]
+- [GCC](#gcc)
+- [Clang-format](#clang-format)
+- [CPP-check](#cpp-check)
+- [Valgrind](#valgrind)
+- [Check library](#check-library)
+- [Makefile](#makefile)
+- [Gcov and Gcovr](#gcov-and-gcovr)
+- [Git](#git)
+- [Notes](#notes)
+  - [Ultimate installation - Ubuntu](#ultimate-installation---ubuntu)
+- [Links](#links-1)
 
 
 ## GCC 
@@ -116,7 +117,9 @@ g++ object.o -o executable
 | -g                                       | used to include debugging information in the compiled binary, this information is essential for debugging your program using tools like `gdb` (GNU Debugger) or other debugging environments. | Error check |
 
 ## Clang-format 
-***Code Formatter*** (***code style***)
+***Code Formatter*** ([***code style***](/C&C++/C_parts/Code_style_notes.md))
+- Can do the code compilation;
+- Can be used for **code formatting**. Can automatically format C, C++, Java, JavaScript, Python, etc.
 ### Installation
 #### Linux (example for ubuntu)
 ```bash

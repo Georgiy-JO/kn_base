@@ -23,13 +23,23 @@
     - [C main](/C&C++/C_notes.md)
         - [Tools](/C&C++/C_parts/Tools_notes.md)
         - [Code samples](/C&C++/C_parts/Code_notes.md)
+        - [Code style](/C&C++/C_parts/Code_style_notes.md)
+        - [C++](/C&C++/C_parts/C++.md)
+        - [C++](/C&C++/C_parts/C.md)
 - **Bash and SH**
     - [Bash and sh](/Bash/Bash_notes.md)
 - **Instruments**
     - [Telegram bot](/Instruments/TgBot_notes.md)
 
 ## Extra
-
+### Instruments
+- AI instruments for programming:
+  - [ChatGPT](https://chatgpt.com/)
+  - [Phind](https://www.phind.com/search?home=true)
+  - [BlackBox](https://www.blackbox.ai/)
+- Remote repositories
+  - GitHub
+  - GitLab
 ### Repository templates 
 - [Empty repository](https://github.com/Georgiy-JO/gh_gen_template)
 - [Empty, for 2 separate repositories](https://github.com/Georgiy-JO/2_rep_template)

@@ -1052,3 +1052,4 @@ Check [/C&C++/materials/example_1.cpp](/C&C++/materials/example_1.cpp)
 
 ## Links
 [6 hours basic tutorial (EN)](https://youtu.be/-TkoO8Z07hI?si=vifWswvQmeKroSGu)
+[Beginning of series of tutorial videos (RU)](https://youtu.be/RKMyJKXXpKM?si=5yCHTqHpgMCdhmfm)
