@@ -390,6 +390,126 @@ delete matrix;
 return 0;
 ```
 
+### Recursion 
+A programming technique there a function that invokes (calls) itself from within.
+- The function calls itself until it reaches a base case that stops the recursion.
+- The recursion can be used to solve problems that have a recursive recitative structure (good for sorting or searching algorithms, for working with tree-like structures).
+- In comparison with iterative algorithms:
+    - pros: less and cleaner coding;
+    - cons: uses more memory and is slower.
+
+### Function templates
+A function template is a function that can work with different data types. This allows us to generate as many overloaded functions with different datatype as we need. 
+
+#### Example
+```C++
+//instead of 
+int max (int x, int y){
+    return (x>y)?x:y;
+}
+double max (double x, double y){
+    return (x>y)?x:y;
+}
+char max (char x, char y){
+    return (x>y)?x:y;   
+}
+//this one will work if we have 2 similar datatypes
+template <typename T>
+T max (T x, T y){
+    return (x>y)?x:y;
+}
+//this one will work if we have 2 different datatypes too
+template <typename T, typename U>
+auto max (T x, U y){
+    return (x>y)?x:y;
+}
+```
+- `auto` make the compiler deduce that the result type should be.
+
+### Structure
+A structure is a collection of variables of different data types that can be used together as a single unit.
+- Structures can be created with `struct` keyword.
+- Variables in structure are called *"members"*.
+- *Members* can be accessed with "*class member access operator*":
+    - `.` for variables;
+    - `->` for pointers.
+
+#### Example 
+```C++
+struct person {
+    std::string name;
+    int age;
+    double rating =0.0;
+};
+void data_crean (person *p){
+    p->name.clear();
+    p->age = 0;
+    p->rating = 0.0;
+}
+void printer(person p){
+    std::cout << "Name: " << p.name << std::endl;
+    std::cout << "Age: " << p.age << std::endl;
+    std::cout << "Rating: " << p.rating << std::endl;
+}
+void update_rating(person &p){
+    p.rating+=0.5;
+}
+int main(){
+    using std::cout, std::endl;
+
+    person first_per;
+    first_per.name = "John";
+    first_per.age = 25;
+    first_per.rating = 4.5;
+
+    printer (first_per);
+    update_rating(first_per);
+    printer (first_per);
+    data_crean(&first_per);
+    printer (first_per);
+
+    return 0;
+} 
+```
+- `p->rating = 0.0;` sets a default value for the member.
+
+### Enumerations
+Enumerations are a way to define a set of named values. It is a user-defined datatype that consists of paired named-integer constants. 
+- Enumerations can be created with `enum` keyword.
+- Enumerations are great for sets of options.
+
+#### Example
+```C++
+enum Day {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
+enum Nums {One=1, Two=2, Three=3, MinusOne=-1};
+int main(){
+    using std::cout, std::endl;
+    Day today = Sunday;
+    switch(today){
+        case Sunday: cout<<"It's Sunday"<<endl; 
+            break;
+        case Monday: cout<<"It's Monday"<<endl; 
+            break;
+        case Tuesday: cout<<"It's Tuesday"<<endl; 
+            break;
+        case Wednesday: cout<<"It's Wednesday"<<endl; 
+            break;
+        case Thursday: cout<<"It's Thursday"<<endl; 
+            break;
+        case Friday: cout<<"It's Friday"<<endl; 
+            break;
+        case Saturday: cout<<"It's Saturday"<<endl; 
+            break;
+    }
+
+    int x=Tuesday;
+    //...
+}
+```
+- If the numbers for *enum*s are not set, the list will start from **0** and go with *+1* step;
+- Enumerations can be used just like number constants assigning those to any variable (that can be assigned to *int*).
+- Enumerations can be used like a datatype.
+
 
 ## Functions 
 
@@ -639,19 +759,296 @@ std::cout << full_name.erase(1,3)<< std::endl;  //J
 ```
 - In `.erase(<begin_index>,<end_index>)` *<begin_index>* in inclusive, *<end_index>* is not.
 
-## .
+
+## Object and Class
+
+### General 
+#### Class
+- A class is a blueprint or template for creating objects;
+- It defines the structure and behavior of objects;
+- It contains data members (variables) and member functions;
+- Classes are abstract concepts, not physical entities;
+- They are defined using the `class` keyword;
+- No memory is allocated when a class is defined.
+- 
+#### Object
+- An object is an instance of a class;
+- It represents a concrete entity with specific values for data members;
+- Objects contain actual data stored in memory;
+- They are created from classes using [constructors](#constructor);
+- Objects are physical entities that exist at runtime;
+- Memory is allocated when an object is created.
+
+#### Summary
+Object is a collection of attributes and methods. **Attributes** are characteristics of an object, **methods** are functions that object can preform. **Object** is an instance of a data when **class** is the definition of an object.
+- Objects can be created from a user-defined data type **class**, that acts like a blueprint for an object.
+- **Class** encapsulates data (*attributes*) and functions (*methods*) that operate on that data into a single unit. 
+- **Classes** are a fundamental part of *object-oriented programming* (**OOP**) in C++, allowing for the modeling of real-world entities and promoting code reusability, modularity, and abstraction.
+- [General example](#general)
+
+#### Example
+```C++
+#include <iostream>
+
+class Human{
+    public:
+        std::string name;
+        std::string occupation;
+        int age;
+        bool isAlive=true;
+
+        void eat(){
+            std::cout<<"Human is eating"<<std::endl;
+        }
+        void sleep(){
+            std::cout<<"Human is sleeping"<<std::endl;
+        }
+        void drink(){
+            std::cout<<"Human is drinking"<<std::endl;
+        }
+};
+int main(){
+    using std::cout, std::endl;
+
+    Human human1;
+    Human human2;
+
+    human1.name="John";
+    human1.occupation="Pilot";
+    human1.age=30;
+    human2.name="Jeffrey";
+    human2.occupation="Comander";
+    human2.age=45;
+
+    cout<<"Name: "<<human1.name<<endl;
+    cout<<"Occupation: "<<human1.occupation<<endl;
+    cout<<"Age: "<<human1.age<<endl;
+    cout<<"Is Alive: "<<human1.isAlive<<endl;
+
+    cout<<"Name: "<<human2.name<<endl;
+    cout<<"Occupation: "<<human2.occupation<<endl;
+    cout<<"Age: "<<human2.age<<endl;
+
+    human1.eat();
+    human2.sleep();
+    human1.drink();
+    return 0;
+} 
+```
+- If there is setting a value in class description it sets a default value for this attribute.
 
 
+### Abstraction+
+- **Encapsulation** is one of the fundamental principles of object-oriented programming (OOP). It refers to the bundling of data (attributes) and methods (functions or procedures) that operate on that data into a single unit, known as a class. More importantly, encapsulation restricts direct access to some of an object's components, which is a means of preventing unintended interference and misuse of the object's internal state.
+- **Abstraction** is one of the fundamental principles of object-oriented programming (OOP) that focuses on simplifying complex systems by modeling classes based on the essential properties and behaviors an object should have while hiding the unnecessary details. 
+  - Simple speaking it means *hiding unnecessary data from outside a class*
+  - Abstraction is achieved by using **access modifiers**.
+- **Access modifiers** are keywords used in object-oriented programming to set the accessibility or visibility of **classes**, **methods**, **Attributes** and other members. They control how and where these members can be accessed from other parts of the program. 
+  - The main purpose of access modifiers is to implement **encapsulation**, which is a fundamental principle of object-oriented design.
+  - **Attributes** and **methods** have ***access modifiers***:
+      - `public`: can be accessed from anywhere.
+      - `private`: can only be accessed within the class.
+      - `protected`: can be accessed within the class and its derived classes.
+- Related functions:
+  - `getter` - function that makes a private attribute READABLE.
+  - `setter` - function that makes a private attribute WRITABLE.
 
+| Aspect | Encapsulation | Abstraction | 
+|----------------------|---------------------------------------------------|--------------------------------------------------| 
+| **Definition** | Encapsulation is the bundling of data (attributes) and methods (functions) that operate on that data into a single unit, typically a class. It restricts direct access to some of an object's components, which is a means of preventing unintended interference and misuse of the object's internal state. |Abstraction is the process of simplifying complex systems by modeling classes based on the essential properties and behaviors an object should have while hiding the unnecessary details. It focuses on what an object does rather than how it does it.|
+| **Purpose** | To protect the internal state of an object and control access to it. | To simplify complex systems by exposing only essential features. | 
+| **Focus** | Focuses on data hiding and restricting access to the internal state. | Focuses on exposing only relevant attributes and behaviors. |
+| **Implementation** | Achieved using access modifiers (e.g., private, public) and getter/setter methods. | Achieved using abstract classes and interfaces. | 
+| **Example** | A class with private variables and public methods to access them. | An interface defining a contract that various classes must implement. | 
+| **Real-World Analogy** | A pill capsule that protects the medicine inside from external factors. | A TV remote that allows you to control the TV without needing to know how it works internally. |
 
+#### Example
+```C++
+class Stove{
+    private:
+        double temperature=0;
+    public: 
+        std::string colour="Black";
+        double getTemperature (){
+            return temperature;
+        }
+        void setTemperature(double temp){
+            if(temp<=0)
+                temperature=0;
+            else if (temp>=10)
+                temperature=10;
+            else
+                temperature=temp;
+        }
+    Stove(double temperature, std::string colour){
+        setTemperature(temperature);
+        this->colour=colour;
+    }
+};
+int main(){
+    using std::cout, std::endl;
+    Stove stove(5,"blue");
+    stove.colour="red";                                         //ok
+    stove.temperature=1000;                                     //error
+    stove.setTemperature(1000);                                 //ok
+    cout << "Stove temperature:"<<stove.getTemperature()<<endl; //ok
+    return 0;
+} 
+```
 
+### Constructor
+It is a special method, that is automatically called when an object is instantiated (useful to assign values to attributes as arguments). 
+- There is a **constructor** that is automatically called.  In C++ if you don't define any *constructor*, the compiler provides a default *constructor* that initializes the object with default values.
+- **Constructor** can be manually set.
+- A **constructor** is a member function with the same name as the class.
+- If a constructor is set you can't just create new object simple way.
+    ```C++
+        Student s2;         // would not work
+    ```
 
+#### Examples
+- ***#1***
+    ```C++
+    class Student{
+        public:
+            std::string name;
+            int age;
+            double mark;
+        
+        Student(std::string name, int age, double mark){
+            this->name= name;
+            this->age = age;
+            this->mark = mark;
+        }
+    };
 
+    int main(){
+        using std::cout, std::endl;
+        Student s1("John", 20, 85.5);
+        cout << "Name: " << s1.name << endl<< "Age: "<<s1.age<<endl << "Mark: "<<s1.mark<<"%"<<endl;
+        return 0;
+    } 
+    ```
+- ***#2***
+    ```C++
+    class Student{
+        public:
+            std::string name;
+            int age;
+            double mark;
+        
+        Student(std::string n, int a, double m){
+            name= n;
+            age = a;
+            mark = m;
+        }
+    };
 
+    int main(){
+        using std::cout, std::endl;
+        Student s1("John", 20, 85.5);
+        cout << "Name: " << s1.name << endl<< "Age: "<<s1.age<<endl << "Mark: "<<s1.mark<<"%"<<endl;
+        return 0;
+    } 
+    ```
+- If in the constructor declaration the names of variables are the same `this->` keyword is needed to address to attributes. Otherwise, you can just use attributes names.
 
+### Overloaded constructors 
+With the same logic as overloaded functions **overloaded constructors** allow to have different constructors with the same name, but different parameters.
+
+#### Example
+```C++
+class Pizza{
+    public:
+        std::string topping1;
+        std::string topping2="NON";
+        std::string topping3="NON";
+
+    Pizza(){}
+    Pizza(std::string t1){
+        topping1= t1;
+    }
+    Pizza(std::string t1, std::string t2){
+        topping1= t1;
+        topping2= t2;
+    }
+    Pizza(std::string t1, std::string t2, std::string t3){
+        topping1= t1;
+        topping2= t2;
+        topping3= t3;
+    }
+    void ingredients(){
+        std::cout << "Topping 1: " << topping1 << std::endl;
+        if(topping2!="NON"){
+            std::cout << "Topping 2: " << topping2 << std::endl;
+            }
+        if(topping3!="NON"){
+            std::cout << "Topping 3: " << topping3 << std::endl;
+        }
+    }
+};
+
+int main(){
+    using std::cout, std::endl;
+    Pizza p1("peppirony");
+    Pizza p2("peppirony", "mushroom", "olive");
+    p1.ingredients();
+    cout << endl;
+    p2.ingredients();
+   return 0;
+} 
+```
+### Inheritance
+Inheritance is a principle of *OOP* that allows a new class (subclass/derived class/**child class**) to inherit *attributes* and *methods* from an existing class (superclass/base class/**parent class**). 
+- This method helps to reuse similar code found within multiple classes.
+
+#### Examples
+- **#1**
+    ```C++
+    class Animal{
+        public:
+            bool alive =true;
+        void eat(){
+            std::cout<<"Eating"<<std::endl;
+        }
+    };
+    class Dog:public Animal{
+        public:
+        void bark(){
+            std::cout<<"Barking"<<std::endl;
+        }
+        void stayAtHome(){
+            std::cout<<"Staying near house"<<std::endl;
+        }
+    };
+    class Cat:public Animal{
+        public:
+        void meow(){
+            std::cout<<"Meowing"<<std::endl;
+        }
+        void stayAtHome(){
+            std::cout<<"Staying in house"<<std::endl;
+        }
+    };
+    int main(){
+        using std::cout, std::endl;
+        Dog Guffy;
+        Cat Tom;
+        Guffy.eat();
+        cout<<"Guffy is alive: "<<Guffy.alive<<endl;
+        Guffy.bark();
+        Guffy.stayAtHome();
+        Tom.eat();
+        cout<<"Tom is alive: "<<Tom.alive<<endl;
+        Tom.meow();
+        Tom.stayAtHome();
+        Tom.bark();                                 //error
+        return 0;
+    } 
+    ```
+- **#2**
+Check [/C&C++/materials/example_1.cpp](/C&C++/materials/example_1.cpp)
 
 
 ## Links
 [6 hours basic tutorial (EN)](https://youtu.be/-TkoO8Z07hI?si=vifWswvQmeKroSGu)
-
-
