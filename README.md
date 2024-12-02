@@ -7,6 +7,8 @@
     * Some Contents may not work properly due to the fact that those were created in and for *Obsidian*.
 
 ## Contents:
+- **Global**
+  - [Dictionary of terms](/General/Dictionaty.md)
 - **SQL**
     - [SQL](/SQL/SQL_notes.md)
 - **DevOps**    
@@ -21,11 +23,11 @@
         - [SSH](/Linux/Linux_parts/SSH_stuff.md)
 - **C**
     - [C main](/C&C++/C_notes.md)
-        - [Tools](/C&C++/C_parts/Tools_notes.md)
-        - [Code samples](/C&C++/C_parts/Code_notes.md)
-        - [Code style](/C&C++/C_parts/Code_style_notes.md)
-        - [C++](/C&C++/C_parts/C++.md)
-        - [C++](/C&C++/C_parts/C.md)
+        - [Tools](/C&C++/Parts/Tools_notes.md)
+        - [Code samples](/C&C++/Parts/Code_notes.md)
+        - [Code style](/C&C++/Parts/Code_style_notes.md)
+        - [C++](/C&C++/Parts/C++.md)
+        - [C++](/C&C++/Parts/C.md)
 - **Bash and SH**
     - [Bash and sh](/Bash/Bash_notes.md)
 - **Instruments**

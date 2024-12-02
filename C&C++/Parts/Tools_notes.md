@@ -117,7 +117,7 @@ g++ object.o -o executable
 | -g                                       | used to include debugging information in the compiled binary, this information is essential for debugging your program using tools like `gdb` (GNU Debugger) or other debugging environments. | Error check |
 
 ## Clang-format 
-***Code Formatter*** ([***code style***](/C&C++/C_parts/Code_style_notes.md))
+***Code Formatter*** ([***code style***](/C&C++/Parts/Code_style_notes.md))
 - Can do the code compilation;
 - Can be used for **code formatting**. Can automatically format C, C++, Java, JavaScript, Python, etc.
 ### Installation
@@ -238,7 +238,7 @@ sudo apt-get install check
 ### Use
 Added to a c file as a library allow to use functions to compare output or result of execution of your functions with prepared values or results of calculation.
 
-#### [Example](/C&C++/materials/tetris_tests.c)
+#### [Example](/C&C++/materials/C/tetris_tests.c)
 * see [Notes/links](#links-1)
 
 ### Links
@@ -296,7 +296,7 @@ clean:
 - -**.PHONY**: This tells `make` that `all` and `clean` are not files but commands.
 
 
-#### [Example](/C&C++/materials/Makefile)
+#### [Example](/C&C++/materials/C/Makefile)
 * see [Notes/links](#links-1)
 
 ### Tips and structure
