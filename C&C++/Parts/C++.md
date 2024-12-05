@@ -4,6 +4,7 @@
 - [Object-oriented programming](/General/Dictionaty.md#object-oriented-programming) (OOP) language.
   - The main principals of OOP are realized via [`class`](#object-and-class)
 - Evolution of C.
+  - Plenty of C elements, functions, etc. works here...
 
 ## Libraries 
 
@@ -101,7 +102,7 @@ int y{2+4*5};           //22
 int notInt(5.4);        //error
 ```
 
-#### Value Initialization
+#### Value initialization
 Initialization with default value (most times **0**).
 ```C++
 int x{}; // Value initializes x to 0
@@ -148,6 +149,9 @@ C++ can automatically decide what type to use.
     decltype(i) j;                  //const int*
     ```
 - `auto` and `decltype` work not only for initialization.
+
+#### [Examples of initialization](#hint-new--initialization)
+
 
 ### References
 (Ссылки)
@@ -670,14 +674,17 @@ int main(){
 Memory that is allocated after the program is already compiled and running. 
 - This memory is allocated in the heap, which is a big segment of the memory assigned to the program.  
 ![Memory](/C&C++/media/program_memory.png "Memory of a program")
-- The `new` keyword is used to allocate memory dynamically.
-- The `delete` keyword is used to free the memory.
+- The `new` operator is used to allocate memory dynamically - allocates memory and calls the [constructor](#constructor) (if it exists).
+  - Use `new` to allocate memory for one object.
+  - Use `new[]` to allocate memory for an array of objects.
+- The `delete` operator is used to free the memory - frees memory and calls [destructor](#destructor) (if it exists).
   - Use `delete` when you want to deallocate memory that was allocated for a single object using `new`.
   - Use `delete[]` when you want to deallocate memory that was allocated for an array of objects using `new[]`.
 - Pointers that do not manage the lifetime of the objects they point to (regular pointers) are called raw pointers.
+- After using `delete` it is a good practice to assign to the pointer `nullptr`, this way in case you call `delete` again no error will happen. 
 
 #### Example
-- **#1**
+- ***#1***
     ```C++
     using namespace std;
 
@@ -706,83 +713,264 @@ Memory that is allocated after the program is already compiled and running.
     }
 
     for (int i=0;i<rows;i++){
-        delete matrix[i];
+        delete [] matrix[i];
     }
-    delete matrix;
+    delete [] matrix;
 
     return 0;
     ```
-- **#2**
+- ***#2***
     ```C++
     int main() {
-        int* arr = new int[5]; // Allocate memory for an array of 5 numbers
-        delete[] arr; // Deallocate memory for the array of numbers
+        int* arr = new int[5];  // Allocate memory for an array of 5 numbers
+        delete[] arr;           // Deallocate memory for the array of numbers
         int* pointer = new int;
         delete pointer;
         return 0;
     }
     ```
-    
-### Smart pointers (❗***HINT***)
-Smart pointers in C++ are objects that manage dynamic memory and automatically release it when the pointer is no longer needed. This helps prevent memory leaks and simplifies resource management. The C++ Standard Library provides several types of smart pointers, with `std::unique_ptr` and `std::shared_ptr` being the most common.
-  - `std::unique_ptr` is a smart pointer that provides unique ownership of an object. This means that only one s`td::unique_ptr` can own a given object at any time. When a `std::unique_ptr` goes out of scope or is initialized with another pointer, the object is automatically released.
-  - `std::shared_ptr` is a smart pointer that provides shared ownership of an object. The object will be released when the last `std::shared_ptr` pointing to it is destroyed or reset.
-- Working with smart pointers requires `#include <memory>`
+- ***#3***: constructor + memory allocation
+    ```C++
+    struct point{
+        private:
+            int x;
+            int y;\
+        public:
+        point(){
+            x=0;
+            y=0;
+            std::cout<<"Constructor called"<<std::endl;
+        }
+        point(int x, int y){
+            this->x=x;
+            this->y=y;
+            std::cout<<"Constructor called"<<std::endl;
+        }
+        ~point(){
+            std::cout<<"Destructor called"<<std::endl;
+        }
+    };
+    int main(){
+        point* p = new point(1,2);
+        delete p;
+        return 0;
+    }
+    ```
+##### (❗***HINT***) new + initialization
+- ***#4***: different approach 
+    ```C++
+    struct volume {
+        int length, height, depth;
+    };
+    int main() {
+        volume* v_1 = new volume;           //memory garbage in variables     
+        volume* v_2 {new volume};           //same as one before
+        volume* v_3 = new volume();         //variables are initiated with zeros 
+        volume* v_4 = new volume{1, 2, 3};  //variables are initiated with values 
+        volume* v_5 {new volume{1, 2, 3}};  //same as one before
+        delete v_1;
+        delete v_2;
+        delete v_3;
+        delete v_4;
+        delete v_5;
+        v_1=nullptr;
+        v_2=nullptr;
+        v_3=nullptr;
+        v_4=nullptr;
+        v_5=nullptr;
 
-#### Examples
-- **#1 `std::unique_ptr`**
+        int* p1 = new int;                  //not initialized (memory garbage)
+        double* p2 {new double()};          //initialized with 0
+        short* p3 {new short{-5}};          //initialized with -5
+        unsigned p4 {new unsigned(11)};     //initialized with 11 
+        delete p1;
+        delete p2;
+        delete p3;
+        delete p4;
+        p1=nullptr;
+        p2=nullptr;
+        p3=nullptr;
+        p4=nullptr;
+
+        int* ar_1 {new int[7]{}};           //0 0 0 0 0 0 0
+        int* ar_2 {new int[4]()};           //0 0 0 0
+        int* ar_3 {new int[5]{1, 2, 3}};    //1 2 3 0 0
+        delete[] ar_1;
+        delete[] ar_2;
+        delete[] ar_3;
+        ar_1=nullptr;
+        ar_2=nullptr;
+        ar_3=nullptr;
+
+        return 0;
+    }
+    ```
+
+
+
+### Smart pointers (❗***HINT***)
+Smart pointers in C++ are objects that manage dynamic memory and automatically release it when the pointer is no longer needed. This helps prevent memory leaks and simplifies resource management. The C++ Standard Library provides several types (classes) of smart pointers, with `std::unique_ptr` and `std::shared_ptr` being the most common.  
+- Working with smart pointers requires `#include <memory>`
+- `std::unique_ptr` and `std::shared_ptr` can't be mixed (they are different classes).
+
+#### `std::unique_ptr`
+`std::unique_ptr` is a smart pointer that provides unique ownership of an object. This means that only one `std::unique_ptr` can point to the that memory at a time. When a `std::unique_ptr` goes out of scope or is initialized with another pointer, the object is automatically released.
+- `std::make_unique` is a utility function (from C++14) that simplifies the creation of `std::unique_ptr`. Using `std::make_unique` is preferred over using `new` directly because it helps prevent memory leaks and makes the code safer and cleaner (requires `#include <memory>` too).
+  - Syntax:
+    ```C++
+    std::unique_ptr<T> <pointer_name> {make_unique<T>(Args&&... args)}
+    ```
+    - Where `T` is the type of the object you want to create, and `Args` are the arguments that will be forwarded to the constructor of `T`.
+- Methods of `unique_ptr`:
+  - `get()` - return a raw pointer to the allocated memory.
+  - `release()` - return a raw pointer to the allocated memory and disconnect smart pointer from it (does not free it).
+  - `reset()` - reset the smart pointer to point to a new object or to nothing and free the allocated memory.
+  - `swap()` - swap the addresses of 2 smart pointers.
+  - etc.
+
+#### `std::shared_ptr`
+`std::shared_ptr` is a smart pointer that provides shared ownership of an object. The object will be released when the last `std::shared_ptr` pointing to it is destroyed or reset.
+- `std::make_shared` is a utility function in C++ that simplifies the creation of `std::shared_ptr`(requires `#include <memory>` too). 
+  - Syntax:
+    ```C++
+    std::shared_ptr<T> <ptr_name> = make_shared<T>(Args&&... args);
+    ```
+    - Where `T` is the type of the object you want to create, and `Args` are the arguments that will be forwarded to the constructor of `T`.
+- Methods of `shared_ptr`:
+  - `get()` - return a raw pointer to the allocated memory.
+  - `reset()` - reset the smart pointer to point to a new object or to nothing and free the allocated memory.
+  - `swap()` - swap the addresses of 2 smart pointers.
+  - `use_count()` - return the number of `shared_ptr` objects pointing to the same memory space (will not count raw pointers).
+  - `unique()` - return **true** if only one pointer reference the memory, **false** - if 2 and more.
+  - etc.
+- Memory control for `std::shared_ptr` be like:  
+    ![Memory_ctrl_shared_ptr_1](/C&C++/media/shared_ptr_1.png "Two point to one")  
+    ![Memory_ctrl_shared_ptr_2](/C&C++/media/shared_ptr_2.png "Each point to different")  
+    ![Memory_ctrl_shared_ptr_3](/C&C++/media/shared_ptr_3.png "When not a single one is pointing, it gets deleted")  
+
+
+#### Examples `unique_ptr`
+- **#1**: smart pointers:`unique_ptr`: general
     ```C++
     #include <iostream>
-    #include <memory> // For std::unique_ptr
+    #include <memory>
+    int main(){
+        std::unique_ptr<int> ptr;           //creating of unique smart pointer for int value, the pointer's value will be NULL
+        std::shared_ptr<int> ptr2 {};       //creating of shared smart pointer for int value, the pointer's value will be NULL
+        std::shared_ptr<int> ptr3 {nullptr};//creating of shared smart pointer for int value, the pointer's value will be NULL
+        std::shared_ptr<int> ptr4 {std::make_unique<int>(55)};  //creating and initializing a pointer with value
 
-    int main() {
-        // Create a unique pointer to an array of 10 integers
-        std::unique_ptr<int[]> array(new int[10]);
+        ptr=std::make_unique<int>(10);      //allocation memory for the pointer and writing 10 there
 
-        // Initialize the array
-        for (int i = 0; i < 10; ++i) {
-            array[i] = i * 10;
+        (*ptr)++;                           
+        std::cout << *ptr << std::endl;     //output: 11  
+        //...                               //can work with smart pointer the same way as with raw ones
+        ptr=std::make_unique<int>(11);      //will free the previos memory and allocate new 
+        ptr2=ptr;                           //error
+        return 0;
+    }
+    ```
+- **#2**: smart pointers: `unique_ptr`: methods
+    ```C++
+    #include <iostream>
+    #include <memory>
+    int main(){
+        std::unique_ptr<int> ptr {std::make_unique<int>(55)};
+        std::unique_ptr<int> ptr2 {std::make_unique<int>(155)};
+
+        int* p =ptr.get();
+        std::cout << *p << std::endl;       //output: 55
+
+        int* p2 = ptr.release();
+        std::cout << *p2 << std::endl;      //output: 55
+        std::cout << ptr.get() << std::endl;//output: 0
+        delete p2;
+
+        ptr = std::make_unique<int>(55);
+        ptr.reset();
+        std::cout << ptr.get() << std::endl;//output: 0
+        ptr.reset(new int(143));            //does not allow `make_unique`
+        std::cout << *ptr << std::endl;     //output: 143
+        
+        std::swap(ptr, ptr2);
+        std::cout << *ptr << std::endl;     //output: 155
+        std::cout << *ptr2 << std::endl;    //output: 143
+
+        return 0;
+    }
+    ```
+- **#3**: smart pointers: `unique_ptr`:arrays
+    ```C++
+    int main(){
+        unsigned total (10);
+        std::unique_ptr<int[]> ar {std::make_unique<int[]>(total)};
+        auto ar2 {std::make_unique<int[]>(3)};
+        std::unique_ptr<int[]> ar3 {nullptr};
+
+        for (int i=0;i<total;i++){
+            ar[i]=i*i;
         }
-
-        // Output the values of the array
-        for (int i = 0; i < 10; ++i) {
-            std::cout << array[i] << " ";
+        for(int i=0;i<total;i++){
+            std::cout << ar[i] << " ";
         }
         std::cout << std::endl;
-
-        // The pointer automatically releases memory when it goes out of scope
+        
         return 0;
     }
     ```
-- **#1 `std::shared_ptr`**
-    ```C++
-    #include <iostream>
-    #include <memory> // For std::shared_ptr
+#### Examples `shared_ptr`
+- **#4**: smart pointers:`shared_ptr`: general
+```C++
+#include <iostream>
+#include <memory>
+int main(){
+    std::shared_ptr<int> ptr;
+    std::shared_ptr<int> ptr2{};
+    std::shared_ptr<int> ptr3{nullptr};
+    std::shared_ptr<int> ptr4{ptr};     //ptr and ptr4 refference the same memory
+    std::shared_ptr<int> ptr5 = ptr2;   //ptr2 and ptr5 refference the same memory
+    std::shared_ptr<int> ptr6 {std::make_shared<int>(55)};
+    std::shared_ptr<int> ptr7 = std::make_shared<int>(55);
 
-    void useSharedPtr(std::shared_ptr<int> ptr) {
-        std::cout << "Value: " << *ptr << std::endl;
+    ptr3=ptr6;           //ptr3 not has the same address as ptr6
+    *ptr7=10;
+    std::cout << ptr7 <<" "<< *ptr7 << std::endl;     //will autput address and value
+    // can act like a usual raw pointer, except address arithmetic:
+    ptr7+=10;                   //error
+    auto res= ptr3-ptr4;        //error
+
+    std::unique_ptr<int> ptr8; 
+    ptr8=ptr7;                  //error
+
+    return 0;
+}
+```
+- **#5**:smart pointers:`shared_ptr`: methods
+```C++
+int main(){
+    std::shared_ptr<int> ptr{std::make_shared<int>(55)};
+    std::shared_ptr<int> ptr2{ptr};
+
+    ptr2.reset(new int[5]{1,2,3});
+    int* ar=ptr2.get();             //that is needed because shared_ptr can't work will arrays usual way
+
+    for(int i=0;i<5;i++){
+        std::cout << ar[i] << " ";
     }
+    std::cout << std::endl;            
+    ptr2[3]=8;                      //error: because shared_ptr can't work will arrays usual way 
 
-    int main() {
-        // Create a shared pointer
-        std::shared_ptr<int> sharedPtr1(new int(42));
+    ptr2.swap(ptr);
+    std::cout << *ptr2 <<' '<<ptr.use_count()<< std::endl;  //output: 55 1
+    std::cout << ptr.unique() << std::endl;                 //output: 1
 
-        // Create a second pointer that points to the same object
-        std::shared_ptr<int> sharedPtr2 = sharedPtr1;
-
-        std::cout << "Shared Pointer 1 Value: " << *sharedPtr1 << std::endl;
-        std::cout << "Shared Pointer 2 Value: " << *sharedPtr2 << std::endl;
-
-        // Pass shared_ptr to a function
-        useSharedPtr(sharedPtr1);
-
-        // The object will be released when both pointers go out of scope
-        return 0;
-    }
-    ```
-    - `new int(42)`: This part allocates memory for a single integer on the heap and initializes it with the value 42.
-
-#### Example
+    ptr=ptr2;
+    std::cout << *ptr2 <<' '<<ptr.use_count()<< std::endl;  //output: 55 2
+    std::cout << ptr.unique() << std::endl;                 //output: 0   
+    return 0;
+}
+```
+- proper work with arrays for shared_ptr will be available from C++20
 
 ### Recursion 
 A programming technique there a function that invokes (calls) itself from within.
@@ -905,6 +1093,40 @@ int main(){
 } 
 ```
 - `p->rating = 0.0;` sets a default value for the member.
+
+#### Methods in structures
+In C++ structures has methods, they act mostly the same way as the ones from classes.
+```C++
+struct vec {
+    double x, y;
+    double length(){return sqrt(x*x+y*y);}
+};
+using std::cout, std::endl;
+int main(){
+    vec v{1}, v2{5,10};
+    v.y=5;
+    cout << v.length() << endl;
+    cout << v2.length() << endl;
+    return 0;
+}
+```
+- Function if structure knows where to find variables for calculation, because when you call the function structure passes in it `this->` pointer to the right variables. 
+   - `double length(){return sqrt(x*x+y*y);}` == `double length(){return sqrt(this->x*this->x+this->y*this->y);}`
+   - `this` pointer has the same type as structure and can be used everywhere in the structure, accept `stqtic` methods.
+
+#### Access modifiers in structures
+Access modifiers in structures works the same way as those in [classes](#object-and-class). The difference is that for classes default state is `private` and for structure fields `public`.
+
+#### Constructors and Destructors in structures
+Constructors in structures work almost the same way as those in [classes](#object-and-class). If we do not specify a constructor, compiler will add several standard constructors to the structure, if we add at least one constructor ourselves, no default constructors will be added.
+Same works with destructors.
+
+#### Summery
+Structures and [classes](#object-and-class) are pretty close in C++.
+
+![StructVsClass](/C&C++/media/STRUCTvsCLASS.png "structure vs class")
+
+
 
 ### Enumerations
 Enumerations are a way to define a set of named values. It is a user-defined datatype that consists of paired named-integer constants. 
@@ -1182,18 +1404,24 @@ Inline functions are a feature of C++ that allows you to define functions that a
     - **Parameters**: This is where you define the input parameters for the lambda, similar to a regular function.
     - **Return Type**: This is optional; if omitted, the compiler will deduce the return type.
     - **Function Body**: This contains the code that will be executed when the lambda is called.
-    - 
-- **Capture Modes**: You can capture variables in different ways:
-    - **By Value**: [x] captures x by value (a copy).
-    - **By Reference**: [&x] captures x by reference (no copy).
-    - **All by Value**: [=] captures all variables used in the lambda by value.
-    - **All by Reference**: [&] captures all variables used in the lambda by reference.
+- **Capture Modes**: Lambda functions can't use local variables from function it is in. Capturing variables allow using local variables inside lambda function. There are several mods of capturing, those can be set with a special parameter in capture element (example 6), the parameters can be combined, mixed, used for particular variables or all variables local for the function lambda function is it:
+    - **By Value**: `[x]`: captures x by value (a constant copy inside lambda function).
+      - Using `mutable` make this copy modifiable.
+      - Can capture several variables separated by comma.
+      - If the passing variable is a pointer the original value can be changes from inside of lambda function.
+    - **By Reference**: `[&x]`: captures x by reference (not copying), lambda function will be able to modify variables from outside.
+    - **All by Value**: `[=]`: captures all variables used in the lambda by value (use those as constants inside lambda function).
+      - Use `mutable` to make those passed variables modifiable (not constant), but still those changes will be local inside lambda function.
+    - **All by Reference**: `[&]`: captures all variables used in the lambda by reference.
 - **Use Cases**: Lambda functions are often used in:
   - Standard algorithms (like `std::sort`, `std::for_each`, etc.);
   - Event handling and callbacks;
   - As temporary functions for short-lived operations;
   - Can be put inside another function's parameters (example 4).
   
+
+
+
 #### Example
 - **#1** 
 ```C++
@@ -1243,32 +1471,102 @@ int main(){
     }
     ```
 - **#4**
-```C++
-void show_ar(const int* ar, size_t length, bool (*filter_func)(int)=nullptr){
-    for(int i=0;i<length;i++){
-        if(filter_func!=nullptr){
-            if (filter_func(ar[i]))
+    ```C++
+    void show_ar(const int* ar, size_t length, bool (*filter_func)(int)=nullptr){
+        for(int i=0;i<length;i++){
+            if(filter_func!=nullptr){
+                if (filter_func(ar[i]))
+                    cout <<ar[i]<<' ';
+            }
+            else
                 cout <<ar[i]<<' ';
         }
-        else
-            cout <<ar[i]<<' ';
     }
-}
-int main(){
-    int data[]{1,2,3,4,5,6,7,8,9,10};
-    show_ar(data,sizeof(data)/sizeof(*data));   //will print all data
-    cout<<endl;
-    show_ar(data,sizeof(data)/sizeof(*data),[](int x){return x%2==0?true:false;});  //print only even numbers
-    cout<<endl;
-    return 0;
-}
+    int main(){
+        int data[]{1,2,3,4,5,6,7,8,9,10};
+        show_ar(data,sizeof(data)/sizeof(*data));   //will print all data
+        cout<<endl;
+        show_ar(data,sizeof(data)/sizeof(*data),[](int x){return x%2==0?true:false;});  //print only even numbers
+        cout<<endl;
+        return 0;
+    }
+    ```
+- **#5**: [/C&C++/materials/CPP/lambda_fun_ex.cpp](/C&C++/materials/CPP/lambda_fun_ex.cpp)
+- **#6**
+    ```C++
+    int main(){
+        int a(5), b(10),c(15);
+        double data[]{1.2,3.4,6.7,8.5};
 
-```
+        auto r1=[=](){
+            cout <<c<<endl; //OK
+            c++;            //ERROR
+            return a+b;     //OK
+        };
+        r1();
 
+        auto r2=[=]() mutable{
+            c++;            //OK
+            cout <<c<<endl; //OK    //16
+            return a+b;     //OK
+        };
+        r2();
+        cout <<c<<endl;             //15
 
-- **#**: [/C&C++/materials/CPP/lambda_fun_ex.cpp](/C&C++/materials/CPP/lambda_fun_ex.cpp)
+        auto r3=[c,data](){
+            cout <<c<<endl; //OK
+            cout << a<<endl;//ERROR
+            return data[0]; //OK
+        };
+        r3();
 
+        auto r4=[&a](){
+            cout <<a<<endl; //OK    //5
+            a++;
+            c++;            //ERROR
+            cout << a<<endl;//OK    //6
+        };
+        r4();
+        cout << a<<endl;//OK    //6
 
+        auto r5=[&](){
+            a++;            //OK
+            c++;            //OK
+        };
+        r5();
+
+        int* ptr_b=&b;
+        auto r6=[ptr_b](){
+            cout <<*ptr_b<<endl;//OK    //10
+            (*ptr_b)++;         //OK
+            *ptr_b++;           //ERROR
+            cout <<*ptr_b<<endl;//OK    //11
+        };
+        r6();
+        cout <<*ptr_b<<endl;//OK    //11
+
+        auto r7=[ptr_b]()mutable{
+            (*ptr_b)++;         //OK
+            *ptr_b++;           //OK
+        };
+        r7();
+
+        // Mixing the way of capture
+        auto r8=[ptr_b, &a, c, &data]()mutable{
+            //...
+        };
+        // Capture all by value, but `a` and `b` by reference
+        auto r9=[=, &a,&b]()mutable{
+            //...
+        };
+        // Capture all by reference, but `data` and `c` by value
+        auto r10=[&, data,c]()mutable{
+            //...
+        };
+
+        return 0;
+    }
+    ```
 
 ## Files
 In C++ there are following classes that make working with files easier (to work with those `#include <fstream>`):
@@ -1509,7 +1807,7 @@ int main() {
 
 ### General 
 
-![OOP_1](media/oop_1.png "example of OOP based on real world")
+![OOP_1](/C&C++/media/oop_1.png "example of OOP based on real world")
 
 #### Class
 - A class is a blueprint or template for creating objects;
@@ -1541,7 +1839,7 @@ Object is a collection of attributes and methods. **Attributes** are characteris
       - `private`: can only be accessed within the class.
       - `protected`: can be accessed within the class and its derived classes.
     - **Access modifiers** are set for a class not an object (this protection is at the class level).
-      - See example #3.
+      - See [example #3](#class-examples).
   - Related functions:
     - `getter` - function that makes a private attribute READABLE.
     - `setter` - function that makes a private attribute WRITABLE.
@@ -1551,10 +1849,7 @@ Object is a collection of attributes and methods. **Attributes** are characteris
 In C++, methods are functions that are associated with a class or an object. They define the behavior of the objects created from that class. 
 #### Key Concepts of Methods in C++
 - **Member Functions**: Methods are often referred to as member functions because they are defined within a class and can access the class's data members.
-- **Access Specifiers**: Methods can have access specifiers that determine their visibility:
-    - ***public***: Accessible from outside the class.
-    - ***private***: Accessible only from within the class.
-    - ***protected***: Accessible from within the class and by derived classes.
+- **Access Specifiers**: Methods can have access specifiers (access modifiers*) that determine their visibility.
 - **Method Types**:
     - ***Instance Methods***: These methods operate on instances of the class and can access instance variables.
     - ***Static Methods***: These methods belong to the class itself rather than any particular object. They cannot access instance variables directly but can access static variables.
@@ -1748,8 +2043,9 @@ It is a special method, that is automatically called when an object is instantia
         Student s2;         // would not work
     ```
 
-#### Examples
-- ***#1***
+#### Examples (constructor)
+- ***#1***: (`this->` pointer)
+  - with `this->`:
     ```C++
     class Student{
         public:
@@ -1763,7 +2059,6 @@ It is a special method, that is automatically called when an object is instantia
             this->mark = mark;
         }
     };
-
     int main(){
         using std::cout, std::endl;
         Student s1("John", 20, 85.5);
@@ -1771,7 +2066,7 @@ It is a special method, that is automatically called when an object is instantia
         return 0;
     } 
     ```
-- ***#2***
+  - without `this->`:
     ```C++
     class Student{
         public:
@@ -1785,7 +2080,6 @@ It is a special method, that is automatically called when an object is instantia
             mark = m;
         }
     };
-
     int main(){
         using std::cout, std::endl;
         Student s1("John", 20, 85.5);
@@ -1793,10 +2087,32 @@ It is a special method, that is automatically called when an object is instantia
         return 0;
     } 
     ```
-- If in the constructor declaration the names of variables are the same `this->` keyword is needed to address to attributes. Otherwise, you can just use attributes names.
+  - If in the constructor declaration the names of variables are the same `this->` pointer is needed to address to attributes. Otherwise, you can just use attributes names and `this->` pointer will be added automatically on execution.
+  
+##### (❗***HINT***)
+- ***#2***: fast use of class   
+  - Class (or structure) can be used for calculations, this way the object itself won't be created. 
+    ```C++
+    class point{
+        double x, y;
+        public:
+        point(double x, double y){
+            this->x = x;
+            this->y = y;
+        }
+        double distance(){
+            return sqrt(x*x + y*y);
+        }
+    };
+    int main(){
+        double length=point(5,10).distance();
+        cout << length << endl;
+        return 0;
+    }
+    ```
 
 ### Destructor
-In C++, a **destructor** is a special member function that is automatically called when an object goes out of scope or is explicitly deleted. The primary purpose of a destructor is to perform cleanup operations, such as releasing resources that the object may have acquired during its lifetime. This can include deallocating memory, closing file handles, or releasing network connections.
+In C++, a **destructor** is a special member function that is **automatically** called when an object goes out of scope or is **explicitly deleted**. The primary purpose of a destructor is to perform cleanup operations, such as releasing resources that the object may have acquired during its lifetime. This can include deallocating memory, closing file handles, or releasing network connections.
 - A destructor has the same name as the class but is preceded by a **tilde (~)**. For example, if you have a class named `MyClass`, the destructor would be named `~MyClass`.
 - Destructors do not take any parameters and do not return a value.
 - Destructors are called automatically when an object goes out of scope (for stack-allocated objects) or when delete is called on a dynamically allocated object.
