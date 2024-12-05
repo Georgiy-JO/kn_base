@@ -4,7 +4,7 @@
 
 * ***NOTES***:
     * This repository is a personal knowledge base, and it's not intended to be a professional or full thesaurus or dictionary. Information in it is focused on practical field, please seek more information in other source if you need to.
-    * Some Contents may not work properly due to the fact that those were created in and for *Obsidian*.
+    * Check links section in the documents, there are some goodies.
 
 ## Contents:
 - **Global**

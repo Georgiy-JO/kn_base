@@ -105,7 +105,6 @@ General rules:
   - `const` should be used for methods that does not change the object (except static variables);
 - Error handling:
   - code must include border cases and error handling;
-  - [exceptions](/C&C++/Parts/C++.md#exceptions-error-handling) must be used for error handling.
 
 Specific rules:
 - naming style examples:
@@ -132,6 +131,8 @@ Specific rules:
 - better use `constexpr` and `inline` instead of macros; 
 - when necessary, it is preferable to use multithreading with the standard library;
 - use [**PCH**](/C&C++/Parts/C++.md#pch)
+- use [lambda functions](/C&C++/Parts/C++.md#lambda-functions)
+- [exceptions](/C&C++/Parts/C++.md#exceptions-error-handling) must be used for error handling.
 
 
 

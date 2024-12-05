@@ -1,5 +1,17 @@
 # Dictionary of some sort
 
+## Imperative programming
+In computer science, imperative programming is a programming paradigm of software that uses statements that change a program's state. In much the same way that the imperative mood in natural languages expresses commands, an imperative program consists of commands for the computer to perform. Imperative programming focuses on describing how a program operates step by step (generally order of the steps being determined in source code by the placement of statements one below the other), rather than on high-level descriptions of its expected results.
+
+## Declarative programming
+In computer science, declarative programming is a programming paradigm - a style of building the structure and elements of computer programs—that expresses the logic of a computation without describing its control flow.
+Declarative programming is a programming paradigm that is based on the concept of "what" rather than "How". It is a high-level approach to programming that focuses on specifying the desired result of a program without describing the steps to achieve it. Declarative programming is often used in functional programming and logic programming.
+
+## Object-oriented programming 
+Object-oriented programming (OOP) is a programming paradigm based on the concept of objects, which can contain data and code: data in the form of fields (often known as attributes or properties), and code in the form of procedures (often known as methods). In OOP, computer programs are designed by making them out of objects that interact with one another.
+Many of the most widely used programming languages (such as C++, Java,[4] and Python) are multi-paradigm and support object-oriented programming to a greater or lesser degree, typically in combination with imperative programming, procedural programming and functional programming.
+
+
 ## Abstraction
 **Abstraction** is one of the fundamental principles of object-oriented programming (OOP) that focuses on simplifying complex systems by modeling classes based on the essential properties and behaviors an object should have while hiding (ignoring) the unnecessary details. For example classes are hiding complexity of their implementation and provide a simple interface for interaction.
 
@@ -26,7 +38,7 @@ In C++, abstraction is achieved through various mechanisms, such as:
 - '**Modules and Namespaces**': Abstraction can also be achieved through modules and namespaces, which help organize code and hide implementation details.
 
 ## Encapsulation
-- **Encapsulation** is one of the fundamental principles of object-oriented programming (OOP). It refers to the bundling of data (attributes) and methods (functions or procedures) that operate on that data into a single unit, known as a class. More importantly, encapsulation restricts direct access to some of an object's components, which is a means of preventing unintended interference and misuse of the object's internal state.
+- **Encapsulation** is one of the fundamental principles of object-oriented programming (OOP). It refers to the bundling of data (attributes) and methods (functions or procedures) that operate on that data into a single unit, known as a class. More importantly, encapsulation restricts direct access to some of an object's components, which is a means of preventing unintended interference and misuse of the object's internal state (ex. setting attributes `private`).
 
 ### Encapsulation vs Abstraction
 | Aspect | **Encapsulation** | **Abstraction** | 

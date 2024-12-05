@@ -1,23 +1,26 @@
 # C++
 - Created in year 1985.
 - Developed by Bjarne Stroustrup.
-- Object-oriented programming (OOP) language.
+- [Object-oriented programming](/General/Dictionaty.md#object-oriented-programming) (OOP) language.
+  - The main principals of OOP are realized via [`class`](#object-and-class)
 - Evolution of C.
 
 ## Libraries 
 
-| C++         | Description    |
-| ----------- | -------------- |
-| \<iostream> | input/output   |
-| \<cmath>    | math functions |
-| \<ctime>    | time related functions  |
-| \<iomanip>  | facilities for manipulating the input and output format of streams |
-| \<memory>    | [smart pointers](#smart-pointers-hint)|
-| \<vector>   | dynamic array ([STL-c.](#sequence-containers))  |
-| \<map>   | pair data ([STL-c.](#associative-containers)) |
-| \<algorithm>| [STL algorithms](#stl-algorithms)     |
-|\<stdexcept>| standard errors list |
-<!-- | \<string>   | string        | -->
+| C++          | Description                                                        |
+| ------------ | ------------------------------------------------------------------ |
+| \<iostream>  | input/output                                                       |
+| \<cmath>     | math functions                                                     |
+| \<ctime>     | time related functions                                             |
+| \<iomanip>   | facilities for manipulating the input and output format of streams |
+| \<memory>    | [smart pointers](#smart-pointers-hint)                             |
+| \<vector>    | dynamic array ([STL-c.](#sequence-containers))                     |
+| \<map>       | pair data ([STL-c.](#associative-containers))                      |
+| \<algorithm> | [STL algorithms](#stl-algorithms)                                  |
+| \<stdexcept> | standard errors list                                               |
+| \<string>    | extra for strings                                                  |
+| \<fstream>   | to work with [files](#files)                                       |
+
 
 
 ## Code situations and examples
@@ -29,7 +32,6 @@
     int a = 5.5; // a is 5
     int a = -5.5; // a is 5
     ```
-- `bool` datatype exists by default (can be `true` or `false`).
 - `const` keyword is used to declare a constant variable, it can be used with functions to prevent modification of the function's parameters (secure the data).
     ```C++
     void printer (const std::string &data_1, const int &data_2){...}
@@ -63,13 +65,130 @@
     void fun2(double* passed_array){/*...*/ }
     ```
 - `NULL` = `nullptr`;
+- `__cplusplus` - defined (exist) for g++ compiller.
 
+### Element initialization
+C++ allows different ways of initialization of an element.
+#### Copy initializes 
+C style.
+```C++
+double x=-5.44;
+std::string str ="Hello"; 
+int arr[] = {1, 2, 3, 4, 5};
+```
 
+#### Functional notation (Direct initialization)
+Better use this one for C++;
+- Does not check the data type it initialize.
+```C++
+double x(-5.44);
+std::string str("Hello");
+int y(2+4*5);           //22
+
+int notInt(5.4);        //5
+```
+
+#### Braced initialization (List Initialization)
+Best for C++ lists, vectors, arrays, etc.
+- Does check the data type it initialize
+```C++
+double x{-5.44};
+std::string str{"Hello"};
+int arr[]{1, 2, 3, 4, 5};
+chat ch{'b'};
+int y{2+4*5};           //22
+
+int notInt(5.4);        //error
+```
+
+#### Value Initialization
+Initialization with default value (most times **0**).
+```C++
+int x{}; // Value initializes x to 0
+std::string str{}; // Value initializes str to an empty string
+```
+#### Declaration (no initialization)
+No initialization (value most times will just keep the memory garbage).
+```C++
+int x;
+std::string str;
+```
+- Better use initialization with set values, than this one.
+
+#### Auto initialization (❗***HINT***)
+C++ can automatically decide what type to use.
+- From C++11
+- `auto`
+    ```C++
+    auto x = 5.44;                  //double
+    auto y = 5.44f;                 //float
+    auto str{"Hello"};              //std::string
+    auto arr = {1, 2, 3, 4, 5};     //int[]
+    auto ch('f');                   //char
+    auto z((short)10+100000UL);     //unsigned long
+    auto k{5*6+x};                  //double 
+
+    const int v=5;
+    int* p=nullptr;
+    const int* i=nullptr;
+    auto q = p;                     //int*
+    auto q1 = *p;                   //int
+    auto q2 = &p;                   //int**
+    auto r=v;                       //int
+    const auto r1=v;                //const int
+    auto j = i;                     //const int*
+    auto j2 = *i;                   //int
+    auto j3 = &i;                   //const int**
+    ```
+- To force the type completely: `decltype(<variable>)`.
+    ```C++
+    const int v=5;
+    const int* i=nullptr;
+    decltype(v) r;                  //const int
+    decltype(i) j;                  //const int*
+    ```
+- `auto` and `decltype` work not only for initialization.
+
+### References
+(Ссылки)
+**Reference** is an alias for another variable (another name for an existing variable). 
+  - It must be **initialized** when it is declared and **cannot** be changed to refer to another variable later.
+  - Using **reference** instead of copying values into a function if faster.
+```C++
+int x = 5;
+int& lnk_x = x;          // y is a reference to x
+cout<< x <<endl;     //5
+cout<< lnk_x <<endl;     //5
+
+int a=10;
+int* ptr_a=&a;
+int ar[]={1,2,3};
+int& ref_a=a;           //ok
+int& &ref_ptr_a=*ptr_a; //ok
+int& ref_ar=ar[0];      //ok
+int& ref=10;            //error
+int& &ref_ptr_a=ptr_a;  //error
+```
+#### Constant references
+- **Constant reference** is a reference that does allow seeing data, but does not allow to change it.
+```C++
+    int a=5;
+    const int& lnk_a=a;
+    cout << lnk_a <<endl;
+    a=10;
+    cout << lnk_a <<endl;
+    lnk_a=5;                //error    
+
+    const int b=5;
+    const int& lnk_b=b;     //ok
+    int& lnk_b_1=b;         //error 
+```
 
 ### Input
 
 #### Standard input
-Each read works until *new line break* or *space* etc.
+- Each read works until *new line break* or *space* etc.
+- `cin` - object of **istream** class from `std` namespace that works with input of data.
 ```C++
 std::string name;
 int age;
@@ -80,14 +199,17 @@ std::cin >> name >> age;
 ```
 
 #### Getline
-Reads until *new line break*.
+Reads until *new line break* or set character.
 ```C++
 std::string full_name;
 std::getline(std::cin, name);
+
+std::string string2;
+std::getline(std::cin, string2, ','); //read until comma
 ```
 
 ####  ❗***HINT***
-If we use `getline` after `cin` we could read `\n` instead of the line we want to, this happens because *new line break*is still in the buffer. This can be avoided several ways, for example:
+If we use `getline` after `cin` we could read `\n` instead of the line we want to, this happens because *new line break* is still in the buffer. This can be avoided several ways, for example:
 - 1:
     ```C++
     std::cin >> age;
@@ -116,8 +238,9 @@ std::cout << "Room number " << x ;
 std::cout << 'A';
 ```
 - `std` - [standard namespace](#standard-namespace)
-- `cout` - **c**haracter **out**put.
+- `cout` - **c**haracter **out**put - an object from the `std` namespace in **ostream** class that works with outputs.
 - `endl` - does the same thing as `\n`, furthermore flashes the output buffer, but `\n` if better in the terms of performance. 
+- Operator `<<` is overloaded for each and every variable type inside the `cout`, so we don't need to specify the type of data we print.
 
 #### Precision output
 * requires \<iomanip>
@@ -130,8 +253,37 @@ std::cout << "You have: " << std::setprecision(8) << std::fixed << balance << st
 - `std::setw(12)` - set the whole length of the output, will not cut output if it is longer, but will add spaces in front if it is shorter.
     
 
+### Data types 
+Some extra data types.
+
+| Type       | Description                                     | Inc in                         | Size                                 |
+| ---------- | ----------------------------------------------- | ------------------------------ | ------------------------------------ |
+| `bool`     | can be `true`(1) or `false`(0)                  | exists by default              | 1 byte                               |
+| `wchar_t`  | expended char (for Unicode)                     | exists by default              | 2 byte - Windows <br> 4 byte - Linux |
+| `char8_t`  | 8-bit Unicode character (for Unicode (UTF-16))  | exists by default (from C++20) | 1 byte                               |
+| `char16_t` | 16-bit Unicode character (for Unicode (UTF-16)) | exists by default              | 2 byte                               |
+| `char32_t` | 32-bit Unicode character (for Unicode (UTF-32)) | exists by default              | 4 byte                               |
+
+#### Example
+```C++
+wchar_t x;
+char y;
+y='Я';              //out of range error
+x ='Я';             // error
+x = L'Я';           // L is used for wide character list
+cout<<x<<endl;      //1071 - code of symbol 
+char line[]="Привет"
+cout<<line<<endl;   // prints "Привет"
+y=line[0];
+cout<<y<<endl;      // undefind character
+```
+- Code of the symbol depend on the coding system of out file (UTF-8, etc.).
+- `wchar_t` is useful for UTF-8 etc.
+- `char` is alright for Windows-1251, ASCII etc.
+
+
 ### Strings
-String is an object that represents a sequence of text. Strings are provided from the standard namespace. String is a reference datatype (it actually stores a pointer to the place where the data is located).
+A string is an object (of `string` class) that represents a sequence of text. Strings are provided from the standard namespace. String is a reference datatype (it actually stores a pointer to the place where the data is located). Strings are dynamically allocated. Strings still have **'\0'** at the end. Strings can be read using [`cin`](#input) or [`getline()`](#getline).
 ```C++
 std::string name = "Jack";
 std::string address = "My_street 55, flat 25";
@@ -147,8 +299,9 @@ std::string address = "My_street 55, flat 25";
     ```C++
     std::string str="hello world";
     std::cout << str[3] << std::endl;       //l
+    str[4]='a';
+    std::cout << str << std::endl;          //hella world
     ```
-* There are [methods](#string-methods) to make work with strings simpler.
 * Strings can be easily replaced/swapped/etc:
     ```C++
     std::string name1 = "Jack";
@@ -158,10 +311,108 @@ std::string address = "My_street 55, flat 25";
     name1 = name2;
     name2 = tmp;
     ```
+* There are [methods](#string-built-in-methods) to make work with strings simpler.
 
+#### String built-in methods
+Include:
+- length
+- emptiness 
+- clean
+- append
+- get a char
+- insert string
+- find char
+- erase part
+- size
+- capacity
+- data
+- [etc](https://cplusplus.com/reference/string/string/)
+
+**String length, size, capacity**
+- `capacity` - how much place was allocated';
+- `size` - how much place is used;
+- `length` - how much place is used (same as `size`).
+```C++
+std::string full_name="Jack O'Neill";
+cout<<"The length of the string is: "<<full_name.length()<<endl;    //12
+cout<<"The size of the string is: "<<full_name.size()<<endl;        //12
+cout<<"The capacity of the string is: "<<full_name.capacity()<<endl;//15
+```
+
+**String empty**
+```C++
+if (full_name.empty()) {
+    std::cout << "The string is empty." << std::endl;
+}
+```
+
+**String clear**
+```C++
+full_name="Jack";
+std::cout << full_name << std::endl; //Jack
+full_name.clear();
+std::cout << full_name<< std::endl; // 
+```
+
+**String append**
+```C++
+full_name = "Jack ";
+std::string surname = "Oneill";
+full_name.append(surname); 
+```
+
+**String get char**
+```C++
+std::string full_name = "Jack";
+std::cout<< full_name.at(0); //J
+```
+
+**String insert string**
+```C++
+std::string full_name = "Jack";
+full_name.insert(0,"@");    //@Jack
+full_name.insert(1,"@");    //J@ack
+full_name.insert(1,"Ro");   //JRoack
+```
+
+**String find char**
+```C++
+std::string full_name = "Jack";
+size_t pos = full_name.find('a'); // 1
+```
+
+**String erase part**
+```C++
+std::string full_name = "Jack";
+std::cout << full_name.erase(1,2)<< std::endl;  //Jk
+std::cout << full_name.erase(1,3)<< std::endl;  //J
+```
+- In `.erase(<begin_index>,<end_index>)` *<begin_index>* in inclusive, *<end_index>* is not.
+
+**Data**
+- `data` return the C-kind string from object string.
+```C++
+std::string full_name = "Jack";
+char* cstr = full_name.data();
+printf("%s\n",cstr);
+```
 
 ### Namespaces
 Namespace is a declarative region that provides a scope to the identifiers (such as variables, functions, classes, etc.) inside it. Namespaces are used to organize code and prevent name conflicts, especially in large projects or when using libraries that may have overlapping names.
+- `::` - symbol of opening a namespace.
+- Using `::` without setting the namespace before activate the standard **global namespace**.
+    ```C++
+    int global=5;
+    int global_2=10;
+    int main(){
+        int global_2=15;
+        std::cout<<::gloabal<<std::endl;    //5
+        std::cout<<gloabal<<std::endl;      //5
+        std::cout<<::global_2<<std::endl;   //10
+        std::cout<<global_2<<std::endl;     //15
+    }
+- **Global namespace** is a default namespace of the program for those global variables, structures, etc. that do not have any namespace set.
+- `using` - allows to use the names from the namespace without prefixing them with the namespace name.
 
 #### Standard namespace
 In C++, `std` is the **standard namespace** that contains all the standard library functions, classes, and objects. The C++ Standard Library provides a rich set of functionalities, including input/output operations, data structures, algorithms, and more, which are essential for C++ programming.
@@ -178,6 +429,7 @@ In C++, `std` is the **standard namespace** that contains all the standard libra
 **Nested Namespaces**: You can define namespaces within other namespaces, allowing for a hierarchical organization of code.
 **Using Directives**: You can use the using directive to bring names from a namespace into the current scope, which can simplify code but may also lead to name conflicts if not used carefully.
 
+#### Examples
 ```C++
 namespace first {
     int x = 5;
@@ -203,8 +455,27 @@ int main(){
 }
 ```
 
-####  ❗***HINT***
-`using namespace` allows cutting down some repetitions. But the standard namespace is so huge so using it straight would cause too much intersection. 
+####  ❗***HINT*** #1
+Namespace can be added to later in a program:
+```C++
+namespace first {
+    int x = 5;
+}
+namespace Second {
+    int x = 9;
+}
+namespace first {
+    std::string line = "myLine";
+}
+```
+- This adjusted namespace is seen as one by the program.
+- This parts of a namespace can be in different files (example: `std`).
+- 
+####  ❗***HINT*** #2
+`using` with **namespaces** allows cutting down some repetitions in code by importing elements for a particular namespace. Can be used inside a function (so it will be active for the function) or outside it for global effect. But the standard namespace is so huge so using it straight would cause too much intersection. 
+* Syntaxes:   
+  1) `using namespace <name_of_namespace>;`
+  2) `using <name_of_namespace>::<element>;`
 * Wrong way to use:
     ```C++
     using namespace std;
@@ -220,14 +491,39 @@ int main(){
     string name = "Jack";               //std::string name = "Jack";
     cout << "My name is  " << name;     //std::cout << "My name is  " << name;    
     ```
+####  ❗***HINT*** #3
+Namespaces can be nested:
+```C++
+namespace first {
+    namespace second {
+        int x = 5;
+    }
+}
+int main(){
+    std::cout << first::second::x << std::endl;  //5
+}
+```
+####  ❗***HINT*** #4
+Namespaces name can be removed from calling by `inline`:
+```C++
+namespace first {
+    inline namespace second {
+        int x = 5;
+    }
+}
+int main(){
+    std::cout << first::x << std::endl;          //5
+    std::cout << first::second::x << std::endl;  //5
+}
+```
 
-### Typedef
+### Typedef and Using
 `typedef` is a keyword in C++ that allows you to give a new name or alias to an existing type. This can make your code more readable and easier to understand.
 * Usually the new datatype has **_t** at the end of the name.
 * New datatype can be used the same way as old datatype, and old datatype can be used at the same time as new datatype.
 
 ####  ❗***HINT***
-`typedef` is usually replaced by `usung` (using works better with templates).
+`typedef` is usually replaced by `using` (using works better with templates).
 
 ```C++
 typedef std::string text_t;
@@ -265,6 +561,7 @@ x=='Y'?std::cout << "YES":std::cout <<"NO";
 ### For each loop
 A cycle structure that ease going through an iterable data set.
 - Does not work if the amount of elements is not preset or is unknown.
+- Does not work with elements themselves, just create a copy (can be bypassed by using [references](#references)).
 
 #### Syntax
 ```C++
@@ -272,15 +569,32 @@ for( <datatype> <name_single_element> : <anme_of_dataset>){...}
 ```
 
 #### Examples
+- **#1**
+    ```C++
+    std::string numbers[]={"one", "two", "three", "four", "five"};
+    for( std::string number : numbers){
+        std::cout << number<< std::endl;
+    }
+    double decimals[]={1.0, 2, 3, 4, 5};
+    for (double dec: decimals){
+        std::cout << dec << std::endl;
+    }
+    ```
+- **#2**
 ```C++
-std::string numbers[]={"one", "two", "three", "four", "five"};
-for( std::string number : numbers){
-    std::cout << number<< std::endl;
-}
-double decimals[]={1.0, 2, 3, 4, 5};
-for (double dec: decimals){
-    std::cout << dec << std::endl;
-}
+int arr[]={1,2,3,4,5};
+
+for(int i : arr)
+    i*=2;
+for(int i : arr)
+    std::cout << i << ' ';  //1 2 3 4 5
+std::cout << std::endl;
+//with references
+for(int &i : arr)
+    i*=2;
+for(int i : arr)
+    std::cout << i << ' ';  //2 4 6 8 10
+std::cout << std::endl;
 ```
 
 ### Matrices (2D array)
@@ -316,7 +630,10 @@ std::string *pStrs[]={(strs+0),(strs+1),(strs+2)};   //array of pointers
 std::string *pStrs2=strs;                            //pointer to an array
 ```
 
-#### Passing to function (❗***HINT***)
+### Passing data to function (❗***HINT***)
+- **Pass by value**: The function receives a copy of the original variable;
+- **Pass by [reference](#references)**: The function receives the original variable;
+- **Pass by [pointer](#pointers)**: The function receives the memory address of the original variable;
 Example:
 ```C++
 void swap (int x, int y){
@@ -324,7 +641,7 @@ void swap (int x, int y){
     x = y;
     y = temp;
 }
-void swap2 (int &x, int &y){
+void swap2 (int& x, int& y){
     int temp = x;
     x = y;
     y = temp;
@@ -342,7 +659,7 @@ int main(){
     cout<< x <<" "<<y<<endl;    //5 10
     swap2(x,y);                 //pass values by refference (actually work with original addresses)
     cout<< x <<" "<<y<<endl;    //10 5
-    swap3(&x,&y);               //pass addresses and work with addresses
+    swap3(&x,&y);               //pass values by pointer (pass addresses and work with addresses)
     cout<< x <<" "<<y<<endl;    //5 10
     return 0;
 }
@@ -504,6 +821,44 @@ auto max (T x, U y){
 ####  ❗***HINT*** `auto`
 - `auto` make the compiler deduce that the result type should be.
 
+### Functions default input
+```C++
+void fun (int x=55, std::string str="hello!", double y = -54.4){
+    cout << x <<';'<< str <<';'<< y <<endl;
+}
+int main(){
+    fun();  //55;hello!;-54.4
+    fun(10);                //10;hello!;-54.4
+    fun(10, "world");       //10;world;-54.4
+    fun(10, "world", 100);  //10;world;100
+    fun("world");           //error
+    return 0;
+}
+```
+
+- Not all parameters in function must have defaults if others have defaults. But in this case not preset parameters go first!
+    ```C++
+    void fun (char* str0, int x=55, std::string str="hello!", double y = -54.4){
+        cout << str0 <<';'<<x <<';'<< str <<';'<< y <<endl;
+    }
+    void fun ( int x=55, char* str0, std::string str="hello!", double y = -54.4){       //ERROR
+        //...
+    }
+    int main(){
+        fun();                  // error
+        fun("line");            //line;10;hello!;-54.4
+        return 0;
+    }
+    ```
+####  ❗***HINT*** (Fun default)
+Having some default parameters in function is useful for functions that's parameters works like settings (change the way function act).
+```C++
+double round_my(double x, int radix=0){
+    double p=pow(10,radix);
+    return round(x*p)/p;
+}
+```
+
 ### Structure
 A structure is a collection of variables of different data types that can be used together as a single unit.
 - Structures can be created with `struct` keyword.
@@ -635,7 +990,7 @@ Exceptions in C++ are a powerful mechanism for error handling that allows develo
 - **Catching Exceptions**: you can "catch" exceptions using the `try` and `catch` blocks. This allows you to define how to handle specific types of exceptions.
 - **Stack Unwinding**: when an exception is thrown, the program unwinds the stack, meaning that destructors for all objects created in the current scope are called. This helps in resource management and prevents memory leaks.
 - **Standard Exception Classes**: C++ provides a hierarchy of standard exception classes in the `<stdexcept>` header, such as `std::runtime_error`, `std::logic_error`, and others, which can be used to represent different types of errors.
-    
+
 #### Example of Using Exceptions
 ```C++
 #include <iostream>
@@ -761,7 +1116,7 @@ Inline functions are a feature of C++ that allows you to define functions that a
     ```
 - **Multiple Definitions**: An inline function can be defined in multiple translation units (source files) without violating the One Definition Rule (ODR). This is useful for defining functions in header files.
 - **Compiler Discretion**: The inline keyword is merely a suggestion to the compiler. The compiler may choose to ignore it and generate a regular function call if it deems it more efficient.
-- **Use Cases**: inline is typically used for small, frequently called functions, such as accessor methods or simple mathematical operations.
+- **Use Cases**: inline is typically used for small, frequently called functions, such as accessory methods or simple mathematical operations.
 
 
 ### PCH
@@ -812,6 +1167,249 @@ Inline functions are a feature of C++ that allows you to define functions that a
     ```
 - **Compile Your Source Files**: When compiling your source files, ensure that the compiler knows to use the precompiled header.
 
+### Lambda Functions  (❗***HINT***)
+**Lambda Functions** (or simply **lambdas**, or **anonymous functions**) allows defining anonymous [functions](#functions) (functions without a name) directly in your code (in any fitting place of program). They are particularly useful for short, simple operations that are used only once or a few times, such as in algorithms or as callbacks.
+- From C++11
+
+#### Key Features of Lambda Functions
+- **Syntax**: The basic syntax of a lambda function is as follows:
+    ```C++
+    [capture](parameters) -> return_type {
+        // function body
+    }
+    ```
+    - **Capture**: This part specifies which variables from the surrounding scope are accessible inside the lambda. You can capture by value or by reference.
+    - **Parameters**: This is where you define the input parameters for the lambda, similar to a regular function.
+    - **Return Type**: This is optional; if omitted, the compiler will deduce the return type.
+    - **Function Body**: This contains the code that will be executed when the lambda is called.
+    - 
+- **Capture Modes**: You can capture variables in different ways:
+    - **By Value**: [x] captures x by value (a copy).
+    - **By Reference**: [&x] captures x by reference (no copy).
+    - **All by Value**: [=] captures all variables used in the lambda by value.
+    - **All by Reference**: [&] captures all variables used in the lambda by reference.
+- **Use Cases**: Lambda functions are often used in:
+  - Standard algorithms (like `std::sort`, `std::for_each`, etc.);
+  - Event handling and callbacks;
+  - As temporary functions for short-lived operations;
+  - Can be put inside another function's parameters (example 4).
+  
+#### Example
+- **#1** 
+```C++
+int main(){
+        [](int a, int b){ return a + b; }(5,5);
+        std::cout << [](int a, int b){ return a + b; }(5,5) << std::endl;   //10
+        [](int a, int b){ return a + b; };                                  //nothing
+        return 0;
+    }
+```
+- **#2**
+    ```C++
+    int main(){
+        auto add = [](int a, int b){ return a + b; };
+        std::cout << add(5, 7) << std::endl;            //12
+        auto s =add;    //same as s{add}
+        std::cout << s(15, 17) << std::endl;            //32
+        auto k {[](const char* msg,double&x){
+            std::cout << msg << std::endl;
+            x++;
+        }};
+        double x = 0;
+        k("Hello",x);                                   //Hello
+        std::cout << x << std::endl;                    //1
+        auto k2 {[](const char* msg,double x){
+            std::cout << msg << std::endl;
+            return ++x;
+        }};
+        x=k("world",x);                                 //world
+        std::cout << x << std::endl;                    //2
+        return 0;
+    }
+    ```
+    - **add**: is an object of the function.
+    - **s**: is another object of the function.
+- **#3**
+    ```C++
+    int main(){
+        auto summ { [](int a, int b){return a+b;}};             //will return int
+        auto summ2 { [](int a, int b) -> double {return a+b;}};  //will return double
+        auto summ3 { [](auto a, auto b){return a+b;}};           //from C++14
+        auto summ4 { [](auto a, auto b) -> auto {return a+b;}};  //type of return depend on type of input
+        std::cout << summ4(5,7) << std::endl;                    //12 -- int
+        std::cout << summ4(5.5,7.7) << std::endl                 //13.2 -- double
+        std::string res = summ4(std::string("Hello "), std::string("world!"));
+        std::cout << res << std::endl;                            //Hello world! -- string
+    }
+    ```
+- **#4**
+```C++
+void show_ar(const int* ar, size_t length, bool (*filter_func)(int)=nullptr){
+    for(int i=0;i<length;i++){
+        if(filter_func!=nullptr){
+            if (filter_func(ar[i]))
+                cout <<ar[i]<<' ';
+        }
+        else
+            cout <<ar[i]<<' ';
+    }
+}
+int main(){
+    int data[]{1,2,3,4,5,6,7,8,9,10};
+    show_ar(data,sizeof(data)/sizeof(*data));   //will print all data
+    cout<<endl;
+    show_ar(data,sizeof(data)/sizeof(*data),[](int x){return x%2==0?true:false;});  //print only even numbers
+    cout<<endl;
+    return 0;
+}
+
+```
+
+
+- **#**: [/C&C++/materials/CPP/lambda_fun_ex.cpp](/C&C++/materials/CPP/lambda_fun_ex.cpp)
+
+
+
+## Files
+In C++ there are following classes that make working with files easier (to work with those `#include <fstream>`):
+- `ifstream`: for reading data from file;
+- `ofstream`: for writing data to file;
+- `fstream`: for both reading and writing data to file;
+- `wifstream`: for reading data from file for type `wchar_t`;
+- `wofstream`: for writing data to file for type `wchar_t`;
+- `wfstream`: for both reading and writing data to file for type `wchar_t`.
+
+### This classes methods:
+| Method                | Description                                                                       | Example        |
+| --------------------- | --------------------------------------------------------------------------------- | -------------- |
+| `open("<file_name>")` | to open file (`ofstream` and `fstream` will create new files if there aren't any) | [#1](#1-files) |
+| `close()`             | to close file                                                                     | [#1](#1-files) |
+| `is_open()`           | to check if file is open                                                          | [#1](#1-files) |
+| `eof()`               | return **true** when we get to the end of the file                                | [#4](#4-files) |
+| `write(...)`          | straight writing data to file (byte to byte)                                      | [#5](#5-files) |
+| `read(...)`           | straight reading of data from file to memory (byte to byte)                       | [#5](#5-files) |
+- `write((char*)<pointer_to_beginning_of_data>,<size_of_data_to_write>)`
+- Writing data to file in binary form is the straight copying the memory. It takes less space.
+- `read((char*)<pointer_to_place_to_save>,<size_of_data_to_read>)` / `read((char*)<pointer_to_variable>,<size_of_data_to_read>)`
+- `read()` can detect the end of file.
+
+### File access modes
+There are several modes of opening files. The particular mode can be chosen while opening file. To choose the mode following flags (variables) are used, these variables are part of class `ios`. 
+
+| Flag          | Description                                              | For objects from class                    |
+| ------------- | -------------------------------------------------------- | ----------------------------------------- |
+| `ios::in`     | only to read from file                                   | `ifstream` <br> `fstream`                 |
+| `ios::out`    | only to write to file <br> previous data will be deleted | `ofstream` <br> `fstream`                 |
+| `ios::app`    | to write to file <br> previous data will not be deleted  | `ifstream` <br>`ofstream` <br> `fstream`  |
+| `ios::ate`    | to open file and set the position to the end of file     | `ifstream` <br> `ofstream` <br> `fstream` |
+| `ios::binary` | to open file in binary mode                              | `ifstream` <br> `ofstream` <br> `fstream` |
+- These are more of those.
+- The flags can be mixed.
+- Examples [#2](#2-files), [#3](#3-files)
+
+### Input and Output of data
+Works the same way as for `cin`, `cout`, but with our new objects.
+- Examples [#4](#4-files)
+
+### Examples
+#### #1 files
+```C++
+#include <fstream>
+#include <iostream>
+int main(){
+    std::ofstream ofs;
+    ofs.open("output.txt");
+    std::ifstream ifs;
+    ifs.open("input.txt");
+    if(!ifs.is_open())
+        cout << "Unable to open input file"<<endl;
+    else{
+        ifs.close();
+    }
+    ofs.close();
+    return 0;
+}
+```
+Or opening could be done via constructor.
+```C++
+int main(){
+    std::ofstream ofs("output.txt");
+    std::ifstream ifs("input.txt");
+    //...
+}
+```
+#### #2 files
+```C++
+using std::ios;
+int main(){
+    std::ofstream ofs("output.txt");
+    std::ifstream ifs("input.txt", ios::app);   //will create a file  this time
+    cout<<ifs.is_open()<<endl;                  //true
+    //...
+}
+```
+#### #3 files
+```C++
+std::ifstream ifs("input.txt", ios::app| ios::binary);   //will open in binary format
+```
+#### #4 files
+```C++
+#include <iostream>
+#include <fstream>
+using std::cout, std::endl, std::ios;
+
+int main(){
+
+    //-----output to file-----
+    std::ofstream ofs("output.txt");
+    if(ofs.is_open()){
+        ofs << "Hello, world!" << endl;
+        ofs << -55.5 << ' ' << 1000 << endl;
+        ofs << "This is a test." << endl;
+        ofs.close();
+    }
+    //-----input from file-----
+    int data_3{};
+    double data_2{};
+    std::string data_1{}, data_4{};
+    std::ifstream ifs("output.txt");
+    if(ifs.is_open()){
+        getline(ifs,data_1);
+        ifs >> data_2 >> data_3;
+        while(data_4.length()==0 && !ifs.eof())         //otherwise it will read '\n'
+            getline(ifs,data_4);
+        ifs.close();
+    }
+    cout <<data_1<<endl<<data_2<<endl<<data_3<<endl<<data_4<<endl;
+    return 0;
+} 
+```
+#### #5 files
+```C++
+//-----write to file in binary form-----
+double arr_in[]{55, -5.5, -9999.99, -7.77777, 5, 0};
+std::ofstream ofs("output.txt", ios::binary | ios::out);
+if(ofs.is_open()){
+    ofs.write((char*)arr_in, sizeof(arr_in));
+    ofs.close();
+}
+//-----read from file in binary form-----
+double arr_out[sizeof(arr_in)/sizeof(arr_in[0])]{};
+std::ifstream ifs("output.txt", ios::binary | ios::in);
+if(ifs.is_open()){
+    ifs.read((char*)arr_out, sizeof(arr_in));
+    ifs.close();
+}
+//-----print the array-----
+for(double& x:arr_out){
+    cout << x << " ";
+}
+cout << endl;
+return 0;
+```
+#### #6 file
+- Writing a structure to file binary way: [/C&C++/materials/CPP/example_2.cpp](/C&C++/materials/CPP/example_2.cpp)
+
 
 ## Functions 
 
@@ -849,13 +1447,16 @@ fill( n + length/2, n + length, "sushi");
 ### Tips
 C++ does support **overloaded functions**:
 * There can be several functions with the same name, if their parameters list differs.
-* The compiler will choose the correct function based on the parameters passed.
+* The compiler will choose the correct function based on the parameters passed. It is done during compilation.
 * Function's **signature** (name + parameters list) MUST be unique.
+* This is an instance of static polymorphism. 
 
 ```C++
 int summ(int x, int y) { return x+y; }
-double summ(double x, double y) { return x+y; }
-int summ(double x, double y) { return x+y; }
+//will work for summ(int, int), summ(short, short)
+//but will not work for summ(long, long)
+double summ(double x, double y) { return x+y; }     
+//will work for summ(double, double), summ(float, float)
 ```
 
 ## Manipulators
@@ -904,182 +1505,29 @@ int main() {
 }
 ```
 
-## Methods
-In C++, methods are functions that are associated with a class or an object. They define the behavior of the objects created from that class. 
-
-### Theory
-#### Key Concepts of Methods in C++
-- **Member Functions**: Methods are often referred to as member functions because they are defined within a class and can access the class's data members.
-- **Access Specifiers**: Methods can have access specifiers that determine their visibility:
-    - ***public***: Accessible from outside the class.
-    - ***private***: Accessible only from within the class.
-    - ***protected***: Accessible from within the class and by derived classes.
-- **Method Types**:
-    - ***Instance Methods***: These methods operate on instances of the class and can access instance variables.
-    - ***Static Methods***: These methods belong to the class itself rather than any particular object. They cannot access instance variables directly but can access static variables.
-- **Const Methods**: A method can be declared as `const`, indicating that it does not modify any member variables of the class.
-- **Overloading**: C++ allows method overloading, which means you can have multiple methods with the same name but different parameter lists.
-
-#### Syntax of Methods
-**Example 1:**
-*Defining a Class with Methods:*
-```C++
-#include <iostream>
-using namespace std;
-
-class MyClass {
-private:
-    int value; // Private data member
-
-public:
-    // Constructor
-    MyClass(int v) : value(v) {}
-    // Instance method
-    void display() {
-        cout << "Value: " << value << endl;
-    }
-    // Static method
-    static void staticMethod() {
-        cout << "This is a static method." << endl;
-    }
-    // Const method
-    void constMethod() const {
-        cout << "This is a const method." << endl;
-    }
-};
-```
-
-*Using Methods:*
-```C++
-int main() {
-    MyClass obj(10); // Create an object of MyClass
-    obj.display();   // Call the instance method
-
-    MyClass::staticMethod(); // Call the static method
-
-    obj.constMethod(); // Call the const method
-
-    return 0;
-}
-```
-
-**Example 2**
-*Example of Method Overloading:*
-```C++
-class Calculator {
-public:
-    // Overloaded methods for addition
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    double add(double a, double b) {
-        return a + b;
-    }
-
-    int add(int a, int b, int c) {
-        return a + b + c;
-    }
-};
-
-int main() {
-    Calculator calc;
-    cout << "Sum of 2 integers: " << calc.add(5, 10) << endl; // Calls int version
-    cout << "Sum of 2 doubles: " << calc.add(5.5, 10.5) << endl; // Calls double version
-    cout << "Sum of 3 integers: " << calc.add(1, 2, 3) << endl; // Calls 3-parameter version
-    return 0;
-}
-```
-
-### Build in methods
-#### String methods
-Include:
-- length
-- emptiness 
-- clean
-- append
-- get a char
-- insert string
-- find char
-- erase part
-- [etc](https://cplusplus.com/reference/string/string/)
-
-**String length**
-```C++
-std::string full_name;
-std::getline(std::cin, name);
-int length = full_name.length();
-```
-
-**String empty**
-```C++
-if (full_name.empty()) {
-    std::cout << "The string is empty." << std::endl;
-}
-```
-
-**String clear**
-```C++
-full_name="Jack";
-std::cout << full_name << std::endl; //Jack
-full_name.clear();
-std::cout << full_name<< std::endl; // 
-```
-
-**String append**
-```C++
-full_name = "Jack ";
-std::string surname = "Oneill";
-full_name.append(surname); 
-```
-
-**String get char**
-```C++
-std::string full_name = "Jack";
-std::cout<< full_name.at(0); //J
-```
-
-**String insert string**
-```C++
-std::string full_name = "Jack";
-full_name.insert(0,"@");    //@Jack
-full_name.insert(1,"@");    //J@ack
-full_name.insert(1,"Ro");   //JRoack
-```
-
-**String find char**
-```C++
-std::string full_name = "Jack";
-size_t pos = full_name.find('a'); // 1
-```
-
-**String erase part**
-```C++
-std::string full_name = "Jack";
-std::cout << full_name.erase(1,2)<< std::endl;  //Jk
-std::cout << full_name.erase(1,3)<< std::endl;  //J
-```
-- In `.erase(<begin_index>,<end_index>)` *<begin_index>* in inclusive, *<end_index>* is not.
-
-
 ## Object and Class
 
 ### General 
+
+![OOP_1](media/oop_1.png "example of OOP based on real world")
+
 #### Class
 - A class is a blueprint or template for creating objects;
 - It defines the structure and behavior of objects;
 - It contains data members (variables) and member functions;
 - Classes are abstract concepts, not physical entities;
 - They are defined using the `class` keyword;
-- No memory is allocated when a class is defined.
-- 
+- No memory is allocated when a class is defined;
+- **Classes** are **namespaces** for theirs **methods** and **attributes**.
+
 #### Object
 - An object is an instance of a class;
 - It represents a concrete entity with specific values for data members;
 - Objects contain actual data stored in memory;
 - They are created from classes using [constructors](#constructor);
 - Objects are physical entities that exist at runtime;
-- Memory is allocated when an object is created.
+- Memory is allocated when an object is created;
+- The **attributes** of an **object** are stored in memory allocated for this object, but the **methods** are located there in the general **class** memory.
 
 #### Summary
 Object is a collection of attributes and methods. **Attributes** are characteristics of an object, **methods** are functions that object can preform. **Object** is an instance of a data when **class** is the definition of an object.
@@ -1092,12 +1540,32 @@ Object is a collection of attributes and methods. **Attributes** are characteris
       - `public`: can be accessed from anywhere.
       - `private`: can only be accessed within the class.
       - `protected`: can be accessed within the class and its derived classes.
+    - **Access modifiers** are set for a class not an object (this protection is at the class level).
+      - See example #3.
   - Related functions:
     - `getter` - function that makes a private attribute READABLE.
     - `setter` - function that makes a private attribute WRITABLE.
     - **getter**s and **setter**s are used due to that fact that it is a good practice to keep as many of the class **attributes** `private` as possible.
 
-#### Example
+#### Methods
+In C++, methods are functions that are associated with a class or an object. They define the behavior of the objects created from that class. 
+#### Key Concepts of Methods in C++
+- **Member Functions**: Methods are often referred to as member functions because they are defined within a class and can access the class's data members.
+- **Access Specifiers**: Methods can have access specifiers that determine their visibility:
+    - ***public***: Accessible from outside the class.
+    - ***private***: Accessible only from within the class.
+    - ***protected***: Accessible from within the class and by derived classes.
+- **Method Types**:
+    - ***Instance Methods***: These methods operate on instances of the class and can access instance variables.
+    - ***Static Methods***: These methods belong to the class itself rather than any particular object. They cannot access instance variables directly but can access static variables.
+- **Const Methods**: A method can be declared as `const`, indicating that it does not modify any member variables of the class.
+- **Overloading**: C++ allows method overloading, which means you can have multiple methods with the same name but different parameter lists.
+- Syntax of Methods:
+    - Defining a Class with Methods: [Class examples](#class-examples):#4
+    - Using Methods: [Class examples](#class-examples):#4
+    - Method Overloading: [Class examples](#class-examples):#5
+
+#### Class examples
 - **#1**
     ```C++
     #include <iostream>
@@ -1180,6 +1648,94 @@ Object is a collection of attributes and methods. **Attributes** are characteris
         cout << "Stove temperature:"<<stove.getTemperature()<<endl; //ok
         return 0;
     } 
+    ```
+- **#3**
+    ```C++
+    #include <iostream>
+    #include <math.h>
+    class Point2D {
+    private:
+        int x, y;
+    public:
+        void set_coords(int a, int b)
+            {x = a; y = b;}
+        double length_to(const Point2D& pt)
+        {
+            return sqrt((x - pt.x) * (x - pt.x) + (y - pt.y) * (y - pt.y));
+        }
+    };
+
+    int main()
+    {
+        Point2D pt, endp;
+        pt.set_coords(1, 2);
+        endp.set_coords(10, 20);
+        double len = pt.length_to(endp);
+        std::cout << len << std::endl;
+        return 0;
+    }
+    ```
+    - In function `length_to` we can access private elements of another object because **access modifiers** are parameters of class itself not an object.
+-  **#4**
+    ```C++
+    #include <iostream>
+    using namespace std;
+
+    class MyClass {
+    private:
+        int value; // Private data member
+
+    public:
+        // Constructor
+        MyClass(int v) : value(v) {}
+        // Instance method
+        void display() {
+            cout << "Value: " << value << endl;
+        }
+        // Static method
+        static void staticMethod() {
+            cout << "This is a static method." << endl;
+        }
+        // Const method
+        void constMethod() const {
+            cout << "This is a const method." << endl;
+        }
+    };
+
+    int main() {
+        MyClass obj(10); // Create an object of MyClass
+        obj.display();   // Call the instance method
+        MyClass::staticMethod(); // Call the static method
+        obj.constMethod(); // Call the const method
+
+        return 0;
+    }
+
+    ```
+- **#5**
+    ```C++
+    class Calculator {
+    public:
+        // Overloaded methods for addition
+        int add(int a, int b) {
+            return a + b;
+        }
+
+        double add(double a, double b) {
+            return a + b;
+        }
+
+        int add(int a, int b, int c) {
+            return a + b + c;
+        }
+    };
+    int main() {
+        Calculator calc;
+        cout << "Sum of 2 integers: " << calc.add(5, 10) << endl; // Calls int version
+        cout << "Sum of 2 doubles: " << calc.add(5.5, 10.5) << endl; // Calls double version
+        cout << "Sum of 3 integers: " << calc.add(1, 2, 3) << endl; // Calls 3-parameter version
+        return 0;
+    }
     ```
 
 ### Constructor
@@ -1560,14 +2116,15 @@ class Stack {
 ## STL containers 
 **Standard Template Library containers** are template classes provided by the C++ Standard Library that are used for storing and managing collections of objects. They offer convenient and efficient ways to work with data, including adding, removing, searching, and sorting elements.
 
-### Main Categories of STL Containers
+### Main Categories of STL Containers  (❗***HINT***)
 #### Sequence Containers
 These containers store elements in a specific order. Elements can be accessed by index, and their order is preserved.
 - Examples:
-    - **`std::vector`**: A dynamic array that can change its size. It provides fast access to elements by index (`#include <vector>`).
-    - **`std::deque`**: A double-ended queue that allows adding and removing elements from both the front and the back.
-    - **`std::list`**: A doubly linked list that allows efficient insertion and deletion of elements at any position in the list, but does not provide fast access by index.
-    - 
+    - **`std::array`**: A fixed-size array that can be used when the size in set - ***array***.
+    - **`std::vector`**: A dynamic array that can change its size. It provides fast access to elements by index (`#include <vector>`) - ***dynamic arrays***.
+    - **`std::deque`**: A double-ended queue that allows adding and removing elements from both the front and the back - ***queue***.
+    - **`std::list`**: A ***doubly linked list*** that allows efficient insertion and deletion of elements at any position in the list, but does not provide fast access by index.
+  
 #### Associative Containers
 These containers store elements as pairs of "key-value". They provide fast access to elements by key.
 - Examples:
@@ -1581,7 +2138,7 @@ These containers do not store elements as "key-value" pairs and do not guarantee
     - **`std::unordered_set`**: A container that stores unique elements without guaranteeing order.
     - **`std::unordered_map`**: A container that stores "key-value" pairs without guaranteeing order.
 
-### Examples of Using STL Containers
+### Examples of using STL Containers
 
 #### `std::vector`
 ```C++
@@ -1702,5 +2259,6 @@ std::thread, std::async
 
 ## Links
 [6 hours basic tutorial (EN)](https://youtu.be/-TkoO8Z07hI?si=vifWswvQmeKroSGu)
-[Beginning of series of tutorial videos (RU)](https://youtu.be/RKMyJKXXpKM?si=5yCHTqHpgMCdhmfm)
+[Beginning of series of tutorial videos about basics of C++ (RU)](https://youtu.be/QYZbN2g-Dxc?si=AofHPo_lEbHv93qC)
+[Beginning of series of tutorial videos about OOP with C++ (RU)](https://youtu.be/RKMyJKXXpKM?si=5yCHTqHpgMCdhmfm)
 [C++ official documentation](https://cplusplus.com/)
