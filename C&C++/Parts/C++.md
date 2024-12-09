@@ -180,7 +180,7 @@
     }
     void fun2(double* passed_array){/*...*/ }
     ```
-- `NULL` = `nullptr`;
+- `nullptr` - *NULL* pointer;
 - `__cplusplus` - defined (exist) for g++ compiller.
 
 ### **Lvalue** and **Rvalue**     (//❗❗)
@@ -368,10 +368,39 @@ x=='Y'?std::cout << "YES":std::cout <<"NO";
 
 ### Random numbers
 (actually are pseudo-random)
+
+#### C style
 1. Include \<ctime>.
 2. Use `srand(time(NULL))` to seed the random number generator.
 3. Use `x = rand()` to generate a random number (from 0 to 32767).
     - Use `y = rand()%n` to generate a random number between 0 and n-1.
+
+#### C++ style
+```C++
+#include <iostream>
+#include <random>
+#include <chrono> // Для инициализации seed
+
+int main() {
+    // Инициализация генератора случайных чисел с помощью seed на основе текущего времени
+    auto seed = std::chrono::steady_clock::now().time_since_epoch().count();
+    std::mt19937 mt(seed);
+
+    // Создание распределений
+    std::uniform_int_distribution<int> int_dist(1, 10);         // Равномерное распределение для целых чисел
+    std::uniform_real_distribution<double> real_dist(0.0, 1.0); // Равномерное распределение для вещественных чисел
+
+    // Генерация случайных чисел
+    int random_int = int_dist(mt);     // Случайное целое число [1, 10]
+    double random_double = real_dist(mt); // Случайное вещественное число [0.0, 1.0]
+
+    // Вывод результатов
+    std::cout << "Случайное целое число [1, 10]: " << random_int << "\n";
+    std::cout << "Случайное вещественное число [0.0, 1.0]: " << random_double << "\n";
+
+    return 0;
+}
+```
 
 ### Matrices (2D array)
 - The number of columns must be set with number:
@@ -593,7 +622,9 @@ Smart pointers in C++ are objects that manage dynamic memory and automatically r
 - Memory control for `std::shared_ptr` be like:  
     ![Memory_ctrl_shared_ptr_1](/C&C++/media/shared_ptr_1.png "Two point to one")  
     ![Memory_ctrl_shared_ptr_2](/C&C++/media/shared_ptr_2.png "Each point to different")  
-    ![Memory_ctrl_shared_ptr_3](/C&C++/media/shared_ptr_3.png "When not a single one is pointing, it gets deleted")  
+    ![Memory_ctrl_shared_ptr_3](/C&C++/media/shared_ptr_3.png "When not a single one is pointing, it gets deleted") 
+- Memory control for `std::shared_ptr` for class be like:   
+    ![Memory_ctrl_shared_ptr_4](/C&C++/media/shared_ptr_4.png "Two point to one")  
 
 
 #### Examples `unique_ptr`
@@ -973,8 +1004,12 @@ return 0;
 #### Type Casting - `dynamic_cast`
 Casting with taking into account lines of inheritance of structures and classes during program execution.
 - Allows checking if an object has the class we are interested in.
+  - If we use `dynamic_cast` on wrong pointer, it returns `nullptr`,
+  - If we use `dynamic_cast` on correct pointer, it returns the pointer to the object.
+  - If we use `dynamic_cast` on wrong reference, it returns `bad_cast` ([*](https://en.cppreference.com/w/cpp/types/bad_cast));
+  - If we use `dynamic_cast` on correct reference, it returns the reference to the object.
 - The only casting that works during program execution.
-- Can be used for **links** and **pointers**.
+- Can be used for **reference** and **pointers**.
 - To define the class it uses virtual table of methods for classes, so if there is no virtual methods in classes, `dynamic_cast` can't be used.
 - Uses *RTTI* technology - slows down the program - better not be used.
 - `std::dynamic_pointer_cast` - analog for [smart pointers](#smart-pointers-hint).
