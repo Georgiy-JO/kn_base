@@ -27,7 +27,7 @@
         - [Code samples](/C&C++/Parts/Code_notes.md)
         - [Code style](/C&C++/Parts/Code_style_notes.md)
         - [C++](/C&C++/Parts/C++.md)
-        - [C++](/C&C++/Parts/C.md)
+        - [C](/C&C++/Parts/C.md)
 - **Bash and SH**
     - [Bash and sh](/Bash/Bash_notes.md)
 - **Instruments**
