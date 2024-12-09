@@ -1,5 +1,18 @@
 # Style of a code
 
+## Contents:
+- [Style of a code](#style-of-a-code)
+  - [Contents:](#contents)
+  - [General](#general)
+    - [Key Aspects of Code Style](#key-aspects-of-code-style)
+    - [Benefits of a Consistent Code Style](#benefits-of-a-consistent-code-style)
+  - [Code Style Guides](#code-style-guides)
+    - [Example of C++ code style + guidelines](#example-of-c-code-style--guidelines)
+      - [General rules:](#general-rules)
+      - [Specific rules:](#specific-rules)
+  - [Links](#links)
+
+
 ## General
 Code style refers to a set of guidelines and conventions for writing code in a consistent and readable manner. It encompasses various aspects of programming, including formatting, naming conventions, and the organization of code. Adhering to a particular code style helps improve the maintainability, readability, and overall quality of the code, making it easier for developers to collaborate and understand each other's work.
 
@@ -43,7 +56,7 @@ Many programming languages and frameworks have established style guides that pro
 - Ruby: Ruby Style Guide.
 
 ### Example of C++ code style + guidelines 
-General rules:
+#### General rules:
 - Global:
   - follow Google C++ guidelines (can be checked with `clang-format`);
   - avoid memory leaking situations;
@@ -106,7 +119,7 @@ General rules:
 - Error handling:
   - code must include border cases and error handling;
 
-Specific rules:
+#### Specific rules:
 - naming style examples:
   - `class Employee`;
   - `int employee_count`;
