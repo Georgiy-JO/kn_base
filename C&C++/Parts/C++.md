@@ -7,7 +7,121 @@
   - Plenty of C elements, functions, etc. works here...
 
 ## Contents
-
+- [Libraries](#libraries)
+- [General (+ Situations and examples)](#general--situations-and-examples)
+  - [Tips](#tips)
+  - [**Lvalue** and **Rvalue**     (//❗❗)](#lvalue-and-rvalue-----)
+  - [PCH  (//❗❗)](#pch--)
+  - [For each loop](#for-each-loop)
+  - [Ternary operator](#ternary-operator)
+  - [Random numbers](#random-numbers)
+  - [Matrices (2D array)](#matrices-2d-array)
+  - [Recursion](#recursion)
+  - [Macros](#macros)
+- [Datatype +](#datatype-)
+  - [Element initialization](#element-initialization)
+    - [Copy initializes](#copy-initializes)
+    - [Functional notation (Direct initialization)](#functional-notation-direct-initialization)
+    - [Braced initialization (List Initialization)](#braced-initialization-list-initialization)
+    - [Value initialization](#value-initialization)
+    - [Declaration (no initialization)](#declaration-no-initialization)
+    - [Auto initialization (❗***HINT***)](#auto-initialization-hint)
+  - [References](#references)
+    - [Constant references](#constant-references)
+  - [Pointers](#pointers)
+  - [Smart pointers (❗***HINT***)](#smart-pointers-hint)
+    - [`std::unique_ptr`](#stdunique_ptr)
+    - [`std::shared_ptr`](#stdshared_ptr)
+  - [Extra data types](#extra-data-types)
+  - [Strings](#strings)
+    - [String built-in methods](#string-built-in-methods)
+  - [Type Casting (Type Conversion)](#type-casting-type-conversion)
+    - [Implicit Type Conversion (Automatic Conversion)](#implicit-type-conversion-automatic-conversion)
+    - [Explicit Type Conversion (Type Casting)](#explicit-type-conversion-type-casting)
+    - [Type Casting - C-style Casting](#type-casting---c-style-casting)
+    - [Type Casting - `const_cast`](#type-casting---const_cast)
+    - [Type Casting - `reinterpret_cast`](#type-casting---reinterpret_cast)
+    - [Type Casting - `static_cast`](#type-casting---static_cast)
+    - [Type Casting - `dynamic_cast`](#type-casting---dynamic_cast)
+  - [Typedef and Using](#typedef-and-using)
+    - [(❗***HINT***)](#hint)
+- [Instruments](#instruments)
+  - [Namespaces](#namespaces)
+      - [(❗***HINT***) #1](#hint-1)
+      - [(❗***HINT***) #2](#hint-2)
+      - [(❗***HINT***) #3](#hint-3)
+      - [(❗***HINT***) #4](#hint-4)
+  - [Dynamic memory](#dynamic-memory)
+      - [(❗***HINT***) new + initialization](#hint-new--initialization)
+  - [Enumerations](#enumerations)
+  - [Scoped enumeration(enum class)](#scoped-enumerationenum-class)
+  - [Exceptions (Error handling)](#exceptions-error-handling)
+      - [(❗***HINT***)](#hint-1)
+  - [`constexpr`](#constexpr)
+  - [Comments](#comments)
+    - [Comments standards](#comments-standards)
+- [Input - Output](#input---output)
+  - [Input](#input)
+    - [Standard input](#standard-input)
+    - [Getline](#getline)
+    - [(❗***HINT***)](#hint-2)
+  - [Output](#output)
+  - [Manipulators](#manipulators)
+- [Files](#files)
+- [Function](#function)
+  - [Library functions](#library-functions)
+      - [(❗***HINT***)](#hint-3)
+    - [Fill()](#fill)
+    - [std::terminate()](#stdterminate)
+    - [std::abort()](#stdabort)
+  - [Tips](#tips-1)
+  - [Passing data to function (❗***HINT***)](#passing-data-to-function-hint)
+  - [Functions default input](#functions-default-input)
+    - [(❗***HINT***) (Fun default)](#hint-fun-default)
+  - [Function template](#function-template)
+      - [(❗***HINT***) `auto`](#hint-auto)
+  - [Inline Functions (❗***HINT***)](#inline-functions-hint)
+  - [Lambda Functions (❗***HINT***)](#lambda-functions--hint)
+  - [Pointer to a function (//❗❗)](#pointer-to-a-function-)
+- [Structure](#structure)
+  - [Summery](#summery)
+- [Object and Class](#object-and-class)
+  - [General](#general)
+  - [Constructor](#constructor)
+      - [(❗***HINT***)](#hint-4)
+      - [(❗***HINT***)](#hint-5)
+      - [(❗***HINT***)](#hint-6)
+  - [Destructor](#destructor)
+  - [Overloaded constructors](#overloaded-constructors)
+  - [Constant methods](#constant-methods)
+  - [Overloading operators](#overloading-operators)
+    - [Addition operator `+` (❗***HINT***)](#addition-operator--hint)
+    - [Index operator `[]`](#index-operator-)
+    - [Operator `()`](#operator-)
+  - [Functors](#functors)
+  - [Friend classes and functions](#friend-classes-and-functions)
+  - [Inheritance](#inheritance)
+    - [Protected constructor and destructor (❗***HINT***) (//❗❗)](#protected-constructor-and-destructor-hint-)
+  - [Virtual method](#virtual-method)
+    - [`override` and `final`](#override-and-final)
+  - [**Abstract method** (Pure Virtual Functions)](#abstract-method-pure-virtual-functions)
+  - [Abstract Classes](#abstract-classes)
+  - [Interface](#interface)
+  - [Multiple inheritance](#multiple-inheritance)
+    - [Diamond inheritance (virtual classes declaration)](#diamond-inheritance--virtual-classes-declaration)
+  - [Static attributes and Static methods](#static-attributes-and-static-methods)
+    - [Static attributes](#static-attributes)
+    - [Static method](#static-method)
+  - [Methods outsource (❗***HINT***)](#methods-outsource-hint)
+  - [Class template](#class-template)
+    - [More info (//❗❗)](#more-info---)
+- [Standard Template Library](#standard-template-library)
+  - [STL containers](#stl-containers)
+    - [Main Categories of STL Containers  (❗***HINT***)](#main-categories-of-stl-containers--hint)
+  - [STL algorithms](#stl-algorithms)
+    - [Common STL Algorithms](#common-stl-algorithms)
+- [Multithreading (//❗❗)](#multithreading---)
+- [Links](#links)
 
 ## Libraries 
 
@@ -69,7 +183,7 @@
 - `NULL` = `nullptr`;
 - `__cplusplus` - defined (exist) for g++ compiller.
 
-### **Lvalue** and **Rvalue**     //!!!!!
+### **Lvalue** and **Rvalue**     (//❗❗)
 In C++, the terms **lvalue** and **rvalue** refer to different categories of expressions that determine how values are stored and manipulated in memory. 
   
 #### Lvalue
@@ -151,7 +265,7 @@ With C++11, the concepts of **lvalue** and **rvalue** references were introduced
 1) [Click](https://youtu.be/5hY0PMgqSiA?si=uN-1btg452_tiKji)
 2) [Click](https://youtu.be/Jw3uUe-NuLE?si=7sxuEW7EPnRVVGMi)
 
-### PCH  //!!!!!
+### PCH  (//❗❗)
 **Precompiled headers (PCH)** are a feature used in C and C++ programming to speed up the compilation process. They allow the compiler to store the results of parsing and processing header files so that they do not need to be reprocessed every time a source file is compiled. This can significantly reduce compilation times, especially in large projects with many dependencies.
 
 #### How Precompiled Headers Work
@@ -902,7 +1016,7 @@ class Cart{
 * Usually the new datatype has **_t** at the end of the name.
 * New datatype can be used the same way as old datatype, and old datatype can be used at the same time as new datatype.
 
-####  ❗***HINT***
+####  (❗***HINT***)
 `typedef` is usually replaced by `using` (using works better with templates).
 
 ```C++
@@ -978,7 +1092,7 @@ int main(){
 }
 ```
 
-####  ❗***HINT*** #1
+####  (❗***HINT***) #1
 Namespace can be added to later in a program:
 ```C++
 namespace first {
@@ -994,7 +1108,7 @@ namespace first {
 - This adjusted namespace is seen as one by the program.
 - This parts of a namespace can be in different files (example: `std`).
 - 
-####  ❗***HINT*** #2
+####  (❗***HINT***) #2
 `using` with **namespaces** allows cutting down some repetitions in code by importing elements for a particular namespace. Can be used inside a function (so it will be active for the function) or outside it for global effect. But the standard namespace is so huge so using it straight would cause too much intersection. 
 * Syntaxes:   
   1) `using namespace <name_of_namespace>;`
@@ -1014,7 +1128,7 @@ namespace first {
     string name = "Jack";               //std::string name = "Jack";
     cout << "My name is  " << name;     //std::cout << "My name is  " << name;    
     ```
-####  ❗***HINT*** #3
+####  (❗***HINT***) #3
 Namespaces can be nested:
 ```C++
 namespace first {
@@ -1026,7 +1140,7 @@ int main(){
     std::cout << first::second::x << std::endl;  //5
 }
 ```
-####  ❗***HINT*** #4
+####  (❗***HINT***) #4
 Namespaces name can be removed from calling by `inline`:
 ```C++
 namespace first {
@@ -1566,7 +1680,7 @@ std::string string2;
 std::getline(std::cin, string2, ','); //read until comma
 ```
 
-####  ❗***HINT***
+####  (❗***HINT***)
 If we use `getline` after `cin` we could read `\n` instead of the line we want to, this happens because *new line break* is still in the buffer. This can be avoided several ways, for example:
 - 1:
     ```C++
@@ -1814,7 +1928,7 @@ return 0;
 | `z=round(x)`      | returns the nearest integer to x                   | \<cmath>       |
 | `m =toupper(c)`   | return the uppercase version of c                  | \<iostream>    |
 
-#####  ❗***HINT***
+#####  (❗***HINT***)
 Function lists:
 - [CMATH](https://cplusplus.com/reference/cmath/)
 
@@ -1921,7 +2035,7 @@ int main(){
         return 0;
     }
     ```
-####  ❗***HINT*** (Fun default)
+####  (❗***HINT***) (Fun default)
 Having some default parameters in function is useful for functions that's parameters works like settings (change the way function act).
 ```C++
 double round_my(double x, int radix=0){
@@ -1965,7 +2079,7 @@ A function template is a function that can work with different data types. This 
     }
     ```
 
-#####  ❗***HINT*** `auto`
+#####  (❗***HINT***) `auto`
 - ***#2***: different types +`auto`
     These will work if we have 2 different datatypes.
     ```C++
@@ -2253,7 +2367,7 @@ int main(){
     ```
 
 
-### Pointer to a function //!!!!!
+### Pointer to a function (//❗❗)
 ......
 
 ## Structure
@@ -3349,11 +3463,11 @@ int main(){
 } 
 ```
 
-#### Operations: `+=`, `*=`, `%=`, etc  //!!!!!
+#### Operations: `+=`, `*=`, `%=`, etc  (//❗❗)
 - Guide: [Click](https://youtu.be/EdHgDl52aNU?si=uKE0OiCSzNLgskdz)
 - File: <!-- [/C&C++/materials/CPP/dynamic_array.cpp](/C&C++/materials/CPP/dynamic_array.cpp) -not ready -->
 
-#### Operations: `++`, `--`               //!!!!!
+#### Operations: `++`, `--`               (//❗❗)
 Increment and decrement operators.
 - Guide: [Click](https://youtu.be/zd4nAiRt18Y?si=T9XccOm91frAkZZV)
 - File: <!-- [/C&C++/materials/CPP/dynamic_array.cpp](/C&C++/materials/CPP/dynamic_array.cpp) -not ready -->
@@ -3508,7 +3622,7 @@ class Circle : public Shape{            //public inheritance
     };
     ```
 
-#### Protected constructor and destructor (❗***HINT***) //!!!!!
+#### Protected constructor and destructor (❗***HINT***) (//❗❗)
 - Put constructor of a parent class into `protrcted` section to avoid creating objects of parent class, while be able to use this constructor from the child class to create objects of the child class. Parent class will be usable only from inheritance classes.
 - Put destructor of a class into `protected` section to avoid creating objects of this class in stack - this way objects can only be created in heap. To free memory in this case it is possible to create a special method in class that will delete object - free memory (this method will be able to call `protected` destructor and everything will work fine).
 - More info: [Click](https://youtu.be/bTvoVPmPUgg?si=_Dg0M0n-nQQ8F53z)
@@ -3847,25 +3961,6 @@ int main(){
 }
 ```
 
-
-
-
-
-### Templates for classes
-Templates are a way to write generic code that can work with different data types. They work with classes the same way they work with functions;
-
-#### Examples 
-```C++
-template <typename T>
-class Stack {
-    private:
-        std::vector<T> elements;
-    public:
-        void push(T const& element);
-        T pop();
-};
-```
-
 ### Methods outsource (❗***HINT***)
 Methods can be defined outside the class definition. This is useful for several reasons:
 - It allows you to separate the interface from the implementation.
@@ -3971,7 +4066,7 @@ Similarly to [function template](#function-template) it is possible to create cl
         Point pt_d(1.1,2.2);        // will deside type from constructor base on arguments(double) -- works from C++17
     }
     ```
-#### [More info](https://youtu.be/5YcZMDKygOs?si=DKBKCLwGq9F9cooj)   //!!!!!
+#### [More info](https://youtu.be/5YcZMDKygOs?si=DKBKCLwGq9F9cooj)   (//❗❗)
 
 
 ## Standard Template Library
@@ -4113,7 +4208,7 @@ Here are some commonly used STL algorithms:
     }
     ```
 
-## Multithreading   //!!!!!
+## Multithreading   (//❗❗)
 std::thread, std::async
 
 

@@ -1,16 +1,15 @@
 # Style of a code
 
 ## Contents:
-- [Style of a code](#style-of-a-code)
-  - [Contents:](#contents)
-  - [General](#general)
-    - [Key Aspects of Code Style](#key-aspects-of-code-style)
-    - [Benefits of a Consistent Code Style](#benefits-of-a-consistent-code-style)
-  - [Code Style Guides](#code-style-guides)
-    - [Example of C++ code style + guidelines](#example-of-c-code-style--guidelines)
-      - [General rules:](#general-rules)
-      - [Specific rules:](#specific-rules)
-  - [Links](#links)
+
+- [General](#general)
+  - [Key Aspects of Code Style](#key-aspects-of-code-style)
+  - [Benefits of a Consistent Code Style](#benefits-of-a-consistent-code-style)
+- [Code Style Guides](#code-style-guides)
+  - [Example of C++ code style + guidelines](#example-of-c-code-style--guidelines)
+    - [General rules:](#general-rules)
+    - [Specific rules:](#specific-rules)
+- [Links](#links)
 
 
 ## General

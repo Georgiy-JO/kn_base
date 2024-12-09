@@ -1,32 +1,19 @@
 # Some sort of dictionary 
 
 ## Contents:
-- [Some sort of dictionary](#some-sort-of-dictionary)
-  - [Contents:](#contents)
-  - [Imperative programming](#imperative-programming)
-  - [Declarative programming](#declarative-programming)
-  - [Object-oriented programming](#object-oriented-programming)
-  - [Abstraction](#abstraction)
-    - [C++ Example](#c-example)
-  - [Encapsulation](#encapsulation)
-    - [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
-  - [Layers](#layers)
-    - [C++ Example](#c-example-1)
-  - [Properties](#properties)
-  - [SOLID](#solid)
-    - [The acronym SOLID stands for:](#the-acronym-solid-stands-for)
-      - [S - Single Responsibility Principle (SRP):](#s---single-responsibility-principle-srp)
-      - [O - Open/Closed Principle (OCP):](#o---openclosed-principle-ocp)
-      - [L - Liskov Substitution Principle (LSP):](#l---liskov-substitution-principle-lsp)
-      - [I - Interface Segregation Principle (ISP):](#i---interface-segregation-principle-isp)
-      - [D - Dependency Inversion Principle (DIP):](#d---dependency-inversion-principle-dip)
-    - [Recap:](#recap)
-      - [SOLID с примерами на Java //!!!!!](#solid-с-примерами-на-java-)
-    - [Extra OOP rules](#extra-oop-rules)
-      - [Sureness](#sureness)
-  - [Polymorphism](#polymorphism)
-    - [Types of Polymorphism](#types-of-polymorphism)
-    - [Benefits of Polymorphism](#benefits-of-polymorphism)
+- [Imperative programming](#imperative-programming)
+- [Declarative programming](#declarative-programming)
+- [Object-oriented programming](#object-oriented-programming)
+- [Abstraction](#abstraction)
+- [Encapsulation](#encapsulation)
+- [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
+- [Layers](#layers)
+- [Properties](#properties)
+- [SOLID](#solid)
+  - [Recap:](#recap)
+    - [SOLID с примерами на Java (//❗❗)](#solid-с-примерами-на-java-)
+  - [Extra OOP rules](#extra-oop-rules)
+- [Polymorphism](#polymorphism)
 
 
 ## Imperative programming
@@ -166,7 +153,7 @@ The SOLID principles are a set of five design principles intended to make softwa
 - **I**: Interface Segregation Principle (no forced dependencies on unused interfaces);
 - **D**: Dependency Inversion Principle (depend on abstractions, not on concrete implementations).
 
-#### SOLID с примерами на Java //!!!!!
+#### SOLID с примерами на Java (//❗❗)
 - [Link](https://youtu.be/uX8Ot1u3YV0?si=oG1ZrBjd1Vkcb1G_)
 
 ### Extra OOP rules
