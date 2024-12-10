@@ -4,6 +4,7 @@
 - [Imperative programming](#imperative-programming)
 - [Declarative programming](#declarative-programming)
 - [Object-oriented programming](#object-oriented-programming)
+  - [Main principals of the OOP](#main-principals-of-the-oop)
 - [Abstraction](#abstraction)
 - [Encapsulation](#encapsulation)
 - [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
@@ -24,9 +25,20 @@ In computer science, declarative programming is a programming paradigm - a style
 Declarative programming is a programming paradigm that is based on the concept of "what" rather than "How". It is a high-level approach to programming that focuses on specifying the desired result of a program without describing the steps to achieve it. Declarative programming is often used in functional programming and logic programming.
 
 ## Object-oriented programming 
-Object-oriented programming (OOP) is a programming paradigm based on the concept of objects, which can contain data and code: data in the form of fields (often known as attributes or properties), and code in the form of procedures (often known as methods). In OOP, computer programs are designed by making them out of objects that interact with one another.
+Object-oriented programming (OOP) is a programming paradigm based on the concept of a program as a set of interacting information objects and on concept of objects belonging to specific classes itself, which can contain data and code: data in the form of fields (often known as attributes or properties), and code in the form of procedures (often known as methods). In OOP, computer programs are designed by making them out of objects that interact with one another.
 Many of the most widely used programming languages (such as C++, Java,[4] and Python) are multi-paradigm and support object-oriented programming to a greater or lesser degree, typically in combination with imperative programming, procedural programming and functional programming.
+- **A class** is a set of some objects that have the same defined properties and methods performed on them.
+- **An object** is a specific instance of a class.
 
+Almost any part of the real world can be represented by some set of formalised objects describing that part from the perspective of the programmer. This approach of application development is called object-oriented. The place you are currently in is also some object of the class "place". If this place is considered as part of an application that provides reference information on various city establishments, it is sufficient to associate with a given object only the properties corresponding to the address and some type of establishment, range of provided services, etc.
+If this place is considered as part of a 2D planar map drawing application, then some different properties will be required, such as geoposition and dimensions. If you need to visualise the place in three dimensions, you will need a list of quite precise descriptions of the visual characteristics of the objects in the place, their position and size in relation to each other, lighting sources, etc. So, the same object of the real or abstract world can be represented or modelled in completely different ways at the programming level, keeping only the necessary properties. This set of properties is what mostly defines the classes themselves.
+
+### Main principals of the OOP:
+- [Abstraction](#abstraction): the selection of that few characteristics of an object that sufficiently define it in terms of the program that is being developed.
+- [Encapsulation](#encapsulation): hiding an implementation within a class and providing an external interface to interact with it.
+- Inheritance: the hierarchical generation of new classes based on an existing class, fully or partially reusing the implementation of the parent class.
+- [Polymorphism](#polymorphism): the ability for different classes implementing the same interface to have different implementations.
+- 
 
 ## Abstraction
 **Abstraction** is one of the fundamental principles of object-oriented programming (OOP) that focuses on simplifying complex systems by modeling classes based on the essential properties and behaviors an object should have while hiding (ignoring) the unnecessary details. For example classes are hiding complexity of their implementation and provide a simple interface for interaction.
