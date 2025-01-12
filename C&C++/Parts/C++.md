@@ -2994,7 +2994,7 @@ Constructor that delegate actions to another constructor - call another construc
     ```
   - (\*) - create a temple object and calculate with it. That is possible due to existence of single element constructor (converting constructor).
 ##### (❗***HINT***)
-- ***#5***: copy constructor
+- ***#6***: copy constructor
     ```C++
     #include <iostream>
     #include <memory>

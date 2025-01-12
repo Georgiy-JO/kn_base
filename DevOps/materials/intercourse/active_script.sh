@@ -97,7 +97,7 @@ if [ $1 = "-h" ] || [ $1 = "0" ]; then
         8     --  install Docker;
         9     --  check that docker works properly;
         10    --  configuring the shell to run docker by gitlab-runner (DANGEROUS); 
-        11    --  install needed for C (compiling, checking and report);
+        11    --  install needed for C and C++  (compiling, checking and report);
         12    --  remove adjustments from #9;
         13    --  remove configuration of [github actions] to reconfigure;
         -1    --  installing sertain version of clang-format 
@@ -169,6 +169,14 @@ elif [ $1 = '11' ]; then
   else 
     echo "installation failed:  gcov;" >> log.txt
   fi
+  # to install gtest
+  sudo apt-get install libgtest-dev -y
+  sudo apt-get install cmake -y # install cmake
+  cd /usr/src/gtest
+  sudo mkdir build
+  cd build
+  sudo cmake ..
+  sudo make
 # 10------------------------------------------------------------------------------------------------------------------------------------
 elif [ $1 = '10' ]; then
   echo "To let gitlab-runner work with docker we will need to add it to the docker group. That is not too secure (basically we are giving gitlab-runner SUDO access)!"
