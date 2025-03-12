@@ -113,7 +113,7 @@ g++ object.o -o executable
 | -Wextra                                  | nable additional warning messages that are not included with the `-Wall` option                                                                                                               | Error check |
 | -std=<...><br>`-std=c11`<br>`-std=c++11` | specifies that the compiler should conform to the particular standard of the C/C++ programming language (examples: C11 and C++11)                                                             | Compilation |
 | -D<define_name>=\<value>                 | a preprocessor directive that defines the macro with a specific value                                                                                                                         | code effect |
-| -D_POSIX_C_SOURCE=200809L                | defines the macro `_POSIX_C_SOURCE`, it is used to enable certain features of the POSIX (Portable Operating System Interface) standard in your C code                                         | code effect |
+| -D_POSIX_C_SOURCE=201706L                | defines the macro `_POSIX_C_SOURCE`, it is used to enable certain features of the POSIX (Portable Operating System Interface) standard in your C code                                         | code effect |
 | -g                                       | used to include debugging information in the compiled binary, this information is essential for debugging your program using tools like `gdb` (GNU Debugger) or other debugging environments. | Error check |
 
 ## Clang-format 
