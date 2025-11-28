@@ -5,13 +5,25 @@
   - The main principals of OOP are realized via [`class`](#object-and-class)
 - Evolution of C.
   - Plenty of C elements, functions, etc. works here...
+- More documentation and info can be found at websites in [links](#links)
+- ❗ This document is work in progress and waits for updates - some definitions and info might be old, not complete or not professionally written.
+
 
 ## Contents
-- [Libraries](#libraries)
+
+- [Contents](#contents)
+- [Code file types](#code-file-types)
+- [Libraries & Frameworks](#libraries--frameworks)
+    - [Standard](#standard)
+    - [Third party](#third-party)
 - [General (+ Situations and examples)](#general--situations-and-examples)
   - [Tips](#tips)
+    - [Suppress function's input](#suppress-functions-input)
+    - [Max values](#max-values)
+  - [Include guard.](#include-guard)
+  - [C wrapper](#c-wrapper)
   - [**Lvalue** and **Rvalue**     (//❗❗)](#lvalue-and-rvalue-----)
-  - [PCH  (//❗❗)](#pch--)
+  - [Precompiled header  (//❗❗)](#pch--)
   - [For each loop](#for-each-loop)
   - [Ternary operator](#ternary-operator)
   - [Random numbers](#random-numbers)
@@ -65,9 +77,14 @@
     - [Standard input](#standard-input)
     - [Getline](#getline)
     - [(❗***HINT***)](#hint-2)
+    - [Tricks](#tricks)
   - [Output](#output)
   - [Manipulators](#manipulators)
 - [Files](#files)
+  - [Some basic methods:](#basic-methods)
+  - [File access modes](#file-access-modes)
+  - [C style way](#c-style-way)
+  - [Other file related actions](#other-file-related-actions)
 - [Function](#function)
   - [Library functions](#library-functions)
       - [(❗***HINT***)](#hint-3)
@@ -83,6 +100,7 @@
   - [Inline Functions (❗***HINT***)](#inline-functions-hint)
   - [Lambda Functions (❗***HINT***)](#lambda-functions--hint)
   - [Pointer to a function (//❗❗)](#pointer-to-a-function-)
+  - [Pointer to a member function (❗***HINT***)](#pointer-to-a-member-function-hint)
 - [Structure](#structure)
   - [Summery](#summery)
 - [Object and Class](#object-and-class)
@@ -115,6 +133,7 @@
   - [Methods outsource (❗***HINT***)](#methods-outsource-hint)
   - [Class template](#class-template)
     - [More info (//❗❗)](#more-info---)
+  - [Constants in classes](#constants-in-classes)
 - [Standard Template Library](#standard-template-library)
   - [STL containers](#stl-containers)
     - [Main Categories of STL Containers  (❗***HINT***)](#main-categories-of-stl-containers--hint)
@@ -123,21 +142,46 @@
 - [Multithreading (//❗❗)](#multithreading---)
 - [Links](#links)
 
-## Libraries 
+## Code file types
+Here are several most frequently used code file types.
+|File type | Main usage |
+|------|-----|
+|.hpp (recommended) / .hh |**C++ Header File** is used to declare (announce) classes, functions, etc. These files are providing code structure (name system), interface, as well as functions signatures, so those can be used later in other files. Headers are not meant to keep any actual code (definitions/implementations) and are not compiled separately - they are being *#include* into code files. |
+|.h|**C Header File** are often used for C++ code too.|
+|.cpp (recommended) / .cc / .cxx|**C++ Source File** is used to write main realization (definition/implementation) of the classes and functions declared in headers. This is the main code file.|
+|.c|**C Source File** can be used to store C++ code too, but it's not a good practice, because it makes IDEs confused.|
+|.tpp|**Template Preprocessor or Template Implementation File** are used to write realization (definition/implementation) of TEMPLATE classes and functions what was declared in .h/.hpp files. It is used to separate realization from declaration - that is useful for better code structuring. tpp-files are included in the end (after declaration) of the header files. These files should be chosen over cpp-files in case you are working with TEMPLATES, because writing realization of a template in cpp-file may result in compilation errors due to the fact that cpp-files are compiled separately and compiler won't be able to see temples structure at the including headers stage.|
 
-| C++          | Description                                                        |
-| ------------ | ------------------------------------------------------------------ |
-| \<iostream>  | input/output                                                       |
-| \<cmath>     | math functions                                                     |
-| \<ctime>     | time related functions                                             |
-| \<iomanip>   | facilities for manipulating the input and output format of streams |
-| \<memory>    | [smart pointers](#smart-pointers-hint)                             |
-| \<vector>    | dynamic array ([STL-c.](#sequence-containers))                     |
-| \<map>       | pair data ([STL-c.](#associative-containers))                      |
-| \<algorithm> | [STL algorithms](#stl-algorithms)                                  |
-| \<stdexcept> | standard errors list                                               |
-| \<string>    | extra for strings                                                  |
-| \<fstream>   | to work with [files](#files)                                       |
+## Libraries & Frameworks
+### Standard
+
+| std libraries | Description                                                        |
+| ------------- | ------------------------------------------------------------------ |
+| \<iostream>   | input/output                                                       |
+| \<cmath>      | math functions                                                     |
+| \<ctime>      | time related functions                                             |
+| \<iomanip>    | facilities for manipulating the input and output format of streams |
+| \<memory>     | [smart pointers](#smart-pointers-hint)                             |
+| \<vector>     | dynamic array ([STL-c.](#sequence-containers))                     |
+| \<map>        | pair data ([STL-c.](#associative-containers))                      |
+| \<algorithm>  | [STL algorithms](#stl-algorithms)                                  |
+| \<stdexcept>  | standard errors list                                               |
+| \<string>     | extra for strings                                                  |
+| \<fstream>    | to work with [files](#files)                                       |
+| \<random>     | [to generate random numbers](#random-numbers)                      |
+| \<sstream>    | [transform line into stream like object](#input---output)          |
+| \<cstdio>     | It’s mostly [used](#c-style-way) when to use C-style I/O (printf, scanf, fopen, etc.) instead of C++ streams (std::cin, std::cout, std::ifstream, std::ofstream) + allows remove and create files|
+| \<chrono>     | It provides types and utilities to [work](/C&C++/materials/CPP/time_example/timer.cpp) with durations, time points, and clocks in a type-safe and precise way|
+| \<limits>     | maximums, minimums, etc. of data types                             |
+| \<filesystem> | provides a platform-independent API for [working with the file system](#other-file-related-actions): paths, files, directories, and file metadata |
+### Third party
+
+| library / framework            | Description                                                                                                                                                                                                                                                  | Installation                                                             |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| [QT](/C&C++/Parts/QT_notes.md) | Huge framework that is mainly meant to handle creating graphical applications. Includes many elements, libraries, tools and provides plenty of opportunities (like simple way to create GUI, handle graphics, networking, threads, OpenGL, multimedia, etc.) | With official GUI based installer / console commands                     |
+| ncurses                        | library for creating TUIs (text-based user interfaces)                                                                                                                                                                                                       | sudo apt-get install libncurses6 <br>sudo apt-get install libncurses-dev |
+
+
 
 ## General (+ Situations and examples)
 
@@ -182,6 +226,89 @@
     ```
 - `nullptr` - *NULL* pointer;
 - `__cplusplus` - defined (exist) for g++ compiller.
+
+#### Conversion
+- **std::to_string** converts numbers to string.
+  ```C++
+  int x = 42;
+  std::string s = std::to_string(x); // "42"
+  ```
+
+#### Suppress function's input
+Useful if function has input parameter, but it is not used inside.
+```C++
+    void foo (std::string checked){
+        (void)checked;
+        return 5+6;
+    }
+```
+#### Max values
+Library `#include <limits>` has different instruments to get the maximum values if data types and work with those.
+- **#1**
+    ```C++
+    std::numeric_limits<float>::max();
+    ```
+- **#2**
+    ```C++
+    float DoubleToFloat(const double input) {
+        if (input >= static_cast<double>(std::numeric_limits<float>::max()))
+            return std::numeric_limits<float>::max();
+        else if (input <= static_cast<double>(std::numeric_limits<float>::lowest()))
+            return std::numeric_limits<float>::lowest();
+        else if (input > 0 &&
+                input <= static_cast<double>(std::numeric_limits<float>::min()))
+            return std::numeric_limits<float>::min();
+        else if (input < 0 && input >= static_cast<double>(
+                                            std::numeric_limits<float>::min() * (-1)))
+            return std::numeric_limits<float>::min() * (-1);
+        else
+            return static_cast<float>(input);
+    }
+    ```
+
+### Include guard.
+It’s a common C/C++ pattern to prevent multiple inclusions of the same header file, which can cause redefinition errors. The typical structure looks like this:
+```C++
+#ifndef MY_HEADER_H   // Check if a unique macro is not defined
+#define MY_HEADER_H   // Define the macro
+
+// Your header content goes here, e.g., structs, classes, functions
+
+#endif // MY_HEADER_H
+```
+
+Alternative: In modern C++, you can also use ```#pragma once```, which achieves the same effect in a simpler way:
+```C++
+#pragma once
+// Header content
+```
+
+### C wrapper
+To use C code inside a C++ project, you must wrap the C headers/functions so the C++ compiler does not apply name mangling.
+- Only headers need `extern "C"` 
+  - Never put it inside .c-files.
+- No changes to compiled C object files (.o).
+- No special linker flags needed, as long as you compile the C code with a C compiler and C++ code with C++ compiler.
+
+#### Syntaxes
+- Adjust C header:
+    ```C
+    #ifdef __cplusplus
+    extern "C" {
+    #endif
+
+    // C header
+
+    #ifdef __cplusplus
+    }
+    #endif
+    ```
+- Wrap inside C++ file at the including:
+    ```C++
+    extern "C" {
+        #include "original_c_header.h"
+    }
+    ```
 
 ### **Lvalue** and **Rvalue**     (//❗❗)
 In C++, the terms **lvalue** and **rvalue** refer to different categories of expressions that determine how values are stored and manipulated in memory. 
@@ -376,31 +503,69 @@ x=='Y'?std::cout << "YES":std::cout <<"NO";
     - Use `y = rand()%n` to generate a random number between 0 and n-1.
 
 #### C++ style
-```C++
-#include <iostream>
-#include <random>
-#include <chrono> // Для инициализации seed
+In C++ the most popular way is to use Mersenne Twister (<random> library).
 
-int main() {
-    // Инициализация генератора случайных чисел с помощью seed на основе текущего времени
-    auto seed = std::chrono::steady_clock::now().time_since_epoch().count();
-    std::mt19937 mt(seed);
+- The Mersenne Twister is a widely used pseudorandom number generator (PRNG) known for its high quality and long period. It was developed by Makoto Matsumoto and Takuji Nishimura in 1997. The name "Mersenne Twister" comes from the fact that it uses Mersenne primes to achieve its long period.
+- Key Features:
+  - **Period Length**: The Mersenne Twister has a very long period of (2^{19937} - 1), which means it can generate a vast number of random numbers before the sequence repeats. This is significantly longer than many other PRNGs.
+  - **Uniform Distribution**: It produces numbers that are uniformly distributed over a wide range, making it suitable for simulations and applications requiring high-quality randomness.
+  - **Speed**: The Mersenne Twister is designed to be fast, allowing for rapid generation of random numbers.
+  - **State Size**: The internal state of the Mersenne Twister is relatively large (624 integers), which contributes to its long period and high-quality output.
+  - **Deterministic**: Like all PRNGs, the Mersenne Twister is deterministic, meaning that if you start with the same initial seed, it will produce the same sequence of numbers.
+- How It Works: it uses a combination of linear recurrence relations and bitwise operations to generate random numbers. The algorithm involves the following steps:
+  1. **Initialization**: The generator is initialized with a seed value, which sets the initial state of the generator.
+  2. **Twisting**: The core of the algorithm involves a "twisting" process that transforms the internal state to produce new random numbers. This process combines the current state with a set of constants and performs bitwise operations to ensure good statistical properties.
+  3. **Output**: The generator produces random numbers by extracting values from its internal state and applying transformations to ensure uniform distribution.
+- **Example #1**:
+    ```C++
+    #include <iostream>
+    #include <random>
 
-    // Создание распределений
-    std::uniform_int_distribution<int> int_dist(1, 10);         // Равномерное распределение для целых чисел
-    std::uniform_real_distribution<double> real_dist(0.0, 1.0); // Равномерное распределение для вещественных чисел
+    int main() {
+        // Create a Mersenne Twister random number generator
+        std::mt19937 mt(12345); // Seed with a specific value
 
-    // Генерация случайных чисел
-    int random_int = int_dist(mt);     // Случайное целое число [1, 10]
-    double random_double = real_dist(mt); // Случайное вещественное число [0.0, 1.0]
+        // Create a uniform distribution between 1 and 100
+        std::uniform_int_distribution<int> dist(1, 100);
 
-    // Вывод результатов
-    std::cout << "Случайное целое число [1, 10]: " << random_int << "\n";
-    std::cout << "Случайное вещественное число [0.0, 1.0]: " << random_double << "\n";
+        // Generate and print 10 random numbers
+        for (int i = 0; i < 10; ++i) {
+            std::cout << dist(mt) << std::endl;
+        }
 
-    return 0;
-}
-```
+        return 0;
+    }
+    ```
+- **Example #2**:
+    ```C++
+    #include <iostream>
+    #include <random>
+    #include <chrono> // Для инициализации seed
+
+    int main() {
+        // Инициализация генератора случайных чисел с помощью seed на основе текущего времени
+        auto seed = std::chrono::steady_clock::now().time_since_epoch().count();
+        std::mt19937 mt(seed);
+
+        // Создание распределений
+        std::uniform_int_distribution<int> int_dist(1, 10);         // Равномерное распределение для целых чисел
+        std::uniform_real_distribution<double> real_dist(0.0, 1.0); // Равномерное распределение для вещественных чисел
+
+        // Генерация случайных чисел
+        int random_int = int_dist(mt);     // Случайное целое число [1, 10]
+        double random_double = real_dist(mt); // Случайное вещественное число [0.0, 1.0]
+
+        // Вывод результатов
+        std::cout << "Случайное целое число [1, 10]: " << random_int << "\n";
+        std::cout << "Случайное вещественное число [0.0, 1.0]: " << random_double << "\n";
+
+        return 0;
+    }
+    ```
+- Note: apart from C++ the Mersenne Twister is implemented in many other programming languages, including:
+  - Python: The random module in Python uses the Mersenne Twister as its core generator.
+  - Java: The java.util.Random class uses a variant of the Mersenne Twister.
+
 
 ### Matrices (2D array)
 - The number of columns must be set with number:
@@ -864,7 +1029,6 @@ std::string surname {"Oneill"};
 const char* surname2=surname.c_str();
 ```
 
-
 **String get char**
 ```C++
 std::string full_name = "Jack";
@@ -900,6 +1064,26 @@ std::string full_name = "Jack";
 char* cstr = full_name.data();
 printf("%s\n",cstr);
 ```
+
+#### Example
+Functions that remove spaces and tabs from beginning and end of line.
+```C++
+bool IsSpaceCh(const int& symbol) {
+  return IsNotEOF(symbol) && (symbol == ' ' || symbol == '\t');
+}
+void RSpaceChTrim(std::string& line) {
+  line.erase(std::find_if(line.rbegin(), line.rend(),
+                          [](int ch) { return !IsSpaceCh(ch); })
+                 .base(),
+             line.end());
+}
+
+void LSpaceChTrim(std::string& line) {
+  line.erase(line.begin(), std::find_if(line.begin(), line.end(),
+                                        [](int ch) { return !IsSpaceCh(ch); }));
+}
+```
+
 
 ### Type Casting (Type Conversion)
 
@@ -1102,30 +1286,50 @@ In C++, `std` is the **standard namespace** that contains all the standard libra
 **Using Directives**: You can use the using directive to bring names from a namespace into the current scope, which can simplify code but may also lead to name conflicts if not used carefully.
 
 #### Examples
-```C++
-namespace first {
-    int x = 5;
-}
-namespace Second {
-    int x = 9;
-}
-// Example 1
-int main(){
-    int x=0;
-    std::cout << "Global x: " << x << std::endl;                    //0
-    std::cout << "First namespace x: " << first::x << std::endl;    //5
-    std::cout << "Second namespace x: " << Second::x << std::endl;  //9
-    return 0;
-}
+- 1-2
+    ```C++
+    namespace first {
+        int x = 5;
+    }
+    namespace Second {
+        int x = 9;
+    }
+    // Example 1
+    int main(){
+        int x=0;
+        std::cout << "Global x: " << x << std::endl;                    //0
+        std::cout << "First namespace x: " << first::x << std::endl;    //5
+        std::cout << "Second namespace x: " << Second::x << std::endl;  //9
+        return 0;
+    }
 
-// Example 2
-int main(){
-    using namespace first;
-    std::cout << "First namespace x: " << x << std::endl;           //5
-    std::cout << "Second namespace x: " << Second::x << std::endl;  //9
-    return 0;
-}
-```
+    // Example 2
+    int main(){
+        using namespace first;
+        std::cout << "First namespace x: " << x << std::endl;           //5
+        std::cout << "Second namespace x: " << Second::x << std::endl;  //9
+        return 0;
+    }
+    ```
+- 3
+    ```C++
+    namespace MyNamespace {
+    void function1() {
+        std::cout << "Function 1 called" << std::endl;
+    }
+    void function2() {
+        std::cout << "Function 2 called" << std::endl;
+    }
+    }
+    using namespace MyNamespace; // Bring all names from MyNamespace into the current scope
+    int main() {
+        function1(); // No need to prefix with MyNamespace::
+        function2(); // No need to prefix with MyNamespace::
+        return 0;
+    }
+    ```
+
+
 
 ####  (❗***HINT***) #1
 Namespace can be added to later in a program:
@@ -1142,7 +1346,7 @@ namespace first {
 ```
 - This adjusted namespace is seen as one by the program.
 - This parts of a namespace can be in different files (example: `std`).
-- 
+
 ####  (❗***HINT***) #2
 `using` with **namespaces** allows cutting down some repetitions in code by importing elements for a particular namespace. Can be used inside a function (so it will be active for the function) or outside it for global effect. But the standard namespace is so huge so using it straight would cause too much intersection. 
 * Syntaxes:   
@@ -1158,7 +1362,7 @@ namespace first {
 * Better way:
     ```C++
     using std::cout;
-    using std:: string;
+    using std::string;
 
     string name = "Jack";               //std::string name = "Jack";
     cout << "My name is  " << name;     //std::cout << "My name is  " << name;    
@@ -1171,8 +1375,13 @@ namespace first {
         int x = 5;
     }
 }
+namespace third::fourth{
+    int x = 7;
+}
+
 int main(){
     std::cout << first::second::x << std::endl;  //5
+    std::cout << third::fourth::x << std::endl;  //7
 }
 ```
 ####  (❗***HINT***) #4
@@ -1506,6 +1715,15 @@ Exceptions in C++ are a powerful mechanism for error handling that allows develo
         return 0;
     }
     ```
+- ***#2 (best way)*** 
+  - Best way is to pass throw (*e*) as reference - this way new objects are not created with every try-catch block (no extra storage is used) - the same exception is passed. Furthermore, it triggers automatic destructors.
+    ```C++
+    try {
+        foo();  //function(s) or code that can throw exception
+    } catch (const std::exception& e) {
+        ErrorOccured(QString("Runtime -> ") + e.what());
+    }
+    ```
 
 #### Exception class
 There built-in methods of exception creation.
@@ -1729,6 +1947,79 @@ If we use `getline` after `cin` we could read `\n` instead of the line we want t
     std::getline(std::cin >> std::ws, name);
     ```
 
+#### Tricks
+1. Skip leading whitespace from the stream.
+    ```C++
+    std::cin>>std::ws;
+    ```
+2. Makes string out of line.
+    ```C++
+    #include <sstream>
+    void foo(std::string& line){
+    std::istringstream iss(line);
+    char a;
+    iss >>a; // can work with line like with stream
+    }
+    ```
+3. Set whether stream extraction operators (>>) skip whitespace automatically.
+    ```C++
+    #include <sstream>
+    void foo(std::string& line){
+    std::istringstream iss(line);
+
+    iss >> std::skipws;  // enables skipping whitespace (default)
+    iss >> std::noskipws;  // disables skipping whitespace
+    iss >> ch;  // will read spaces, tabs, newlines literally
+    }
+    ```
+4. Changes how booleans are parsed and printed.
+    ```C++
+    std::istringstream iss("true false");bool a, b;
+    iss >> std::boolalpha >> a >> b;  // parses "true" and "false" into bools. Without std::boolalpha (default), only 0 and 1 would work.
+    ```
+5. Interpret or output integers in hexadecimal, octal, or decimal format.
+    ```C++
+    std::istringstream iss("0x10 20");
+    int a, b;
+    iss >> std::hex >> a;  // a = 16
+    iss >> std::dec >> b;  // b = 20
+    ```
+6. Interpret or output integers in the given integer base (8, 10, 16).
+    ```C++
+    iss >> std::setbase(16) >> a;  // read hex
+    ```
+7. Reads strings enclosed in quotes.
+    ```C++
+    std::istringstream iss("\"hello world\"");
+    std::string str;
+    iss >> std::quoted(str);  // str == "hello world"
+    ```
+8. Peek the next element without taking it from the stream:
+    ```C++
+    std::ifstream ifs(file_name);
+    int next_char = ifs.peek();
+    int char = ifs.get();
+    //next_char == char
+    ```
+    - Useful to check if it is the end of line / line in stream: ```while(next_char!=EOF)```.
+9.  Different checking functions of **std::string**.
+All the following functions expect an unsigned char or EOF casted to int to avoid undefined behavior (Passing anything outside this domain (e.g., a negative char without casting) causes undefined behavior.
+    |Function|Role|
+    |---|---|
+    |std::isspace|	Checks if the character is a whitespace char (' ', '\t', '\n', '\r', '\f', '\v')|
+    |std::isalpha|	Checks if the character is alphabetic (A-Z, a-z)|
+    |std::isdigit|	Checks if the character is a digit (0-9)|
+    |std::isalnum|	Checks if the character is alphanumeric (letter or digit)|
+    |std::isupper|	Checks if the character is uppercase letter|
+    |std::islower|	Checks if the character is lowercase letter|
+    |std::isprint|	Checks if the character is printable (including space)|
+    |std::ispunct|	Checks if the character is a punctuation mark|
+    |std::isgraph|	Checks if the character has a visible representation (printable except space)|
+    |std::iscntrl|	Checks if the character is a control character|
+    |std::isxdigit|	Checks if the character is a hexadecimal digit (0-9, a-f, A-F)|
+    |std::tolower|   Convert characters to lowercase|
+    |std::toupper|   Convert characters to uppercase|
+
 
 ### Output
 ```C++
@@ -1814,7 +2105,8 @@ In C++ there are following classes that make working with files easier (to work 
 - `wofstream`: for writing data to file for type `wchar_t`;
 - `wfstream`: for both reading and writing data to file for type `wchar_t`.
 
-### This classes methods:
+### Basic methods:
+Some basic methods to work with files.
 | Method                | Description                                                                       | Example        |
 | --------------------- | --------------------------------------------------------------------------------- | -------------- |
 | `open("<file_name>")` | to open file (`ofstream` and `fstream` will create new files if there aren't any) | [#1](#1-files) |
@@ -1947,6 +2239,59 @@ return 0;
 #### #6 file
 - Writing a structure to file binary way: [/C&C++/materials/CPP/example_2.cpp](/C&C++/materials/CPP/example_2.cpp)
 
+### C style way
+To work with files in C style way you can use ```#include <cstdio>```.
+It includes functions like:
+- ```std::printf```, ```std::fprintf```,  ```std::snprintf```;
+- ```std::scanf```, ```std::fscanf```, ```std::sscanf```;
+- ```std::fopen```, ```std::fclose```, ```std::fflush```;
+- ```std::fread```, ```std::fwrite```;
+- ```std::remove(filename); // delete a file```
+- ```std::rename(oldname,newname); // rename a file```
+- ```std::fseek```, ```std::ftell```, ```std::rewind```
+
+### Other file related actions
+`<std::filesystem>` allows working with files more general way, it includes:
+- **Work with paths**: create, combine, normalize, and inspect filesystem paths.
+    ```C++
+    std::filesystem::path p = "/home/user/file.txt";
+    std::cout << p.filename();    // "file.txt"
+    std::cout << p.extension();   // ".txt"
+    ```
+- Check whether files/folders exist
+    ```C++
+    if (std::filesystem::exists("config.json")) {
+        // file exists
+    }
+    ```
+- Read, create, and remove directories
+    ```C++
+    std::filesystem::create_directory("output");
+    std::filesystem::remove("old_file.txt");
+    std::filesystem::remove_all("temp_folder");
+    ```
+- Iterate through directories
+    ```C++
+    for (const auto& entry : std::filesystem::directory_iterator("models")) {
+        std::cout << entry.path() << '\n';
+    }
+    ```
+    - Useful for scanning folders (like loading .obj files automatically).
+- Copy, move, rename files
+    ```C++
+    std::filesystem::copy("a.txt", "backup/a.txt");
+    std::filesystem::rename("old_name.obj", "new_name.obj");
+    ```
+- Get file metadata
+    ```C++
+    auto size = std::filesystem::file_size("model.obj");
+    auto lastWrite = std::filesystem::last_write_time("model.obj");
+    ```
+- Create temp files or determine system paths(e.g., temp directory, current working directory)
+    ```C++
+    auto cwd = std::filesystem::current_path();
+    auto temp = std::filesystem::temp_directory_path();
+    ```
 
 ## Function 
 
@@ -2400,10 +2745,111 @@ int main(){
         return 0;
     }
     ```
+- **7**: Lambda function + Template function (❗***HINT***)
+    ```C++
+    // mainwindow.h
+    class MainWindow : public QMainWindow { 
+    ...
+    private slots:
+        void on_sl_rotate_OX_valueChanged(int value);
+        void on_bt_translate_up_pressed();
+    private:
+        template <typename Func>
+        void ChangeModel(Func f);
+    ...
+    }; 
+
+
+    // mainwindow.cpp
+    template <typename Func>
+    void MainWindow::ChangeModel(Func f) {
+    try {
+        f();
+        ui->mv_widget->update();
+        ModelDataOutput();
+    } catch (const std::exception& e) {
+        ErrorOccured(QString("Runtime -> ") + e.what());
+    }
+    }
+
+
+    void MainWindow::on_sl_rotate_OX_valueChanged(int value) {
+    ChangeModel([this, value] {ui->mv_widget->RotateX(m_model_controls.GetRotateX(value));});
+    }
+    void MainWindow::on_bt_translate_up_pressed() {
+    ChangeModel([this] {ui->mv_widget->TranslateY(m_model_controls.GetPositiveTranslate());});
+    }
+    ```
 
 
 ### Pointer to a function (//❗❗)
 ......
+
+### Pointer to a member function (❗***HINT***)
+A pointer to a member function is a variable that stores the address of a function that belongs to a class, not a regular function.
+- Pointers to member functions are useful when you want to call different class methods dynamically at runtime, instead of hard-coding which function to call.
+- It is different from a normal function pointer because member functions need an object to run on.
+- Declaration: ``` ReturnType (ClassName::*ptr)(ArgTypes);```
+
+#### Examples
+1. Simple
+    ```C++
+    class MyClass {
+    public:
+        void hello() {
+            std::cout << "Hello!\n";
+        }
+    };
+
+    void (MyClass::*fn)() = &MyClass::hello;
+
+    void main(){
+        MyClass obj;
+        (obj.*fn)();   // calls obj.hello()
+        MyClass* p = &obj;
+        (p->*fn)();    // same thing
+    }
+    ```
+2. With arguments
+    ```C++
+    class Foo {
+    public:
+        int add(int x) { return x + 10; }
+    };
+
+    int (Foo::*fn)(int) = &Foo::add;
+
+    void main(){
+        Foo f;
+        int r = (f.*fn)(5);    // r = 15
+    }
+
+    ```
+3. Replace big switch/if chains
+    Instead of:
+    ```C++
+    if (command == 1) action1();
+    else if (command == 2) action2();
+    else if (command == 3) action3();
+    ```
+    Can do:
+    ```C++
+    using Func = void (MyClass::*)();
+    std::map<int, Func> table = {
+        {1, &MyClass::action1},
+        {2, &MyClass::action2},
+        {3, &MyClass::action3},
+    };
+
+    (this->*table[command])();
+    ```
+4. Implement event handlers
+    Example: key pressed → call one of many functions.
+    ```C++
+    handlers['w'] = &Player::moveUp;
+    handlers['s'] = &Player::moveDown;
+    ```
+
 
 ## Structure
 A structure is a collection of variables of different data types that can be used together as a single unit.
@@ -3881,7 +4327,7 @@ A **pure virtual function** is a virtual function that has no implementation in 
     ```
 
 ### Interface
-An **interface** is a contract or specification that defines a set of methods or behaviors that a class must implement. 
+An **interface** is a contract or specification that defines a set of methods or behaviors that a class must implement. Most of the time interfaces are classes with only virtual (abstract) functions and without fields (variables). 
 - **Interfaces** define a contract that classes must adhere to.
 - Classes that implement an interface must provide concrete implementations for all of its methods. 
 - The most common way to create interfaces in C++ is through [**abstract classes**](#abstract-classes). In C# and some other languages *interfaces* exist as a separate instrument.
@@ -4101,7 +4547,123 @@ Similarly to [function template](#function-template) it is possible to create cl
         Point pt_d(1.1,2.2);        // will deside type from constructor base on arguments(double) -- works from C++17
     }
     ```
+
+- ***#2***
+    ```C++
+    struct FileType {
+    std::string_view type;
+    std::string_view tag;
+
+    constexpr FileType(std::string_view type_, std::string_view tag_)
+        : type(type_), tag(tag_) {}
+    };
+
+    /**
+    * @note Child subclasses must have their own kTypeList and kTypeAmount
+    * constants, and override GetDefaultFileName() function.
+    */
+    template <typename ChildClass>
+    class Capturer {
+    public:
+    Capturer();
+
+    int GetActiveType() const;
+    void SetActiveType(int type_);
+    const std::string& GetFileName() const;
+    bool SetFileName(const std::string& file_name_);
+    virtual const std::string GetDefaultFileName() const = 0;
+    const std::string GetTypeList() const;
+
+    protected:
+    const std::string FixFileName(const std::string& file_name_) const;
+
+    static constexpr const char* kCaptureLocation = "captures";
+
+    int m_active_type;
+    std::string m_file_name;
+
+    private:
+    static constexpr int kTypeAmount = 1;
+    static constexpr std::array<FileType, kTypeAmount> kTypeList = {
+        FileType{"TYPE", ".type"}};
+    };
+
+    class ScreenshotMaker : public Capturer<ScreenshotMaker> {
+    friend class Capturer<ScreenshotMaker>;
+
+    public:
+    ScreenshotMaker() : Capturer() {}
+    void Initialize(QComboBox* type_cbox_);
+
+    const std::string GetDefaultFileName() const override;
+    bool SaveScreenshot(const QPixmap& shot_, const std::string& file_name_);
+    bool SaveScreenshot(const QPixmap& shot_) const;
+
+    private:
+    static constexpr int kTypeAmount = 3;
+    static constexpr std::array<FileType, kTypeAmount> kTypeList = {
+        FileType{"BMP", ".bmp"}, 
+        FileType{"JPEG", ".jpg"},
+        FileType{"JPEG", ".jpeg"}};
+    };
+
+    struct Dementions {
+    size_t width;
+    size_t height;
+    };
+
+    class GifMaker : public Capturer<GifMaker> {
+    friend class Capturer<GifMaker>;
+
+    public:
+    GifMaker();
+    ~GifMaker();
+    void Initialize(QPushButton* gif_button_);
+
+    const std::string GetDefaultFileName() const override;
+    bool RecordGif();
+    bool RecordGif(const std::string& file_name_);
+    bool RecordGif(const std::string& file_name_, const QImage& input_pic);
+    bool RecordGif(const QImage& input_pic);
+    bool SaveGif();
+
+    size_t GetFPS() const;
+    size_t GetTime() const;
+
+    private:
+    static constexpr int kTypeAmount = 1;
+    static constexpr std::array<FileType, kTypeAmount> kTypeList = {
+        FileType{"GIF", ".gif"},
+    };
+    static constexpr size_t kFPS = 10;
+    static constexpr size_t kTime = 5;
+    static constexpr Dementions kDementions = {640, 480};
+
+    bool m_recording;
+    std::unique_ptr<GifWriter> m_gif;
+    };
+    ```
+  - Full version: [Viewer3D->capture](https://github.com/Georgiy-JO/Viewer3D)
+
 #### [More info](https://youtu.be/5YcZMDKygOs?si=DKBKCLwGq9F9cooj)   (//❗❗)
+
+### Constants in classes
+There are different ways to implement constants into classes. 
+- Class related constants are part of the class itself, not part of the class's object, so they can be accessed with ```ClassName::constant_name;```
+  
+#### Examples:
+```C++
+class ClassName{
+  public:
+    enum class ProjectionKind {
+        kOrthographic = 0,
+        kCentral = 1,
+    };                                                                      // enumeration 
+    static constexpr const char* kSettingsFile = "view_parameters.txt";     // C style strings
+    static constexpr const char kBackgroundColorTag[]{"bc"};                // char array
+    static constexpr uintmax_t kMaxSettingsFileSize = 2000;                 // numeric data types
+};
+```
 
 
 ## Standard Template Library
@@ -4114,7 +4676,9 @@ Similarly to [function template](#function-template) it is possible to create cl
   - Examples:
     - **`std::array`**: A fixed-size array that can be used when the size in set - ***array***.
     - **`std::vector`**: A dynamic array that can change its size. It provides fast access to elements by index (`#include <vector>`) - ***dynamic arrays***.
-    - **`std::deque`**: A double-ended queue that allows adding and removing elements from both the front and the back - ***queue***.
+    - **`std::deque`**: A double-ended queue that allows adding and removing elements from both the front and the back - ***double-ended queue***.
+    - **`std::stack`**: Last-In-First-Out adaptor (based on `std::deque` container).
+    - **`std::queue`**: First-In-First-Out adaptor (likely based on `std::deque` container).
     - **`std::list`**: A ***doubly linked list*** that allows efficient insertion and deletion of elements at any position in the list, but does not provide fast access by index.
   
 - **Associative Containers**: These containers store elements as pairs of "key-value". They provide fast access to elements by key.
@@ -4243,8 +4807,82 @@ Here are some commonly used STL algorithms:
     }
     ```
 
-## Multithreading   (//❗❗)
-std::thread, std::async
+## Multithreading 
+Multithreading is a method of moving time/resource-taking actions to second/third etc. thread so that tasks will be executed parallelly. 
+- A thread is a separate path of execution inside a program.  
+  - Each thread runs code independently.
+  - Threads share the same program memory.
+
+#### Tools
+| Tool          | Belongs to | Features                                                                           |
+| ------------- | ---------- | ---------------------------------------------------------------------------------- |
+| `std::thread` | C++ STL    | Low-level way to start a thread. Full control, but requires manual synchronization |
+| `std::async`  | C++ STL    | Higher-level. Runs a task in the background and returns a `std::future`            |
+| `std::future` | C++ STL    | Stores the result of an asynchronous task, allowing retrieval later                |
+| `QThread`     | Qt         | Qt-oriented way of creating threads, with support for signals/slots and `QObject`  |
+
+### Example
+#### #1:QThread
+```C++
+namespace controller {
+class ModelParserWorker : public QObject {
+  Q_OBJECT
+
+ public:
+  explicit ModelParserWorker(const QString& filename_, QObject* parent_ = nullptr): QObject(parent_), m_filename(filename_) {}
+ signals:
+  void finished(std::shared_ptr<inbound_model::Model3D> model);
+  void error(const QString& message);
+ public slots:
+  void Process(){
+    using inbound_model::Model3D;
+    try {
+        std::unique_ptr<Model3D> model =
+            inbound_model::ParseModelFromFile(m_filename.toStdString());
+        emit finished(std::shared_ptr<Model3D>(std::move(model)));
+    } catch (const std::exception& e) {
+        emit error(QString::fromStdString(e.what()));
+    }
+    }
+
+ private:
+  QString m_filename;
+};
+}  // namespace controller
+
+// later:
+void MainWindow::on_bt_show_model_clicked() {
+  using controller::ModelParserWorker;
+  using inbound_model::Model3D;
+
+  auto worker = new ModelParserWorker(m_file_name);
+  QThread* thread = new QThread;
+
+  worker->moveToThread(thread);
+  connect(thread, &QThread::started, worker, &ModelParserWorker::Process);
+
+  connect(
+      worker, &ModelParserWorker::finished, this,
+      [this, thread, worker](std::shared_ptr<Model3D> model) {
+        thread->quit();
+        thread->wait();
+        worker->deleteLater();
+        thread->deleteLater();
+        try {
+          ui->mv_widget->SetModel(std::move(model));
+          ModelDataOutput();
+        } catch (const std::exception& e) {
+          ErrorOccured("Model not set: " + QString::fromStdString(e.what()));
+        }
+        ChangeModel([this] { ui->mv_widget->update(); });
+      });
+  connect(worker, &ModelParserWorker::error, this,
+          [this](const QString& msg) { ErrorOccured("Not Parsed: " + msg); });
+  TextMessageOutput("Model is loading");
+  thread->start();
+}
+```
+
 
 
 ## Links
@@ -4252,3 +4890,4 @@ std::thread, std::async
 [Beginning of series of tutorial videos about basics of C++ (RU)](https://youtu.be/QYZbN2g-Dxc?si=AofHPo_lEbHv93qC)
 [Beginning of series of tutorial videos about OOP with C++ (RU)](https://youtu.be/RKMyJKXXpKM?si=5yCHTqHpgMCdhmfm)
 [C++ official documentation](https://cplusplus.com/)
+[C++ structured documentation (very comfortable)](https://en.cppreference.com/index.html)

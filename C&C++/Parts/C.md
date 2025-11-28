@@ -3,12 +3,20 @@ Imperative programming
 
 ## Libraries 
 
-| C          | Description                              |
+### Standard
+| Library    | Description                              |
 | ---------- | ---------------------------------------- |
 | <stdio.h>  | input/output +                           |
 | <math.h>   | mathematics                              |
 | <stdlib.h> | allocating memory                        |
 | <string.h> | string and memory work related functions |
+
+### Other 
+| Library    | Description                              |Installation|
+| ---------- | ---------------------------------------- |------------|
+|ncurses|library for creating TUIs (text-based user interfaces)|sudo apt-get install libncurses6 <br> sudo apt-get install libncurses-dev|
+
+
 
 ## Tips
 - Assigning double value to an int variable truncates it

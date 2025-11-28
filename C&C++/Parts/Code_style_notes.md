@@ -1,7 +1,7 @@
 # Style of a code
 
 ## Contents:
-
+- [Contents:](#contents)
 - [General](#general)
   - [Key Aspects of Code Style](#key-aspects-of-code-style)
   - [Benefits of a Consistent Code Style](#benefits-of-a-consistent-code-style)
@@ -14,6 +14,7 @@
 
 ## General
 Code style refers to a set of guidelines and conventions for writing code in a consistent and readable manner. It encompasses various aspects of programming, including formatting, naming conventions, and the organization of code. Adhering to a particular code style helps improve the maintainability, readability, and overall quality of the code, making it easier for developers to collaborate and understand each other's work.
+- Rule of the thumb - even though standards may differ depending on the company rules, most popular way is to use [Google style documentation](https://google.github.io/styleguide/cppguide.html)
 
 ### Key Aspects of Code Style
 - **Indentation**: Consistent use of spaces or tabs for indentation helps to visually separate code blocks and makes the structure of the code clear. 
@@ -145,8 +146,14 @@ Many programming languages and frameworks have established style guides that pro
 - use [**PCH**](/C&C++/Parts/C++.md#pch)
 - use [lambda functions](/C&C++/Parts/C++.md#lambda-functions)
 - [exceptions](/C&C++/Parts/C++.md#exceptions-error-handling) must be used for error handling.
-
-
+- It's a good practice to name methods with verbs:
+  ```C++
+  int GetValue();
+  void SetValue();
+  void Rebuild();
+  void KickElement();
+  ```
+- C++ function may have several ```return ;``` points - that is a standard practice.
 
 
 

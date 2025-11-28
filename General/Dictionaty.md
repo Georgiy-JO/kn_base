@@ -1,13 +1,14 @@
 # Some sort of dictionary 
 
 ## Contents:
+- [Contents:](#contents)
 - [Imperative programming](#imperative-programming)
 - [Declarative programming](#declarative-programming)
 - [Object-oriented programming](#object-oriented-programming)
-  - [Main principals of the OOP](#main-principals-of-the-oop)
+  - [Main principals of the OOP:](#main-principals-of-the-oop)
 - [Abstraction](#abstraction)
 - [Encapsulation](#encapsulation)
-- [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
+  - [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
 - [Layers](#layers)
 - [Properties](#properties)
 - [SOLID](#solid)
@@ -15,6 +16,8 @@
     - [SOLID с примерами на Java (//❗❗)](#solid-с-примерами-на-java-)
   - [Extra OOP rules](#extra-oop-rules)
 - [Polymorphism](#polymorphism)
+- [Framework](#framework)
+- [Design patterns](#design-patterns)
 
 
 ## Imperative programming
@@ -220,7 +223,7 @@ There are two main types of polymorphism in programming.
         public:
             void makeSound() override {
                 std::cout << "Meow" << std::endl;
-            }
+            } 
     };
 
     void playSound(Animal* animal) {
@@ -236,8 +239,27 @@ There are two main types of polymorphism in programming.
     ```
 
 ### Benefits of Polymorphism
-- F**lexibility and Extensibility**: Polymorphism allows for the creation of more flexible and extensible code. You can introduce new classes that implement existing interfaces without modifying the code that uses those interfaces.
+- **Flexibility and Extensibility**: Polymorphism allows for the creation of more flexible and extensible code. You can introduce new classes that implement existing interfaces without modifying the code that uses those interfaces.
 - **Code Reusability**: It promotes code reusability by allowing the same function or method to operate on different types of objects.
 - **Simplified Code**: It can simplify code by allowing the same interface to be used for different underlying forms, reducing the need for type checking and casting.
 
+## Framework
+Frameworks are ready-made software structures that handle the general logic of a program, and you only add the parts that are specific to your application.
+- Framework VS library
+  - Library – you call it.
+  - Framework – it calls your code (inversion of control).
+- Simple analogy: a framework is like a house foundation and structure:
+  - The basic construction is already done
+  - You only add your own rooms, decorations, and details
+  
+### Examples
+- Qt – GUI framework for C++
+- Django – web framework for Python
+- React – framework/library for web UI
+- Spring – framework for Java
+
+## Design patterns
+Design patterns are general, reusable solutions to common problems that appear in software design. They are not code, but templates or concepts that guide how you structure your classes, objects, and interactions (best practices discovered by many developers over time). They help make your code more flexible, maintainable, and understandable.
+
+### [More](/General/elements/Design_patterns.md)
 

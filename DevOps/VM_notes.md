@@ -32,6 +32,28 @@ sudo mount -t vboxsf my_shared_folder /<full_way_to_folder>/my_shared_folder
 You can use shared folder for file exchange, for example pass pre-written script files from host machine to VM.
 Folder */DevOps/materials/intercourse* is an example of this kind of folder use.
 
+## SSHing 
+
+How to ssh in V-machine ([source](https://www.youtube.com/watch?v=rhFLfwZzlGA))
+
+1. Machine settings:
+    1. sudo apt install openssh-server -y
+    2. sudo systemctl status ssh
+        1. (If not acrtive) sudo systemctl enable ssh --now
+    3. [Check if SSH port is open]
+        1. [Check if firewall is active] sudo ufw status
+        2. (If yes) [Check that SSH port (22) is open] sudo lsof -i -P -n | grep LISTEN
+        3. (If not) sudo  ufw allow ssh
+        4. [Check status of the firewall] sudo ufw status verbose
+2. VBox settings:
+    1. In settings of the machine check that Network adapter is set to NAT
+    2. [Add port forwarding] Advance -> Port forwarding
+        1. Name connection; protocol - TCP; choose not taken Host port (22222); Guest port - 22.
+3. Main system settings:
+    1. sudo apt install openssh-client -y   (for Windows - PuTTY program can be used)
+4. Connection:
+    1. [At main machine] ssh -p 22222 v-machine_username@localhost
+
 ## Links:
 * [SSH and TCP forwarding](/Linux/Linux_parts/SSH_stuff.md)
 * [Practical work with Linux virtual machines](https://github.com/Georgiy-JO/DO_practice_projects) 

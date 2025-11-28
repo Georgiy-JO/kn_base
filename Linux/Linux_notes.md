@@ -1,23 +1,29 @@
 # Some notes and tips about Linux
 
 ## Contents
-- [[#Useful commands, utilities, daemons, etc.|Useful commands, utilities, daemons, etc.]]
-	- [[#Useful commands, utilities, daemons, etc.#Table 1|Table 1]]
-	- [[#Useful commands, utilities, daemons, etc.#Table 2|Table 2]]
-	- [[#Useful commands, utilities, daemons, etc.#Table 3|Table 3]]
-	- [[#Useful commands, utilities, daemons, etc.#Table 4|Table 4]]
-	- [[#Useful commands, utilities, daemons, etc.#\*0 (restart audio system)|\*0 (restart audio system)]]
-	- [[#Useful commands, utilities, daemons, etc.#\*8 (chmod)|\*8 (chmod)]]
-		- [[#\*8 (chmod)#Symbolic mode|Symbolic mode]]
-		- [[#\*8 (chmod)#Numeric mode|Numeric mode]]
-- [[#Server Ubuntu installation|Server Ubuntu installation]]
-- [[#Fedora after installation setting up|Fedora after installation setting up]]
-- [[#SSH and TCP forwarding|SSH and TCP forwarding]]
-- [[#OS family|OS family]]
-- [[#Extra|Extra]]
-	- [[#Extra#[Fedora ultimate update script](/Linux/materials/Scripts/update.sh)|Fedora ultimate update script]]
-	- [[#Extra#[Fedora libraries paths](/Linux/materials/libraries%20paths.txt)|Fedora libraries locations]]
-- [[#Links:|Links:]]
+- [Contents](#contents)
+- [Useful commands, utilities, daemons, etc.](#useful-commands-utilities-daemons-etc)
+	- [Table 1](#table-1)
+	- [Table 2](#table-2)
+	- [Table 3](#table-3)
+	- [Table 4](#table-4)
+	- [\*0 (restart audio system)](#0-restart-audio-system)
+	- [\*8 (chmod)](#8-chmod)
+		- [Symbolic mode](#symbolic-mode)
+		- [Numeric mode](#numeric-mode)
+		- [Flag examples](#flag-examples-2)
+	- [\*10 Find everything associated with the program](#10-find-everything-associated-with-the-program)
+- [Personal names for Linux terminal commands](#personal-names-for-linux-terminal-commands)
+	- [Using Aliases (For Simple Commands)](#using-aliases-for-simple-commands)
+- [Server Ubuntu installation](#server-ubuntu-installation)
+- [Fedora after installation setting up](#fedora-after-installation-setting-up)
+- [Ubuntu after installation setting up](#ubuntu-after-installation-setting-up)
+- [SSH and TCP forwarding](#ssh-and-tcp-forwarding)
+- [OS family](#os-family)
+- [Extra](#extra)
+	- [Fedora ultimate update script](#fedora-ultimate-update-script)
+	- [Fedora libraries paths](#fedora-libraries-paths)
+- [Links:](#links)
 
 
 * ***`Ctrl+Shift+C` stop the current process***
@@ -51,6 +57,8 @@
 | `ip r`                                                                     | view the current routing table [(*6)](#6)                                                                                                                  | network               | -                                              | 🟢  |
 | `ipcalc`<br>`ipcalc-jodies`<br>`ipcalk`                                    | perform calculations related to IP addresses and subnets                                                                                                   | network               | differ in different systems                    | 🟢  |
 | `ps`                                                                       | information about the currently running processes                                                                                                          | management            | -                                              | 🟡  |
+| tree                                                                       | shows folder-file structure in visual TUI form                                                                                                             | management            | -                                              | 🟢  |
+| ls                                                                         | list files+folders in current directory                                                                                                                    | management            | -                                              | 🟢  |
 
 ### Table 2
 
@@ -206,11 +214,35 @@ chmod 644 filename
 # example for AmnesiaVPN
 sudo find / -iname "*amneziavpn*" 2>/dev/null
 ```
+## Personal names for Linux terminal commands
+
+You can create your own names (aliases or custom commands) in the Linux terminal in a few ways:
+
+### Using Aliases (For Simple Commands)
+If you want to create a short name for an existing command, use an alias.
+
+Example:   
+```bash
+alias open='xdg-open'
+```
+  * Now, you can run:
+	```
+	open file.pdf
+	```
+  * To make it permanent, add the alias to **~/.bashrc** (for Bash) or **~/.zshrc** (for Zsh):
+	```
+	echo "alias mycmd='xdg-open'" >> ~/.bashrc
+	source ~/.bashrc  # Apply changes immediately
+	```
+
 ## Server Ubuntu installation 
 [Example](/DevOps/VM_parts/installation)
 
 ## Fedora after installation setting up
 [My list](/Linux/materials/fedora_start_up.md)
+
+## Ubuntu after installation setting up
+[My list](/Linux/materials/ubuntu_start_up.md)
 
 
 ## SSH and TCP forwarding 

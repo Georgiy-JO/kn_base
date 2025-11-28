@@ -1,18 +1,22 @@
 # Some programs that can help or may be needed for C projects
 
 ## Contents
+- [Contents](#contents)
 - [GCC](#gcc)
+- [GDB (the GNU Debugger)](#gdb-the-gnu-debugger)
 - [Clang-format](#clang-format)
 - [CPP-check](#cpp-check)
 - [Valgrind](#valgrind)
 - [Check library](#check-library)
+- [Google Test framework (gtest)](#google-test-framework-gtest)
 - [Makefile](#makefile)
+- [CMake](#cmake)
 - [Gcov and Gcovr](#gcov-and-gcovr)
 - [Git](#git)
+- [Doxygen (automatic documentation generation)](#doxygen-automatic-documentation-generation)
 - [Notes](#notes)
   - [Ultimate installation - Ubuntu](#ultimate-installation---ubuntu)
-- [Links](#links-1)
-
+  - [Links](#links-1)
 
 ## GCC 
 ***Compiler***
@@ -110,11 +114,43 @@ g++ object.o -o executable
 | -E -S -c                                 | [GCC stages](#gcc-stages)                                                                                                                                                                     | Compilation |
 | -Wall                                    | enable all compiler warnings                                                                                                                                                                  | Error check |
 | -Werror                                  |  treat warnings as errors                                                                                                                                                                     | Error check |
-| -Wextra                                  | nable additional warning messages that are not included with the `-Wall` option                                                                                                               | Error check |
+| -Wextra                                  | handle additional warning messages that are not included with the `-Wall` option                                                                                                               | Error check |
 | -std=<...><br>`-std=c11`<br>`-std=c++11` | specifies that the compiler should conform to the particular standard of the C/C++ programming language (examples: C11 and C++11)                                                             | Compilation |
 | -D<define_name>=\<value>                 | a preprocessor directive that defines the macro with a specific value                                                                                                                         | code effect |
 | -D_POSIX_C_SOURCE=200809L                | defines the macro `_POSIX_C_SOURCE`, it is used to enable certain features of the POSIX (Portable Operating System Interface) standard in your C code                                         | code effect |
 | -g                                       | used to include debugging information in the compiled binary, this information is essential for debugging your program using tools like `gdb` (GNU Debugger) or other debugging environments. | Error check |
+| -I                                       | a compiler flag for gcc and g++ that ADDs a folder to the list of include search paths - tells where to look for headers (```g++ main.cpp -I./include```) | Compilation |
+
+## GDB (the GNU Debugger)
+The GNU Debugger (GDB) is a tool used to debug programs, mainly C and C++.
+
+### Abilities:
+- it runs program step by step to find crashes and bugs
+- shows which line caused the error
+- lets user inspect variables, memory, and call stack
+- helps track segmentation faults and logic bugs
+- when running program under debugger user can:
+  - pause execution
+  - set breakpoints
+  - step through code line by line
+  - print variable values
+  - see the function call history (```bt – backtrace```)
+  
+### Usage  
+- Example for Viewer3D file
+  1. ```gdb ./build/Viewer3D``` -Start the debugger and load your program:
+  2. ```run``` - Inside gdb, this command starts running the program.
+  3. When the program crashes (for example, segmentation fault), **gdb** will catch the crash instead of the program exiting normally.
+  4. ```bt``` after crash will show:
+     - Which function crashed
+     - From which function it was called
+     - Full stack trace
+  5. Output example:
+        ```
+        #0  Foo::bar() at foo.cpp:42
+        #1  main() at main.cpp:10
+        ```
+
 
 ## Clang-format 
 ***Code Formatter*** ([***code style***](/C&C++/Parts/Code_style_notes.md))
@@ -244,6 +280,42 @@ Added to a c file as a library allow to use functions to compare output or resul
 ### Links
 * [Checking function list](https://libcheck.github.io/check/doc/check_html/check_4.html#Convenience-Test-Functions)
 
+## Google Test framework (gtest)
+It's a framework that is mainly used to create unit tests of a C++ code. 
+
+### Use
+#### Way #1
+The test cpp-file includes: 
+- The main function, which is the entry point for the program at the end of the file:
+    ```C++
+    int main(int argc, char** argv) { 
+        ::testing::InitGoogleTest(&argc, argv); //This initializes the Google Test framework.
+        return RUN_ALL_TESTS();                 //This function runs all the tests that have been defined using the Google Test framework.
+    }
+    ```
+- Test functions:
+```C++
+    TEST(MatrixTest, destructor) { // name of the tests block, name of the test
+    matrix::Matrix matrix(4, 5);
+    EXPECT_EQ(matrix.getRows(), 4);
+    EXPECT_EQ(matrix.getCols(), 5);
+    EXPECT_NE(matrix.getMatrix(), nullptr);
+    matrix.~Matrix();
+    EXPECT_EQ(matrix.getRows(), 0);
+    EXPECT_EQ(matrix.getCols(), 0);
+    EXPECT_EQ(matrix.getMatrix(), nullptr);
+    }
+```
+#### Way #2
+The main function can be not included in the test file -default main function will be provided by Gtest automatically. 
+
+### Info 
+[Assertions Reference](https://google.github.io/googletest/reference/assertions.html)
+
+### Example 
+[Example #1](/C&C++//materials/CPP/model3d_tests.cpp)
+
+
 ## Makefile
 A `Makefile` is a special file used by the `make` build automation tool to compile and link programs. It contains rules defining how to build your project, including which files need to be compiled and how to link them together.
 
@@ -262,7 +334,7 @@ A simple Makefile typically includes:
 - **Rules**: Instructions on how to build the targets.
 
 Here’s a simple example of a Makefile for a C project that consists of multiple source files:
-```shell
+```Makefile
 # Compiler
 CC = gcc
 # Compiler flags
@@ -307,7 +379,134 @@ clean:
 | `make` | `clean: clean_a`<br>    `rm -f $(STH)`<br>	`make clean_b` | Make targets can be called inside other make targets                                                    |
 | `-s`   | `clean: clean_a`<br>`rm -f $(STH)`<br>`make -s clean_b`   | To suppress the entering and leaving directory messages, you can run make with the -s option like this: |
 
+### Comments
+It's a good practice to leave comments in the beginning of the Makefile that include project's name and info about goals this file include.
+#### Example:
+```Makefile
+# ----------------------------------------------------------------------
+# Makefile for MyProject
+# ----------------------------------------------------------------------
+#
+# Purpose:
+#   This Makefile automates the build, clean, and testing processes
+#   for the MyProject application. It compiles source code, links
+#   libraries, and generates the final executable.
+#
+# Key Targets:
+#   all      - Builds the project (default target).
+#   clean    - Removes all build artifacts (e.g., object files, binaries).
+#   test     - Runs the test suite to ensure code correctness.
+#
+# Usage:
+#   To build the project:       make
+#   To clean the build:         make clean
+#   To run tests:               make test
+#
+# Notes:
+#   - Requires GNU Make version 4.0 or later.
+#   - Ensure all dependencies are installed before building.
+#   - See the README.md for more details about the project.
+#
+# ----------------------------------------------------------------------
+```
 
+## CMake
+CMake is a build system generator. Unlike Makefiles, which define explicit build rules, CMake generates platform-specific build scripts (e.g., Makefiles, Ninja files, Visual Studio solutions) based on a high-level description.
+
+### Structure
+- CMake can automatically create building rules for different systems.
+- CMake organizes builds using targets. Each target can be:
+  - Executable (add_executable)
+  - Library (add_library)
+  - Alias or Interface (for modular projects)
+- CMake allows setting compilation flags that will be active for all the goals
+- CMake has default goals (like ```install```) with preset parameters and executing (building) standards.
+  - CMakelists.txt:
+    ```
+    install(TARGETS my_program RUNTIME DESTINATION bin)
+    install(TARGETS mylib LIBRARY DESTINATION lib)
+    install(FILES mylib.h DESTINATION include)
+    ```
+  - Build & install:
+    ```bash
+    cmake --install build --prefix /usr/local
+    ```
+- CMake defines many built-in variables:
+  - **CMAKE_SOURCE_DIR**: Root source directory.
+  - **CMAKE_BINARY_DIR**: Root binary directory.
+  - **CMAKE_CURRENT_SOURCE_DIR**: Current directory being processed.
+  - **CMAKE_CURRENT_BINARY_DIR**: Build directory for the current source directory.
+- Custom variables:
+    ```
+    set(MY_VAR "Hello, World!")
+    message(STATUS "My variable: ${MY_VAR}")
+    ```
+- CMake allows looking for a component installed at the PC or bring some of them from the net using links
+  - ```find_package(Qt6 COMPONENTS ...)```
+- Some IDEs create ***CMakeLists.txt.user*** file that stores some settings for running project with IDE. THIS FILE MUST NEVER BE PUSHED TO REMOTE REPOSITORY.
+- CMake has different module that can be added and used.
+  - Example: ```include(GNUInstallDirs)``` - sets a series of standardized install directory variables that follow conventional Linux filesystem layout. These variables let your project be portable and install-friendly across platforms and distros.
+
+
+### Usage
+1. Create a ***CMakeLists.txt*** file in the project directory (the best way is to have one global file and several smaller files in included folders - one for each included library or separate set of goals(life tests)).
+2. Fill *CMakeLists.txt* with all the needed rules.
+3. Run ```cmake /way_to_file/CMakeLists.txt``` from the directory where you want to build the project. It will generate Makefiles and other required files.
+4. Run goals you need using cmake or Makefile or any other way you set in *CMakeLists.txt*.
+    ```bash 
+    cmake -S . -B build
+    cmake --build build
+    ./build/my_program
+    ```
+
+
+### Example
+#### #1:Working with Multiple Components
+Example: Libraries, Executables, and Tests
+```
+project_root/
+ ├── CMakeLists.txt
+ ├── src/
+ │   ├── CMakeLists.txt
+ │   ├── main.cpp
+ │   ├── mylib.cpp
+ │   ├── mylib.h
+ ├── tests/
+ │   ├── CMakeLists.txt
+ │   ├── test_main.cpp
+ ```
+
+- Top-level CMakeLists.txt
+    ```
+    cmake_minimum_required(VERSION 3.10)
+    project(MyProject LANGUAGES CXX)
+
+    add_subdirectory(src)
+    add_subdirectory(tests)
+    ```
+- src/CMakeLists.txt  
+    ```
+    add_library(mylib mylib.cpp)
+    add_executable(my_program main.cpp)
+    target_link_libraries(my_program PRIVATE mylib)
+    ```
+- tests/CMakeLists.txt  
+    ```
+    enable_testing()
+    add_executable(test_main test_main.cpp)
+    add_test(NAME MyTest COMMAND test_main)
+    ```
+
+Running Tests:  
+    ```bash
+    ctest --output-on-failure
+    ```
+
+
+#### #2: From [Viewer3D project](https://github.com/Georgiy-JO/Viewer3D)
+- [Main CMakeLists.txt](/C&C++/materials/CPP/cmake_example/CMakeLists.txt)
+  - [Tests CMakeLists.txt](/C&C++/materials/CPP/cmake_example/tests/CMakeLists.txt)
+  - [Third part CMakeLists.txt](/C&C++/materials/CPP/cmake_example/third_party/CMakeLists.txt)
 
 ## Gcov and Gcovr
 `gcov` and `gcovr` are tools used in C and C++ programming for code coverage analysis. They help developers understand which parts of their code are being exercised by tests, which can be crucial for improving test coverage and ensuring code quality.
@@ -373,14 +572,15 @@ sudo apt install git-all
 
 ### [Info](/DevOps/Git_notes.md)
 
-
+## [Doxygen (automatic documentation generation)](/DevOps/Doc_notes.md)
 ## Notes
 ### Ultimate installation - Ubuntu
-```Shell
-  sudo apt update && sudo apt-get update
-  sudo apt install valgrind cppcheck clang-format gcc g++ make git-all -y
-  sudo apt-get install check gcovr -y
-  sudo apt-get install gcov -y
-```
+#### C
+  ```Shell
+    sudo apt update && sudo apt-get update
+    sudo apt install valgrind cppcheck clang-format gcc g++ make git-all -y
+    sudo apt-get install check gcovr -y
+    sudo apt-get install gcov -y
+  ```
 ### Links
 [Example of the "Check" testing, Makefile and report creation](https://github.com/Georgiy-JO/te-tris_pet)

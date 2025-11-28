@@ -3,12 +3,13 @@
 ![Face picture](misc/reading-owl.png "a meme")
 
 * ***NOTES***:
-    * This repository is a personal knowledge base, and it's not intended to be a professional or full thesaurus or dictionary. Information in it is focused on practical field, please seek more information in other source if you need to.
+    * This repository is a personal knowledge base, and it's not intended to be a professional or complete thesaurus or dictionary. Information in it is focused on practical field, please seek more information in other source if you need to.
     * Check links section in the documents, there are some goodies.
 
 ## Contents:
 - **Global**
   - [Dictionary of terms](/General/Dictionaty.md)
+    - [Design patterns](/General/elements/Design_patterns.md)
 - **SQL**
     - [SQL](/SQL/SQL_notes.md)
 - **DevOps**    
@@ -18,9 +19,12 @@
     - [Docker](/DevOps/Docker_notes.md)
     - [CICD](/DevOps/CICD_notes.md)
     - [Code editors](/DevOps/Code_editors.md)
+    - [Code documentation](/DevOps/Doc_notes.md)
 - **Linux**
     - [Linux](/Linux/Linux_notes.md)
         - [SSH](/Linux/Linux_parts/SSH_stuff.md)
+        - [Fedora setup](/Linux/materials/fedora_start_up.md)
+        - [Ubuntu setup](/Linux/materials/ubuntu_start_up.md)
 - **C**
     - [C main](/C&C++/C_notes.md)
         - [Tools](/C&C++/Parts/Tools_notes.md)
@@ -32,6 +36,7 @@
     - [Bash and sh](/Bash/Bash_notes.md)
 - **Instruments**
     - [Telegram bot](/Instruments/TgBot_notes.md)
+    - [Useful programs (diferent sys.)](/Instruments/programs.md)
 
 ## Extra
 ### Instruments

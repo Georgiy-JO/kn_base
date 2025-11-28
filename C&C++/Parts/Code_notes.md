@@ -1,5 +1,18 @@
 # Code samples
 
+- [C](#c)
+  - [Sort](#sort)
+    - [Bubble sort](#bubble-sort)
+    - [Quick sort](#quick-sort)
+    - [Heap sort](#heap-sort)
+  - [2-D massive realization](#2-d-massive-realization)
+    - ["Array of arrays" (standard)](#array-of-arrays-standard)
+    - [Array pointing to array](#array-pointing-to-array)
+    - [Single array](#single-array)
+- [C++](#c-1)
+  - [Simple logger](#simple-logger)
+
+
 ## C
 ### Sort
 * Swap service function
@@ -28,17 +41,17 @@ void quicksort(int *a, int fs, int ls){
     if(fs<ls){
         int lf=fs, rt=ls, mid=a[((lf+rt)/2)];
         do{
-            while(a[lf]<mid)
-                lf++;
-            while(a[rt]>mid)
+            while(a[lf] < mid && lf < ls)
+                lf--;
+            while(a[rt] > mid && rt > fs)
                 rt++;
             if(lf<=rt){
                 swap_I(a+lf,a+rt);
-                lf++;
-                rt--;
+                if(lf < ls) lf++;
+                if(rt > fs) rt--;
             }    
-        }while(lf<=rt);
-        quicksort(a,fs,rt);
+        }while(lf <= rt);
+        quicksort(a, fs, rt);
         quicksort(a, lf, ls);
     }
 }
@@ -148,4 +161,14 @@ for (int i=0;i<M;i++)
 
 free(single_array_matrix);
 ```
+
+
+## C++
+
+### Simple logger
+Simple way to log output from different parts of the program for debugging reasons.
+Just include [header](/C&C++/materials/CPP/logger/logger.hpp) and compile [source](/C&C++/materials/CPP/logger/logger.cpp) file.
+
+
+
 

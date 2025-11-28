@@ -1,4 +1,6 @@
 # On startup (Fedora 39 -Gnome 45)
+Step by step Fedora settings doc.
+
 ## Step by step:
 ### 1)  DNF Configuration
 ```Bash
@@ -106,7 +108,7 @@ sudo dnf copr enable elxreno/preload -y && sudo dnf install preload -y
 ### 14) Extension + Extensions + gnome TWEAKS  settings 
 ### 15)apps settings
 
-### 16) Install stuff or programming:
+### 16) Install stuff for programming:
 - CHECK.h + gcovr:  
 	```bash
 	sudo yum install check  
