@@ -36,7 +36,7 @@ A little doc with some QT tips and ideas. Please read official documentation for
 
 - QT allows not commercial free use and can be installed using installation tool from the official website or using console packaging installation.
 - QT create is an easy-to-use tool that allows to visually create windows and design those. But it does not have a visual way to control all the options and design opportunities that QT presents, due to that manual in code control of the elements (widgets) is preferable.
-- QT is preferably by default built using [CMake](/C&C++/Parts/Tools_notes.md#cmake)
+- QT is preferably by default built using [CMake](Tools_notes.md#cmake)
 
 ## Debug
 Even though QT creates the GUI window, it can be useful to have an instrument to output in the console window, mainly for the debugging reasons. For these purposes QT has ```<QDebug>``` library.
@@ -258,12 +258,12 @@ QColor new_color = QColorDialog::getColor(
 
 
 ## Multithreading 
-Multithreading is a method of moving time/resource-taking actions to second/third etc. thread so that tasks will be executed parallelly. 
+Multithreading is a method of moving time/resource-taking actions to second/third etc. thread so that tasks will be executed in parallel. 
 In Qt threads are handled by `#include <QThread>` with support for signals/slots and `QObject`.
 
 ### Example
 ```C++
-// model_parcer_worker.h 
+// model_parser_worker.h 
 namespace controller {
 class ModelParserWorker : public QObject {
   Q_OBJECT

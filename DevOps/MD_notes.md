@@ -5,7 +5,6 @@
 ### Pictures
 ***`![<any_name>](<way_to_pic> "<comment_is_needed>")`***   
 
-
 Example: 
 `![ScShot_1](media/scs1.png "new IP")`
 
@@ -26,9 +25,12 @@ Automatic generation of a table of contents for your md-file:
 
 ### Useful extensions
 
-| Extention         | Use                                            | Link                                                                                                                     |
+| Extension         | Use                                            | Link                                                                                                                     |
 | ----------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Table of contents | auto-generated table of contents of a document | [inside](obsidian://show-plugin?id=obsidian-plugin-toc)<br>[git](https://github.com/hipstersmoothie/obsidian-plugin-toc) |
+
+### ***Editing md-files with VScode***
+More info in [Code_editors.md](/DevOps/Code_editors.md#visual-studio-code) - including more useful extensions.
 
 
 

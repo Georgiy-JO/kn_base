@@ -18,6 +18,8 @@ To collapse all the functions in the current file:
 * **Black box** - AI help.
 * **Git Graph** - git control.
 * **LTeX - LanguageTool** - spelling check.
+* **Code Spell Checker** - spelling check.
+* **Russian - Code Spell Checker** - spelling check (RU).
 * **C/C++**, **Nuxtr**, **Vue** etc... - language related extensions.
 * **Markdown All in One** - makes work with markdowns easier (inc. table of contents).
 * **Python** / **Qt C++** / **CMake** / **C/C++** / etc. - large support tools (highlight errors etc.).

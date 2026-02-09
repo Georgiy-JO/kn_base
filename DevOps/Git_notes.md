@@ -1,13 +1,13 @@
 # Git tips
 
 ## Contents
-- [[#Commands and flags|Commands and flags]]
-- [[#Connected files|Connected files]]
-- [[#Special situations|Special situations]]
-	- [[#Special situations#Erasing previous commits in remote repository|Erasing previous commits in remote repository]]
-	- [[#Special situations#Renaming a branch in web github|Renaming a branch in web github]]
-	- [[#Special situations#Work with large files|Work with large files]]
-		- [[#Work with large files#Tweaking repository|Tweaking repository]]
+- [Commands and flags](#commands-and-flags)
+- [Connected files](#connected-files)
+- [Special situations](#special-situations)
+  - [Erasing previous commits in remote repository](#erasing-previous-commits-in-remote-repository)
+  - [Renaming a branch in web github](#renaming-a-branch-in-web-github)
+  - [Work with large files](#work-with-large-files)
+    - [Tweaking repository](#tweaking-repository)
 
 
 ## Commands and flags

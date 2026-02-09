@@ -87,7 +87,7 @@
     | [person.sql](/SQL/table_examples/person.sql)|BD full of personal info|person|
     | [connected_1.sql](/SQL/table_examples/connected_1.sql)|BD made partly from *car* and *person*|car<br>person|
     | [connected_uuid.sql](/SQL/table_examples/connected_uuid.sql)|same as the one before, but **id** is *UUID*|car<br>person|
-    | [connected_2.sql](/SQL/table_examples/connected_2.sql)|BD contains pizzeria associated [info](DICM/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
+    | [connected_2.sql](/SQL/table_examples/connected_2.sql)|BD contains pizzeria associated [info](media/th_3.png)|pizzeria<br>person<br>person_order<br>person_visits<br>menu|
 
 * *DICM* folder contains illustrations for the file. 
 
@@ -189,14 +189,14 @@ Database theory has 4 fundamental data anomalies (physical anomalies):
 
 Therefore, there are different [isolation levels](#transaction-isolation-levels) in ANSI SQL standard that prevent known anomalies.
 
-![th_10](DICM/th_10.png)
+![th_10](media/th_10.png)
 
 From one point of view, this matrix should be a standard for any Relational Database, but reality... looks a bit different.
 ||| |
 | --- | --- | --- |
-| PostgreSQL | ![th_11](DICM/th_11.png) |
-| Oracle | ![th_12](DICM/th_12.png) |
-| MySQL | ![th_13](DICM/th_13.png) |
+| PostgreSQL | ![th_11](media/th_11.png) |
+| Oracle | ![th_12](media/th_12.png) |
+| MySQL | ![th_13](media/th_13.png) |
 
 Nowadays, IT community found a set of new anomalies based on Database Model (logical view):
 - Read Skew Anomaly;
@@ -209,7 +209,7 @@ Nowadays, IT community found a set of new anomalies based on Database Model (log
 
 The most common way to illustrate anomalies is to use several [transactions](#transactions) at the same time with different isolation levels.
 
-* [off top] Remember! The [Curve of Usefulness](DICM/th_9.png) of detailed data over time decrease but the value of aggregated data increase.
+* [off top] Remember! The [Curve of Usefulness](media/th_9.png) of detailed data over time decrease but the value of aggregated data increase.
 
 ### Normalization 
 
@@ -405,7 +405,7 @@ The CAP theorem states that in a distributed system, you can only choose two out
 ## Pre_Work
 
 #### [Installation.general](https://www.postgresql.org/download/)
-#### [Installation.fedora](https://developer.fedoraproject.org/tech/database/postgresql/about.html)
+#### [Installation.Fedora](https://developer.fedoraproject.org/tech/database/postgresql/about.html)
 
 ### !
 * In Windows use **SQL Shell** or **pqAdmin**.
@@ -895,7 +895,7 @@ FROM
 
 ### [Set operations](#terms)
 
-![th_1](DICM/th_1.png)
+![th_1](media/th_1.png)
 
 * In many aspects, sets are used in Relational Databases. Not only to do UNION or MINUS between sets. Sets are also good candidates for doing recursive queries.
 
@@ -910,7 +910,7 @@ FROM
     - Main SQL provides final names of attributes for the whole query.
     - The attributes of controlled SQL should match the number of columns and corresponding family types of main SQL.
 
-    ![th_2](DICM/th_2.png)
+    ![th_2](media/th_2.png)
 
 * In addition, SQL sets are useful for calculating some specific data science metrics, such as the Jaccard distance between 2 objects based on existing data features.
 
@@ -1261,19 +1261,19 @@ WHERE conditions;
     ```
 * index types: 
     * b-tree index aka. balanced tree -default one; 
-        ![b-tree index](DICM/th_4.png "b-tree index for alphabetic based column")
+        ![b-tree index](media/th_4.png "b-tree index for alphabetic based column")
     * function-based index - index structure is based on some function, not just a table;
     * clustered index - data in table sorted the same way as the index;
     * bitmap index - index structure is a 2D table;
-        ![bitmap index](DICM/th_5.png "bitmap index for employee with 'at work status'")
+        ![bitmap index](media/th_5.png "bitmap index for employee with 'at work status'")
     * etc...
 * SQL can use indexes ***automaticaly*** in search if there are any, or you can force SQL to use indexes by blocking the usual search: ```SET enable_seqscan = OFF;```.
 * **INDEX** speed up *search*, but slow down *INSERT*, *DELETE*, *UPDATE*.
-    ![don't use when](DICM/th_6.png "don't use when")
+    ![don't use when](media/th_6.png "don't use when")
 * Index can be created for several columns.
 * **Claster index** is created automatically if there is a primary key (others **handmade indexes** are not clustered).
 * Indexes are most useful on columns that are frequently used in **WHERE** clauses, **JOIN** conditions, and **ORDER BY** clauses.
-    |![th_7](DICM/th_7.png)|![th_8](DICM/th_8.png)|
+    |![th_7](media/th_7.png)|![th_8](media/th_8.png)|
     |---|---|
 
 #### Example 
@@ -1404,13 +1404,13 @@ ROLLBACK;
 
 |Anomaly/Error|Isolation level| Scheme | Result|
 |---|---------------|-------|-------|
-|**Lost Update** Anomaly|**READ COMMITTED**|![scheme_1](DICM/th_14.png)|Session_2 *UPDATE* will not work until the transaction of session_1 is completed via *COMMIT*. <br> After the transaction of session_1 was committed the session_2 *UPDATE* lost the "**lock**" and was finished.|
-|**Lost Update** Anomaly|**REPEATABLE READ**|![scheme_1](DICM/th_14.png)|**Lock** the *UPDATE* of session_2 until the *COMMIT* of the session_1 transaction. <br> After session_1 *COMMIT* will return an error and won't allow UPDATE until the *COMMIT* of session_2. <br> *COMMIT* of session_2 transaction will result in forced **ROLLBACK**.|
-| **Non-Repeatable Reads** Anomaly|**READ COMMITTED**|![scheme_2](DICM/th_15.png)|The second *SELECT* of session_1 will return the updated in session_2 value.|
-| **Non-Repeatable Reads** Anomaly|**SERIALIZABLE**|![scheme_2](DICM/th_15.png)|The second *SELECT* of session_1 will return the same not updated value, only the *SELECT* that is after the session_1 *COMMIT* will return the changed in session_2 value.|
-|**Phantom Reads** Anomaly|**READ COMMITTED**|![scheme_3](DICM/th_16.png)|Second and third summing in session_1 will include value inserted in session_2.|
-|**Phantom Reads** Anomaly|**REPEATABLE READ**|![scheme_3](DICM/th_16.png)|Second summing in session_1 will not include value inserted in session_2, only the one that goes after the session_1 commit (the third one) will.|
-|**DEADLOCK**||![scheme_4](DICM/th_17.png)|After both transactions got **locked** PSQL killed the [session_2](DICM/sh_3.png) transaction so only *UPDATE*s from TRANSACTION [session_1](DICM/sh_2.png) stayed.|
+|**Lost Update** Anomaly|**READ COMMITTED**|![scheme_1](media/th_14.png)|Session_2 *UPDATE* will not work until the transaction of session_1 is completed via *COMMIT*. <br> After the transaction of session_1 was committed the session_2 *UPDATE* lost the "**lock**" and was finished.|
+|**Lost Update** Anomaly|**REPEATABLE READ**|![scheme_1](media/th_14.png)|**Lock** the *UPDATE* of session_2 until the *COMMIT* of the session_1 transaction. <br> After session_1 *COMMIT* will return an error and won't allow UPDATE until the *COMMIT* of session_2. <br> *COMMIT* of session_2 transaction will result in forced **ROLLBACK**.|
+| **Non-Repeatable Reads** Anomaly|**READ COMMITTED**|![scheme_2](media/th_15.png)|The second *SELECT* of session_1 will return the updated in session_2 value.|
+| **Non-Repeatable Reads** Anomaly|**SERIALIZABLE**|![scheme_2](media/th_15.png)|The second *SELECT* of session_1 will return the same not updated value, only the *SELECT* that is after the session_1 *COMMIT* will return the changed in session_2 value.|
+|**Phantom Reads** Anomaly|**READ COMMITTED**|![scheme_3](media/th_16.png)|Second and third summing in session_1 will include value inserted in session_2.|
+|**Phantom Reads** Anomaly|**REPEATABLE READ**|![scheme_3](media/th_16.png)|Second summing in session_1 will not include value inserted in session_2, only the one that goes after the session_1 commit (the third one) will.|
+|**DEADLOCK**||![scheme_4](media/th_17.png)|After both transactions got **locked** PSQL killed the [session_2](media/h_3.png) transaction so only *UPDATE*s from TRANSACTION [session_1](media/sh_2.png) stayed.|
 
 * In different isolation levels some operations are getting "**locked**" by SQL in case they overlap operations from other transactions or may be affected by them.
 * A ***DEADLOCK*** is a situation in a database where two or more transactions are unable to proceed because they are each waiting for the other to release a resource (such as a lock) that they need in order to continue, effectively causing them to become stuck indefinitely unless the deadlock is detected and resolved. In most database systems (inc. PostgreSQL), deadlock detection and resolving is automatic, it chooses one of the transactions to abort. 
@@ -2197,7 +2197,7 @@ SELECT * FROM `user`;
 
 ## Links 
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/);
-- [Data generator](https://mockaroo.com/) [🖼️](/SQL/DICM/sh_1.png);
+- [Data generator](https://mockaroo.com/) [🖼️](media/sh_1.png);
 - [SQL video tutorial](https://youtu.be/qw--VYLpxG4?si=wit1B5ZszeizBEIs);
 - [SQL index video article](https://youtu.be/LpEwssOYRKA?si=D47VIn_RrTna3e05);
 - [Transaction isolation levels and anomalies voiced article](https://youtu.be/yVlCjzJAOOo?si=7lq67WvldOzgTfQs)

@@ -1,15 +1,15 @@
 #  Some docker tips
 
 ## Contents
-- [[#Theory|Theory]]
-	- [[#Theory#Docker|Docker]]
-	- [[#Theory#Dockle|Dockle]]
-	- [[#Theory#Docker Compose|Docker Compose]]
-- [[#Commands and flags|Commands and flags]]
-- [[#Docker file|Docker file]]
-- [[#Docker-compose file|Docker-compose file]]
-	- [[#Docker-compose file#General Structure|General Structure]]
-- [[#Links:|Links:]]
+- [Theory](#theory)
+  - [Docker](#docker)
+  - [Dockle](#dockle)
+  - [Docker Compose](#docker-compose)
+- [Commands and flags](#commands-and-flags)
+- [Docker file](#docker-file)
+- [Docker-compose file](#docker-compose-file)
+  - [General Structure](#general-structure)
+- [Links:](#links)
 
 ## Theory
 

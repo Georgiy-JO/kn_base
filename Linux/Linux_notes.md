@@ -236,7 +236,7 @@ alias open='xdg-open'
 	```
 
 ## Server Ubuntu installation 
-[Example](/DevOps/VM_parts/installation)
+[Example](/DevOps/VM_parts/installation.md)
 
 ## Fedora after installation setting up
 [My list](/Linux/materials/fedora_start_up.md)
@@ -246,10 +246,10 @@ alias open='xdg-open'
 
 
 ## SSH and TCP forwarding 
-[Click](/Linux/Linux_parts/SSH_stuff.md)
+[Click](/Linux/parts/SSH_stuff.md)
 
 ## OS family
-![family](big_family.png)
+![family](media/big_family.png)
 
 ## Extra
 ### [Fedora ultimate update script](/Linux/materials/Scripts/update.sh)

@@ -22,7 +22,7 @@ Can work with multiple programming languages (inc. C++) and generate files and s
 #### Use   
 App is looking for particular comment format and allows using tags in the code file's comments that will be structured and shown in the resulting documentation.
 
-[Tag examples](/C&C++/Parts/C++.md#comments-standards) (not all supported tags inc.):
+[Tag examples](/C&C++/parts/C++.md#comments-standards) (not all supported tags inc.):
 ```c++
     /**
     * @brief Main function role.

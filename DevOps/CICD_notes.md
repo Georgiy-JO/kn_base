@@ -2,24 +2,25 @@
 **C**ontinuous **I**ntegration and **C**ontinuous **D**elivery
 
 ## Contents
-- [[#[Basic info](#links)|Basic info]]
-- [[#GitLab-Runner|GitLab-Runner]]
-	- [[#GitLab-Runner#Structure steps|Structure steps]]
-	- [[#GitLab-Runner#Variables|Variables]]
-	- [[#GitLab-Runner#CICD machine|CICD machine]]
-		- [[#CICD machine#Prepare the machine|Prepare the machine]]
-	- [[#GitLab-Runner#.gitlab-ci.yml file|.gitlab-ci.yml file]]
-- [[#GitHub Actions (CICD with GitHub)|GitHub Actions (CICD with GitHub)]]
-	- [[#GitHub Actions (CICD with GitHub)#CICD machine|CICD machine]]
-		- [[#CICD machine#Using GitHub servers|Using GitHub servers]]
-		- [[#CICD machine#Prepare a machine for self-host|Prepare a machine for self-host]]
-	- [[#GitHub Actions (CICD with GitHub)#Variables|Variables]]
-	- [[#GitHub Actions (CICD with GitHub)#Actions repositories:|Actions repositories:]]
-	- [[#GitHub Actions (CICD with GitHub)#GitHub Actions file|GitHub Actions file]]
-		- [[#GitHub Actions file#Main file - example 1:|Main file - example 1:]]
-		- [[#GitHub Actions file#Main file - example 2:|Main file - example 2:]]
-		- [[#GitHub Actions file#Service  actions file|Service  actions file]]
-- [[#Links:|Links:]]
+- [Basic info](#basic-info)
+- [GitLab-Runner](#gitlab-runner)
+  - [Structure steps](#structure-steps)
+  - [Variables](#variables)
+  - [CICD machine](#cicd-machine)
+    - [Prepare the machine](#prepare-the-machine)
+  - [.gitlab-ci.yml file](#gitlab-ciyml-file)
+- [GitHub Actions (CICD with GitHub)](#github-actions-cicd-with-github)
+  - [CICD machine](#cicd-machine-1)
+    - [Using GitHub servers](#using-github-servers)
+    - [Prepare a machine for self-host](#prepare-a-machine-for-self-host)
+  - [Variables](#variables-1)
+  - [Actions repositories:](#actions-repositories)
+  - [GitHub Actions file](#github-actions-file)
+    - [Main file - example 1:](#main-file---example-1)
+    - [Main file - example 2:](#main-file---example-2)
+    - [Service  actions file](#service--actions-file)
+- [Links:](#links)
+
 
 ## [Basic info](#links)
 ### Theory

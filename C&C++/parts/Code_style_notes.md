@@ -70,7 +70,7 @@ Many programming languages and frameworks have established style guides that pro
   - `namespace`s must be used for logical code organization;
   - use `template` where it's possible;
 - Levels and blocks of code:
-  - code must be separated into [layers and abstractions](Dictionaty.md), if it is needed - code must be separated into functions and files according to logic and goals;
+  - code must be separated into [layers and abstractions](/General/Dictionaty.md), if it is needed - code must be separated into functions and files according to logic and goals;
   - use logical file structure;
   - repeating code parts must be moved to a separate functions;
 - Functions
@@ -100,7 +100,7 @@ Many programming languages and frameworks have established style guides that pro
   - use comments before classes and functions - describe the meaning of those, what kind of data receive, what do output;
   - comment hard parts of a code inside functions;
   - comments must follow the comment standard of the organization:
-    - [Example](/C&C++/Parts/C++.md#comments-standards);
+    - [Example](C++.md#comments-standards);
   - `//` is much more common;
 - Classes and objects:
   - Encapsulation. Separate your objects by making all data fields in your class `private`, use getter and setter functions to work with those;
@@ -125,10 +125,10 @@ Many programming languages and frameworks have established style guides that pro
   - `int employee_count`;
   - `void CalculateSalary()`;
 - better use **smart pointers** when working with dynamic memory;
-- use **[STL containers](/C&C++/Parts/C++.md#stl-containers)** as much as possible if it fits the goal;
-- use **[STL algorithms](/C&C++/Parts/C++.md#stl-algorithms)** when you work with *STL containers*;
+- use **[STL containers](C++.md#stl-containers)** as much as possible if it fits the goal;
+- use **[STL algorithms](C++.md#stl-algorithms)** when you work with *STL containers*;
 - use `constexpr` where it's possible;
-- [Comment standard](/C&C++/Parts/C++.md#comments-standards):
+- [Comment standard](C++.md#comments-standards):
     ```C++
     /**
     * @brief умножает число на два.
@@ -143,9 +143,9 @@ Many programming languages and frameworks have established style guides that pro
 - use `auto` and other modern C++ features;
 - better use `constexpr` and `inline` instead of macros; 
 - when necessary, it is preferable to use multithreading with the standard library;
-- use [**PCH**](/C&C++/Parts/C++.md#pch)
-- use [lambda functions](/C&C++/Parts/C++.md#lambda-functions)
-- [exceptions](/C&C++/Parts/C++.md#exceptions-error-handling) must be used for error handling.
+- use [**PCH**](C++.md#pch)
+- use [lambda functions](C++.md#lambda-functions)
+- [exceptions](C++.md#exceptions-error-handling) must be used for error handling.
 - It's a good practice to name methods with verbs:
   ```C++
   int GetValue();
@@ -154,8 +154,6 @@ Many programming languages and frameworks have established style guides that pro
   void KickElement();
   ```
 - C++ function may have several ```return ;``` points - that is a standard practice.
-
-
 
 ## Links
 - [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)

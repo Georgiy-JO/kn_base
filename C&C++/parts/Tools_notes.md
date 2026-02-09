@@ -153,7 +153,7 @@ The GNU Debugger (GDB) is a tool used to debug programs, mainly C and C++.
 
 
 ## Clang-format 
-***Code Formatter*** ([***code style***](/C&C++/Parts/Code_style_notes.md))
+***Code Formatter*** ([***code style***](Code_style_notes.md))
 - Can do the code compilation;
 - Can be used for **code formatting**. Can automatically format C, C++, Java, JavaScript, Python, etc.
 ### Installation
@@ -313,7 +313,7 @@ The main function can be not included in the test file -default main function wi
 [Assertions Reference](https://google.github.io/googletest/reference/assertions.html)
 
 ### Example 
-[Example #1](/C&C++//materials/CPP/model3d_tests.cpp)
+[Example #1](/C&C++/materials/CPP/model3d_tests.cpp)
 
 
 ## Makefile

@@ -55,5 +55,5 @@ How to ssh in V-machine ([source](https://www.youtube.com/watch?v=rhFLfwZzlGA))
     1. [At main machine] ssh -p 22222 v-machine_username@localhost
 
 ## Links:
-* [SSH and TCP forwarding](/Linux/Linux_parts/SSH_stuff.md)
+* [SSH and TCP forwarding](/Linux/parts/SSH_stuff.md)
 * [Practical work with Linux virtual machines](https://github.com/Georgiy-JO/DO_practice_projects) 

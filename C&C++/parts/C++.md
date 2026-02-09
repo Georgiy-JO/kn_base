@@ -178,7 +178,7 @@ Here are several most frequently used code file types.
 
 | library / framework            | Description                                                                                                                                                                                                                                                  | Installation                                                             |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| [QT](/C&C++/Parts/QT_notes.md) | Huge framework that is mainly meant to handle creating graphical applications. Includes many elements, libraries, tools and provides plenty of opportunities (like simple way to create GUI, handle graphics, networking, threads, OpenGL, multimedia, etc.) | With official GUI based installer / console commands                     |
+| [QT](QT_notes.md) | Huge framework that is mainly meant to handle creating graphical applications. Includes many elements, libraries, tools and provides plenty of opportunities (like simple way to create GUI, handle graphics, networking, threads, OpenGL, multimedia, etc.) | With official GUI based installer / console commands                     |
 | ncurses                        | library for creating TUIs (text-based user interfaces)                                                                                                                                                                                                       | sudo apt-get install libncurses6 <br>sudo apt-get install libncurses-dev |
 
 
@@ -1227,9 +1227,6 @@ class Cart{
 ```
 
 
-
-
-
 ### Typedef and Using
 `typedef` is a keyword in C++ that allows you to give a new name or alias to an existing type. This can make your code more readable and easier to understand.
 * Usually the new datatype has **_t** at the end of the name.
@@ -1279,7 +1276,7 @@ In C++, `std` is the **standard namespace** that contains all the standard libra
     - `#include <algorithm>` for algorithms like `std::sort`.
 
 #### Key Features of Namespaces
-**Avoiding Name Conflicts**: Namespaces allow you to define functions, classes, and variables with the same name in different contexts without causing conflicts. For example, you can have two functions named print() in different namespaces.
+**Avoiding Name Conflicts**: Namespaces allow you to define functions, classes, and variables with the same name in different contexts without causing conflicts. For example, you can have two functions named *print()* in different namespaces.
 
 **Organizing Code**: Namespaces help in logically grouping related code together, making it easier to manage and understand.
 **Nested Namespaces**: You can define namespaces within other namespaces, allowing for a hierarchical organization of code.
@@ -1328,7 +1325,6 @@ In C++, `std` is the **standard namespace** that contains all the standard libra
         return 0;
     }
     ```
-
 
 
 ####  (❗***HINT***) #1
@@ -3003,7 +2999,7 @@ In C++, methods are functions that are associated with a class or an object. The
 1. Allocating memory for the object;
 2. Initializing the object;
    - Constructor initialization has higher priority than default values of attributes (if it does not exist (or called) the defaults are used).
-   - If there are other objects as attributes of the class their *1) initialisation* and *2) call of constructor* will be executed at this step.
+   - If there are other objects as attributes of the class their *1) initialization* and *2) call of constructor* will be executed at this step.
 3. Calling constructor;
 4. Using the object;
 5. Calling destructor;
@@ -3213,7 +3209,7 @@ In C++, methods are functions that are associated with a class or an object. The
 
 ### Constructor
 It is a special method, that is automatically called when an object is instantiated (useful to assign values to attributes as arguments). 
-- There always is a **constructor** that is automatically called: in C++ if you don't define any *constructor*, the compiler provides a set of *constructors* (and operators): *Default constructor*, *Copy constructor*, *Copy assignment operator*, *Destructor*, *Move constructor* and *Move assignment operator*.
+- There always are a **constructor** that is automatically called: in C++ if you don't define any *constructor*, the compiler provides a set of *constructors* (and operators): *Default constructor*, *Copy constructor*, *Copy assignment operator*, *Destructor*, *Move constructor* and *Move assignment operator*.
 - **Constructor** can be manually set.
 - A **constructor** is a member function with the same name as the class.
 - If any constructor is set no default constructor will compiler create.
