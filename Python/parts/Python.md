@@ -23,12 +23,25 @@ print(type(a))      # <class 'float'>
 a="Hello"
 print(type(a))      # <class 'str'>
 ```
+- ```type(...)``` allows to get the type of the variable.
 
 #### Type casting
 ```python
 a = 5.8     #5.8    --> float
 b = int(a)  #5      --> int
+#*
+
+a = "5"     #"5"    --> str
+b = int(a)  #5      --> int
+# but
+a = "5.5"   #"5.5"  --> str
+b = int(a)  #error
+b=float(a)  #5.5    --> float
+#*
 ```
+- Can truncate numbers.
+- Can cast numbers from strings, but only if the format is correct (for int there must be only digits).
+
 
 ### References
 - Any variable is a reference to the data.
@@ -64,14 +77,86 @@ first, *middle, last = [10, 20, 30, 40, 50]
 print(first, middle, last)          # 10 [20, 30, 40] 50 
 ```
 
-
 ## Input && Output 
+
 ### Output
+#### Print parameters
 ```python
 a=5
 b=6.5
-print(a,b)      # 5 6.5
+print(a,b)              # 5 6.5
+print(a,b, sep=" | ")   # 5 | 6.5
+#* 
+
+print("Hello")
+print("world")
+# Hello
+# world
+print("Hello", end=" ")
+print("world")
+# Hello world
+#*
 ```
+- ```sep``` - sets the separator between arguments (default is space).
+- ```end``` - sets parameter to the end on print (default is new line ('\n')).
+
+#### Print formatting (f-strings)
+```python
+x=5.5
+y=-25
+# Old style
+print("Point coordinates: x = ", x, "; y = ", y)          # Point coordinates: x =  5.5; y =  -25
+print("Point coordinates: x = ", x, "; y = ", y, seg="")  # Point coordinates: x = 5.5; y = -25
+# F - string style (python 3.6+)
+print(f"Point coordinates: x = {x}; y = {y}")           # Point coordinates: x = 5.5; y = -25
+```
+
+### Input
+```input()``` allows reading data from standard input stream (console by default).
+- Returning data is a **string** by default. This can be changed by [type casting](#type-casting).
+    ```python
+    a = input()         # writing: -12345
+    print(type(a))      # <class 'str'>
+    b = abs(a)          #error
+
+    a = int(input())    # writing: -12345
+    print(type(a))      # <class 'int'>
+    b = abs(a)          #12345
+
+    a = int(input())    # writing: -123.45  --> error
+    a = float(input())  # writing: -123.45  --> a = -123.45     --  float
+    ```
+
+***Example***:
+```python
+a = float(input())
+b = float(input())
+print("Perimeter =", 2 * (a + b))
+# console:
+# 5.5 44 
+# !ERROR!
+
+# console:
+# 5.5
+# 44
+# Perimeter = 99.0
+
+a = float(input("Enter a: "))
+b = float(input("Enter b: "))
+print("Perimeter =", 2 * (a + b))
+# console:
+# Enter a: 5.5
+# Enter b: 44
+# Perimeter = 99.0
+
+a, b = map(float, input("Enter a and b: ").split())
+print("Perimeter =", 2 * (a + b))
+# console:
+# Enter a and b: 5.5 44
+# Perimeter = 99.0
+```
+
+
 
 ## Math
 ### Simple Calculus
@@ -138,7 +223,7 @@ round(1.5)                  #2
 round(10.5)                 #10
 round(10.5000000001)        #11
 round(11.5)                 #12
-# *
+#*
 
 round(7.8766, 2)            #7.88
 round(7.8766, 3)            #7.877
@@ -166,7 +251,7 @@ math.floor(-5.2)            #-6
 math.trunc(5.2)             #5
 math.trunc(5.8)             #5
 math.trunc(-5.2)            #-5
-# *
+#*
 
 math.factorial(5)            #120
 math.factorial(0)            #1
