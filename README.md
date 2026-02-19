@@ -35,6 +35,10 @@
     - [C++](/C&C++/parts/C++.md)
     - [C](/C&C++/parts/C.md)
     - [QT_notes](/C&C++/parts/QT_notes.md)
+- **Python**
+  - [Python main](/Python/Python_notes.md)
+    - [Settings](/Python/parts/Settings.md)
+    - [Python](/Python/parts/Python.md)
 - **Bash and SH**
   - [Bash and sh](/Bash/Bash_notes.md)
 - **Extras**

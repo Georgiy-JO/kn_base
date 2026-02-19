@@ -11,6 +11,9 @@
   - [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
 - [Layers](#layers)
 - [Properties](#properties)
+- [Programming languages kinds](#programming-languages-kinds)
+  - [Interpreted languages](#interpreted-languages)
+  - [Compiled Languages](#compiled-languages)
 - [SOLID](#solid)
   - [Recap:](#recap)
     - [SOLID с примерами на Java (//❗❗)](#solid-с-примерами-на-java-)
@@ -134,6 +137,78 @@ int main() {
 
 ## Properties
 **Properties** are often used to refer to a higher-level abstraction that encapsulates the attributes of a class. They can be thought of as a combination of attributes and the methods that access or modify them. In some programming languages (like C#), properties are a specific language feature that allows you to define getters and setters in a more concise way. In other languages, properties might be implemented using getter and setter methods.
+
+## Programming languages kinds
+### Interpreted VS Compiled
+The main distinction in programming languages revolves around how source code (what you write) gets turned into instructions that a computer can execute. This leads to two primary approaches: interpreted and compiled (with many modern languages using hybrid strategies).
+
+#### Interpreted languages
+An interpreter reads your source code line by line (or statement by statement) and executes it immediately — no separate compilation step occurs beforehand.
+
+- Examples:
+  - Python (in CPython reference implementation);
+  - Bash;
+  - JavaScript (in browsers / Node.js);
+  - PHP.
+
+#### Compiled Languages
+A compiler translates the entire source code into machine code (or very close to it) before the program runs. You get an executable file that the CPU can run directly.
+
+- Examples:
+  - C && C++;
+  - C# (but has ahead-of-Time compilation option);
+  - Rust;
+  - Go;
+  - Java (but has ahead-of-Time compilation option);
+  - haskel (mostly compiled, but has interpreted mode via GHCi).
+
+#### Other
+
+- Examples:
+  - SQL (declarative, domain-specific language - can't fit into categorization, but acts mostly like interpreted language).
+
+### Statically VS Dynamically typed
+Statically typed and dynamically typed languages represent two fundamental approaches to type systems in programming. The core difference lies in when types are checked and enforced.
+
+#### Statically typed languages
+Variable types are determined and checked at compile-time (before the program runs). Types are usually declared explicitly (or they are inferred).
+- Type mismatches cause compile errors — the code won't even build.
+- Usually faster than dynamically typed languages (compiler optimizations, no runtime type checks), but starts slower.
+
+- Examples:
+  - Rust;
+  - Go;
+  - Java;
+  - C#;
+  - C &&C++.
+
+#### Dynamically typed languages
+Types are determined and checked at run-time (while the program is executing). Variables can hold values of any type and can even change type during execution.
+- Type errors can usually appear only when the problematic line actually runs.
+- More flexible.
+
+- Examples:
+  - Python;
+  - JavaScript (plain);
+  - Ruby;
+  - PHP.
+
+#### Weakly typed (untyped) languages
+Types are interpreted at runtime depending on context (latent / coercive typing).
+- Example:
+  - Bash (everything is string before used):
+    ```bash
+    a="123"       # string "123"
+    x=42          # string "42"
+    y="hello"     # string "hello"
+    z=3.14        # still string "3.14"
+
+    echo $((x + 10))       # treats as integer → 52
+    echo ${x:0:1}          # treats as string  → "4"
+    [[ $x -gt 30 ]] && echo "big"   # arithmetic comparison
+    echo $((a + b))     # → 168   (trims spaces, converts to int)
+    echo "2" + "3"      # → 2+3   (string concatenation, not addition!)
+    ```
 
 
 ## SOLID
