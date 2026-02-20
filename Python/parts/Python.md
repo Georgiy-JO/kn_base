@@ -26,22 +26,31 @@ print(type(a))      # <class 'str'>
 - ```type(...)``` allows to get the type of the variable.
 
 #### Type casting
-```python
-a = 5.8     #5.8    --> float
-b = int(a)  #5      --> int
-#*
+- **To numbers**:
+    ```python
+    a = 5.8     #5.8    --> float
+    b = int(a)  #5      --> int
+    #*
 
-a = "5"     #"5"    --> str
-b = int(a)  #5      --> int
-# but
-a = "5.5"   #"5.5"  --> str
-b = int(a)  #error
-b=float(a)  #5.5    --> float
-#*
-```
-- Can truncate numbers.
-- Can cast numbers from strings, but only if the format is correct (for int there must be only digits).
+    a = "5"     #"5"    --> str
+    b = int(a)  #5      --> int
+    # but
+    a = "5.5"   #"5.5"  --> str
+    b = int(a)  #error
+    b=float(a)  #5.5    --> float
+    #*
+    ```
+    - Can truncate numbers.
+    - Can cast numbers from strings, but only if the format is correct (for int there must be only digits).
 
+- **To strings**:
+    ```python
+    a = 5
+    b = "Answer = "
+    c = b + str(a)  #Answer = 5
+    c = str(55.5)   #"55.5"
+    c = str(True)   #"True"
+    ```
 
 ### References
 - Any variable is a reference to the data.
@@ -277,5 +286,99 @@ b = math.e                   #2.718281828459045
 ```
 - [Type casting](#type-casting) works the same way and is used way more often.
 
+## General
+### Comparison
+```python
+a = 5
 
+print(a <= 10 and a > 0)                #True
+print(a <= 10 or a < 0)                 #True
+print(0 < a <= 10)                      #True
+print(a % 3 == 0 or a % 2 == 0)         #False
+print(a % 3 != 0 or a % 2 != 0)         #True
+print(not (a % 3 == 0 or a % 2 == 0))   #True
+```
+- Instead of *&&* and *||* are used *and* and *or*.
+- Operator's priority:
+    |Operator| Priority|
+    |---|---|
+    |or|1|
+    |and|2|
+    |not|3|
+  - The Highest priority goes first.
+
+### Service functions
+#### bool()
+```python
+bool(1)         #True
+bool(0)         #False
+bool(-1)        #True
+bool(10)        #True
+bool(0.0)       #False
+bool(0.1)       #True
+bool("")        #False
+bool(" ")       #True
+bool("Hello")   #True
+```
+
+## Strings
+### General
+```python
+s1 = "Line"
+s2 = 'Line too'
+
+text1 = ''' Many line text is
+a text with many lines
+because text is longer with longer
+lines.'''                               # /n at the ends of the lines are included
+
+s3 = s1 + ' ' + s2                       # Line Line too
+s4 = s1 + 5                              # error
+s4 = s1 + str(5)                         # Line5
+#*
+
+s5 = s1 * 5                             # LineLineLineLineLine
+s5 = s1 *5.5                            # error
+```
+- Use [type casting](#type-casting) to transform any data into string
+
+#### Comparison
+```python
+print(s1 == 'Line')                     #True
+print(s1 == 'line')                     #False
+print(s1 != 'Line ')                    #True
+
+print("abc" < "abd")                    #True
+print("abc" > "abd")                    #False
+print("abc" > "abc")                    #False
+print("abc" >= "abc")                   #True
+print("abc" > "Abc")                    #True
+#*
+```
+- `>` and `<` use lexicographic (kексикографическое) comparison - compare each latter, the one earlier in the alphabet (ASCII) is smaller.
+
+
+### Service functions and operators
+#### str()
+Check out [type casting](#type-casting).
+
+#### len()
+Calculate length of the string.
+```python
+len('hello')        #5
+len('')             #0
+```
+
+#### in
+Check if one string is in another.
+```python
+print('lab' in 'matlabkomabsamabtolib')   #True
+print('aaa' in 'matlabkomabsamabtolib')   #False
+```
+
+#### ord()
+Returns a number representing the decimal Unicode code (ASCII code) of a specified character.
+```python
+print(ord('A'))     #65
+```
 
