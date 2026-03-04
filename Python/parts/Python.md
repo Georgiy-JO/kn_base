@@ -63,6 +63,19 @@ print(type(a))      # <class 'str'>
     a=5
     b=a
     print (id(a), id(b))  # will get two identical numbers
+
+    a=55    
+    b=a 
+    print(a)        # 55
+    print(b)        # 55
+    print(id(a))    # 11757416       
+    print(id(b))    # 11757416    
+
+    a-=5
+    print(a)        # 50
+    print(b)        # 55
+    print(id(a))    # 11757256
+    print(id(b))    # 11757416
     ```
 
 #### Multiple assignment     
@@ -164,7 +177,6 @@ print("Perimeter =", 2 * (a + b))
 # Enter a and b: 5.5 44
 # Perimeter = 99.0
 ```
-
 
 
 ## Math
@@ -322,6 +334,7 @@ bool("Hello")   #True
 ```
 
 ## Strings
+Unchangeable type.
 ### General
 ```python
 s1 = "Line"
@@ -342,6 +355,46 @@ s5 = s1 *5.5                            # error
 ```
 - Use [type casting](#type-casting) to transform any data into string
 
+### Indexing 
+```python
+s1 = "Line"
+s1[0]                           # L
+s1[1]                           # i
+s1[4]                           # error
+s1[-1]                          # e
+s1[-2]                          # n
+s1[-6]                          # error
+#*
+"My Line"[3]                    # L
+s1[1:3]                         # in
+s1[1:]                          # ine
+s1[:3]                          # Lin
+s1[:]                           # Line  
+s1[1:-2]                        # in
+s1[-2:1]                        # ''    #empty string
+#*
+
+s2 = "I love python"
+s2[2:-3:2]                      # 'lv y'
+s2[2::3]                        # 'leyo'
+s2[2::2]                        # 'lv yhn'
+s2[::4]                         # 'Ivyn'
+s2[::-1]                        # 'nohtyp evol I'
+s2[-2:-7:-1]                    # 'ohtyp'
+s2[-7:-2:-1]                    # ''
+s2[::-3]                        # 'nt oI'
+
+s1[0] = 'H'                     # error
+s6 = 'l' + s1[1:]               # line
+#*
+```
+- Negative indexes allow counting elements from the end of the string.
+- Taking a segment of a string:
+  -  ```s[n:m]``` works like **[n, m)** (*m* is not included);
+  -  if the edges of the segment are not set, they are set automatically as string edges.
+- Strings are **unchangeable** data type (aka. you can only create a new string, not change the old one).
+
+
 #### Comparison
 ```python
 print(s1 == 'Line')                     #True
@@ -355,7 +408,7 @@ print("abc" >= "abc")                   #True
 print("abc" > "Abc")                    #True
 #*
 ```
-- `>` and `<` use lexicographic (kексикографическое) comparison - compare each latter, the one earlier in the alphabet (ASCII) is smaller.
+- `>` and `<` use lexicographic (лексикографическое) comparison - compare each latter, the one earlier in the alphabet (ASCII) is smaller.
 
 
 ### Service functions and operators
