@@ -1,0 +1,33 @@
+# .pre-commit-config.yaml
+repos:
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.5.0   # или новее
+  hooks:
+  - id: ruff
+    args: [--fix, --exit-non-zero-on-fix]
+  - id: ruff-format
+
+- repo: https://github.com/psf/black-pre-commit-mirror
+  rev: 24.8.0
+  hooks:
+  - id: black
+
+
+# OR
+
+# .github/workflows/lint.yml
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - run: pip install ruff black
+    - run: ruff check .               # проверка
+    - run: ruff format --check .      # или black --check .

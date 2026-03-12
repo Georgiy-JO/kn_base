@@ -1,0 +1,23 @@
+[project]
+name = "my-awesome-project"
+version = "0.1.0"
+# ... другие метаданные
+
+[tool.black]
+line-length = 88          # почти всегда 88 (по умолчанию Black)
+target-version = ['py310']  # минимальная версия Python
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "Q", "UP", "ANN"]   # основные группы правил
+ignore = ["E501"]                                 # игнорируем слишком длинные строки (Black сам их разобьёт)
+
+[tool.ruff.format]
+quote-style = "double"          # или "single" — на вкус
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

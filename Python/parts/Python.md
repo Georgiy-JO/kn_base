@@ -336,6 +336,7 @@ bool("Hello")   #True
 ## Strings
 Unchangeable type.
 ### General
+Operators: **+**, **\***.
 ```python
 s1 = "Line"
 s2 = 'Line too'
@@ -351,11 +352,23 @@ s4 = s1 + str(5)                         # Line5
 #*
 
 s5 = s1 * 5                             # LineLineLineLineLine
-s5 = s1 *5.5                            # error
+s5 = s1 * 5.5                           # error
+
+st = "path\to\my\file.txt"
+print(st)            # path    o\my            ile.txt
+st = "path\\to\\my\\file.txt"
+print(st)          # path\to\my\file.txt
+st = r"path\\to\\my\\file.txt"
+print(st)         # path\\to\\my\\file.txt
+st = r"path\to\my\file.txt"
+print(st)         # path\to\my\file.txt
+#*
 ```
 - Use [type casting](#type-casting) to transform any data into string
+- ```r``` before string making that string raw (aka special symbols will not be interpreted).
 
-### Indexing 
+### Indexing
+Operator **[]**.
 ```python
 s1 = "Line"
 s1[0]                           # L
@@ -396,6 +409,7 @@ s6 = 'l' + s1[1:]               # line
 
 
 #### Comparison
+Operators: **==**, **!=**, **>**, **>=**, **<**, **<=**.
 ```python
 print(s1 == 'Line')                     #True
 print(s1 == 'line')                     #False
@@ -411,7 +425,7 @@ print("abc" > "Abc")                    #True
 - `>` and `<` use lexicographic (лексикографическое) comparison - compare each latter, the one earlier in the alphabet (ASCII) is smaller.
 
 
-### Service functions and operators
+### Service functions, operators, methods
 #### str()
 Check out [type casting](#type-casting).
 
@@ -423,10 +437,12 @@ len('')             #0
 ```
 
 #### in
-Check if one string is in another.
+Check if one string is in another (operator).
 ```python
-print('lab' in 'matlabkomabsamabtolib')   #True
-print('aaa' in 'matlabkomabsamabtolib')   #False
+print('lab' in 'matlabkomabsamabtolib')     #True
+print('aaa' in 'matlabkomabsamabtolib')     #False
+print('lab' not in 'matlabkomabsamabtolib') #False
+print('aaa' not in 'matlabkomabsamabtolib') #True
 ```
 
 #### ord()
@@ -435,3 +451,177 @@ Returns a number representing the decimal Unicode code (ASCII code) of a specifi
 print(ord('A'))     #65
 ```
 
+#### upper() and lower()
+```python
+s = 'python'
+print(s.upper())    #PYTHON
+print(s)            #python
+print(s.upper)      #<built-in method upper of str object at 0x7f51b6bac0f0>
+s = 'PYTHON'
+print(s.lower())    #python
+```
+
+#### count(), find(), rfind() and index()
+- **count()** - counting amount of substrings in string.
+- **find()** - finding the substring in string (if there is none, return ```-1```).
+- **rfind()** - same as **find()**, but goes from the end of the string.
+- **index()** - same as **find()**, but if there is no substrings found returns ```ValueError```.
+
+```python
+s = "I love python! Python that is a programming language. Snake python is nice too though."
+
+print(s.count('python'))            # 2
+print(s.count('Python'))            # 1
+print(s.count('python',2))          # 2
+print(s.count('python',2,14))       # 1
+print(s.count('python',2,13))       # 1
+print(s.count('python',2,12))       # 0
+print(s.count('python',2,100))      # 2
+
+print(s.find('Python'))             # 15
+print(s.find('python'))             # 7
+print(s.find('python',0,4))         # -1
+print(s.find('python',14))          # 60
+print(s.find('python',14,1004))     # 60
+print(s.find('python',14,65))       # -1
+print(s.find('python',14,66))       # 60
+print(s.find('pithon'))             # -1
+
+print(s.rfind('Python'))            # 15
+print(s.rfind('python'))            # 60
+print(s.rfind('python',0,4))        # -1
+print(s.rfind('python',0,15))       # 7
+print(s.rfind('python',14))         # 60
+print(s.rfind('python',14,1004))    # 60
+print(s.rfind('python',14,65))      # -1
+print(s.rfind('python',14,66))      # 60
+
+print(s.index('python'))            # 7
+print(s.index('pithon'))            # ValueError: substring not found
+```
+
+#### replace()
+Replacing substrings.
+- Can the amount of replacements be set (```-1``` - unlimited).
+```python
+s = "Banana Republic"
+
+print(s.replace('a','o'))       # Bonono Republic
+print(s)                        # Banana Republic    
+print(s.replace('a','o',1))     # Bonana Republic
+print(s.replace('a','o',2))     # Bonona Republic
+print(s.replace('a','o',3))     # Bonono Republic
+print(s.replace('a','o',-1))    # Bonono Republic
+print(s.replace('A','o'))       # Banana Republic
+print(s.replace('A',''))        # Banana Republic
+```
+
+#### isalpha(), isdigit(), isalnum()
+```python
+s = "Banana"
+print(s.isalpha())      # True
+print(s.isdigit())      # False
+print(s.isalnum())      # True
+s = "Banana or not"
+print(s.isalpha())      # False
+s = '123'
+print(s.isalpha())      # False
+print(s.isdigit())      # True
+print(s.isalnum())      # True
+s = '123.5'
+print(s.isdigit())      # False
+print(s.isalnum())      # False
+s = '-123'
+print(s.isdigit())      # False
+print(s.isalnum())      # False
+s = '123 '
+print(s.isdigit())      # False
+print(s.isalnum())      # False
+s = '123a'
+print(s.isdigit())      # False
+print(s.isalnum())      # True
+```
+#### rjust(), ljust(), center()
+- **rjust()** - add symbols (default:" ") to the beginning of the string, so it will have the set length.
+- **ljust()** - add symbols (default:" ") to the end of the string, so it will have the set length.
+- **center()** - add symbols (default:" ") to the beginning and end of the string, so it will have the set length.
+```python
+s1 = "Banana"     
+s2 = '123'
+print(s1.rjust(2))          # Banana
+print(s1.rjust(10))         #     Banana
+print(s2.rjust(5, '0'))     # 00123
+print(s2.rjust(5, '00'))    # ERROR
+
+print(s1.ljust(10,'*'))     # Banana****
+
+print(s1.center(10,'&'))    # &&Banana&&
+print(s1.center(11,'&'))    # &&&Banana&&
+```
+
+#### split() and join()
+- **split()** - sprits the string into substrings according to separator (default:" ").
+- **join()** - join strings putting separator between them.
+```python
+s = "He stand up to the crowed, walked to the door, get to the street and drove to his work."
+
+print(s.split(','))
+# ['He stand up to the crowed', ' walked to the door', ' get to the street and drove to his work.']
+print(s.split('to'))
+# ['He stand up ', ' the crowed, walked ', ' the door, get ', ' the street and drove ', ' his work.']
+
+s = "1,  2,3,4   ,5, 6, 7,   8,    9"
+d = s.replace(" ","").split(',')
+print(d)
+# ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+print(", ".join(d))             # 1, 2, 3, 4, 5, 6, 7, 8, 9
+print("".join(d))               # 123456789
+
+s = "John Johnson Riverside"
+print(", ".join(s.split()))     # John, Johnson, Riverside
+```
+
+#### strip() and rstrip() and lstrip()
+Removes spaces, new lines, tabs etc for strings.
+- **strip()** - both sides.
+- **rstrip()** - right side.
+- **lstrip()** - left side.
+```python
+s = "\t      \n\n\t\t ME \t\t\n\n      \n\n"
+
+s.strip()           # ME
+s.rstrip()          # \t      \n\n\t\t ME
+s.lstrip()          # ME \t\t\n\n      \n\n
+```
+
+### Forenamed strings 
+#### format()
+```python
+st = "Uncle {0} is {1} years old. {0} lives in {2}."
+a = "Ben"
+b = 55
+c = "Japan"
+print(st.format(a,b,c))
+# Uncle Ben is 55 years old. Ben lives in Japan.
+
+
+sg = "Mayor {Name} is {Age} years old. {Name} Works in {job}."
+a = "Samantha"
+b = 35
+c = "SG"
+print(sg.format(Name=a,Age=b,job=c))
+# Mayor Samantha is 35 years old. Samantha Works in SG.
+```
+
+#### f-strings
+- Works with Python 3.6+.
+- Read more at [PEP 498](https://peps.python.org/pep-0498/)
+```python
+name = "Samantha"
+age = 5
+job = "sg"
+sg = f"Mayor {name} is {age*7} years old. {name} Works in {job.upper()}."
+print(sg)
+# Mayor Samantha is 35 years old. Samantha Works in SG.
+```
