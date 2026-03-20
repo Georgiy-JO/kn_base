@@ -595,7 +595,7 @@ s.rstrip()          # \t      \n\n\t\t ME
 s.lstrip()          # ME \t\t\n\n      \n\n
 ```
 
-### Forenamed strings 
+### Formatted strings  
 #### format()
 ```python
 st = "Uncle {0} is {1} years old. {0} lives in {2}."
@@ -625,3 +625,41 @@ sg = f"Mayor {name} is {age*7} years old. {name} Works in {job.upper()}."
 print(sg)
 # Mayor Samantha is 35 years old. Samantha Works in SG.
 ```
+
+
+## Lists
+Ordered collection of elements.
+- Changeable type.
+### General
+```python
+marks = [5,4,3,2,1]
+marks[3]            # 2
+marks[-1]           # 1
+marks[1:3]          # [4,3]
+marks[1:-1]         # [4, 3, 2]
+marks[5]            # error
+
+marks[0] = 10
+marks               # [10, 4, 3, 2, 1]
+marks[3] = "word"
+marks[4] = [1,2,3]
+marks               # [10, 4, 3, 'word', [1, 2, 3]]
+
+a = []
+# *
+```
+- ```a``` - empty list.
+ 
+### list()
+Creates lists from any object that can be iterated.
+```python
+a = list("python")
+print(a)            # ['p', 'y', 't', 'h', 'o', 'n']
+
+b = list(['some','list'])
+# *
+```
+- ```b``` - is an independent copy of the list inside ```list()```.
+
+### Service functions, operators, methods
+#### len()

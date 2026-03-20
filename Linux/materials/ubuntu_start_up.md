@@ -234,7 +234,10 @@ sudo apt install bleachbit -y
 [Info](/Linux/Linux_notes.md#personal-names-for-linux-terminal-commands)
 
 ### 24. Programming elements (if needed)
-- Install Postman - [link](https://www.postman.com/downloads/) or App center
+- Install Postman (any variant):
+  - [link](https://www.postman.com/downloads/) or 
+  - App center or 
+  - ```sudo flatpak install flathub com.getpostman.Postman```
 - QT - [link](https://www.qt.io/development/download)
 - pgAdmin (for postgreSQL) - *idk, try one from the App center*.
 
