@@ -633,24 +633,67 @@ Ordered collection of elements.
 ### General
 ```python
 marks = [5,4,3,2,1]
-marks[3]            # 2
-marks[-1]           # 1
-marks[1:3]          # [4,3]
-marks[1:-1]         # [4, 3, 2]
-marks[5]            # error
+marks[3]                                # 2
+marks[-1]                               # 1
+marks[1:3]                              # [4,3]
+marks[:3]                               # [5,4,3]
+marks[1:-1]                             # [4, 3, 2]
+marks[5]                                # error
 
 marks[0] = 10
-marks               # [10, 4, 3, 2, 1]
+marks                                   # [10, 4, 3, 2, 1]
 marks[3] = "word"
+marks[1] = 1.5
 marks[4] = [1,2,3]
-marks               # [10, 4, 3, 'word', [1, 2, 3]]
+marks                                   # [10, 1.5, 3, 'word', [1, 2, 3]]
 
 a = []
 # *
+
+b_marks=marks[1:3]
+b_marks[0]=25
+print(marks)                            # [10, 1.5, 3, 'word', [1, 2, 3]]
+print(b_marks)                          # [25, 3]
+
+c_marks=marks
+d_marks=marks[:]
+c_marks[0]=1
+print(marks)                            # [1, 1.5, 3, 'word', [1, 2, 3]]
+print(c_marks)                          # [1, 1.5, 3, 'word', [1, 2, 3]]
+print(d_marks)                          # [10, 1.5, 3, 'word', [1, 2, 3]]
+#*
+
+elements = [1,2,3,4,5,6,7,8,9,10]
+elements[0:9:2]                         # [1, 3, 5, 7, 9]
+elements[0:9:3]                         # [1, 4, 7]
+elements[::-1]                          # [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+elements[2:4] = [101,125]
+print(elements)                         # [1, 2, 101, 125, 5, 6, 7, 8, 9, 10]
+elements[2:4] = 1010, 1250
+print(elements)                         # [1, 2, 1010, 1250, 5, 6, 7, 8, 9, 10]
+elements[::2] = [0,0,0,0,0,0,0,0,0,0]   # Error (to many elements)
+elements[::2] = [0,0,0]                 # Error (to little elements)
+elements[::2] = [0,0,0,0,0]
+print(elements)                         # [0, 2, 0, 1250, 0, 6, 0, 8, 0, 10]
 ```
 - ```a``` - empty list.
+- While just ```=``` make lists reference the same object, taking a cut creates another object (***copy***).
+
+#### Comparison
+Comparison of lists works the same way as for strings - elements are compared one by one.
+```python
+[1,2,3] == [1,2,3]                  # True
+[10,2,3] > [1,20,30]                # True
+[10,2,3] > [1,20,30,40]             # True
+[10,20,30] < [10,20,30,40]          # True
+[1,2,'abc'] == [1,2,'abc']          # True
+[1,2,4] == [1,2,'abc']              # Error
+#*
+```
+- Compared elements must be the same type.
  
-### list()
+#### list()
 Creates lists from any object that can be iterated.
 ```python
 a = list("python")
@@ -659,7 +702,198 @@ print(a)            # ['p', 'y', 't', 'h', 'o', 'n']
 b = list(['some','list'])
 # *
 ```
-- ```b``` - is an independent copy of the list inside ```list()```.
+- ```b``` - is an independent ***copy*** of the list inside ```list()```.
+
+#### Interesting facts
+- While ```=``` just copies the referents (both variables will reference and change the same object), there are 3 ways to create a copy of a list: 
+  - Via [cut (```a[:]```)](#general-2)
+  - Via [```list()```](#list)
+  - Via [```copy()```](#copy-count-index-reverse-sort)
+- [```a.sort()```](#copy-count-index-reverse-sort) - sort the current list (returns nothing (```None```)), [```sorted(a)```](#len-min-max-sum-sorted) - returns sorted list (does not change the original one).
 
 ### Service functions, operators, methods
-#### len()
+#### len(), min(), max(), sum(), sorted()
+```python
+a = list("number of letters")
+print(len(a))       # 17
+b = [1,2,3,4,5,6,7,8,9,0,-1,-2,-3,1,2,3]
+print(min(b))       # -3
+print(max(b))       # 9
+print(sum(b))       # 45
+c = sorted(b)       
+print(b)            # [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, -1, -2, -3, 1, 2, 3]
+print(c)            # [-3, -2, -1, 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9]
+c=sorted(b, reverse=True)
+print(c)            # [9, 8, 7, 6, 5, 4, 3, 3, 2, 2, 1, 1, 0, -1, -2, -3]
+
+print(max(a))       # 'u'
+print(min(a))       # ' '
+print(sum(a))       # error
+print(sorted(a))    # [' ', ' ', 'b', 'e', 'e', 'e', 'f', 'l', 'm', 'n', 'o', 'r', 'r', 's', 't', 't', 'u']
+```
+
+#### Operators 
+```+```, ```*```, ```in```, ```not in```, ```del```.
+```python
+a = [1,2,3]
+b = [4,5,6]
+print(a + b)        # [1, 2, 3, 4, 5, 6]
+print(a + 4)        # error
+print(a + [4])      # [1, 2, 3, 4]
+print(a + [True])   # [1, 2, 3, True]
+print(a * 3)        # [1, 2, 3, 1, 2, 3, 1, 2, 3]
+print(a * 3.4)      # error
+
+c = ['me', 'you', 'knife', 1986, True, 5.55]
+print('you' in c)       # True
+print(1986 in c)        # True
+print(1986 not in c)    # False
+
+del(c[1])
+print(c)                # ['me', 'knife', 1986, True, 5.55]
+```
+
+#### append(), insert(), extend(), remove(), pop(), clear()
+- ```append()```, ```insert()```, ```extend()```, ```remove()``` return nothing (```None```).
+- ```pop()``` returns popped element.
+```python
+a = [1,2,3]
+a.append(4)
+print(a)            # [1, 2, 3, 4]
+a.append([5,6])
+print(a)            # [1, 2, 3, 4, [5, 6]]
+
+a.insert(2,5)
+print(a)            # [1, 2, 5, 3, 4, [5, 6]]
+
+a.extend([7,8,5,True])
+print(a)            # [1, 2, 5, 3, 4, [5, 6], 7, 8, 5, True]
+
+a.remove(5)
+print(a)            # [1, 2, 3, 4, [5, 6], 7, 8, 5, True]
+a.remove(5)
+print(a)            # [1, 2, 3, 4, [5, 6], 7, 8, True]
+a.remove(5)         # Error (can't remove if it is not it the list)
+a.remove(True)
+print(a)            # [2, 3, 4, [5, 6], 7, 8, True]
+a.remove(True) 
+print(a)            # [2, 3, 4, [5, 6], 7, 8]
+
+b = a.pop()
+print(a)            # [2, 3, 4, [5, 6], 7]
+print(b)            # 8
+b = a.pop(2)
+print(a)            # [2, 3, [5, 6], 7]
+print(b)            # 4
+#*
+
+a.clear()
+print(a)            # []
+```
+- ```pop()``` can pop any element via index (default - last).
+
+#### copy(), count(), index(), reverse(), sort()
+- ```count()``` - counts amount of elements with the set value.
+- ```index()``` - return an index of the set element (the first one).
+  - As the second argument the element from which to search from can be set.
+- ```reverse()``` - reverse elements in the ***same*** list.
+- ```sort()``` - sort elements in the ***same*** list.
+  - Can't sort if the list has different types in it (the types must have a comparison rules).
+
+```python
+a = [1,2,3]
+b = a.copy()
+# *
+
+a.count(1)              # 1
+a.count(2)              # 1
+a.count(4)              # 0
+a.extend([1,1,1,1])
+a.count(1)              # 5
+
+print(a)                #[1, 2, 3, 1, 1, 1, 1]
+a.index(1)              # 0
+a.index(2)              # 1
+a.index(-5)             # Error
+a.index(1,2)            # 3
+
+a.reverse()
+print(a)                # [1, 1, 1, 1, 3, 2, 1]
+
+a.sort()
+print(a)                # [1, 1, 1, 1, 1, 2, 3]
+a.sort(reverse=True)
+print(a)                # [3, 2, 1, 1, 1, 1, 1]
+a.append(True)
+a.sort()
+print(a)                # [1, 1, 1, 1, 1, True, 2, 3]
+a.append('Rock')
+a.sort()                # Error
+```
+- ```copy()``` creates an independent ***copy*** of the list.
+
+### Use examples
+#### Nested lists
+```python
+line = [1,5,15,25,0]
+matrix = [line, line, line, line, line]
+line[0] = 8
+print(matrix)
+# [[8, 5, 15, 25, 0], [8, 5, 15, 25, 0], [8, 5, 15, 25, 0], [8, 5, 15, 25, 0], [8, 5, 15, 25, 0]]
+line[0] = 1
+matrix = [line[:], line[:], line[:], line[:], line[:]]
+line[0] = 8
+print(matrix)  
+# [[1, 5, 15, 25, 0], [1, 5, 15, 25, 0], [1, 5, 15, 25, 0], [1, 5, 15, 25, 0], [1, 5, 15, 25, 0]] 
+print(matrix[0])                    # [1, 5, 15, 25, 0]
+print(matrix[0][0])                 # 1
+
+matrix[2] = [0,0,0,0,0]             # removes the 3rd line are set the new one instead
+matrix[2] = [1] * 5                 # removes the 3rd line are set the new one instead    
+matrix[2][:] = [1] * 5              # changes elements of the 3rd line
+
+not_squared = [['two', 'words'], ['here', 'three', 'words'], ['and','here','four','words']]
+complex_structure = [[[1,2],True],["words","system"]]
+print(complex_structure[0][0][1])   # 2
+```
+
+## Conditions
+- Condition blocks are defined by **4 spaces**.
+```python
+z = float(input("Enter z: "))
+if z < 5 and z > 0:
+    print("z is less than 5")
+    print("z is positive")
+elif 5 <= z <= 10:
+    print("z is greater or equal to 5 and less or equal to 10")
+    print("do something else here")
+elif z > 10:
+    print("z is greater than 10")
+else:
+    print("z is less than 0 or equal to 0")
+print("end of block here")
+```
+### Ternary operator 
+```python
+z = float(input("Enter a: "))
+z = float(input("Enter b: "))
+res = a if a > b else b
+print(res)                  # largest number
+
+s = 'python'
+par = 'upper'
+s = s.upper() if par == 'upper' else s.lower()
+print(s)                    # PYTHON
+
+a = 5
+b = 8
+arr = [1,2,a if (a>b) else b, 6, 7]
+print(arr)                  # [1, 2, 8, 6, 7]
+
+line = "a - " + ("even" if a%2 == 0 else "odd") + " number"
+print(line)                 # a - odd number
+```
+
+## Loops
+
+
