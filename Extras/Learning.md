@@ -5,7 +5,6 @@
   - **physics**
   - **computer science**
 
-
 ## Inside navigation
 The repository's goal is to learn, so it is logical that plenty of information is stored inside, and you can get to it via table of contents in the [main README](/README.md).
 - Nevertheless, many topic related links that can be used for better explanation and extra information are stored in links section in other files in the current repository.
@@ -19,7 +18,7 @@ The repository's goal is to learn, so it is logical that plenty of information i
   - [CI/CD](/DevOps/CICD_notes.md#links)
   - [Tg bot](/Extras/TgBot/TgBot_notes.md#links)
 - ML&AI (**computer science**): [links list](/ML_AI/ML&AI.md#links)
-
+- Algorithms (**computer science**): [links list](/General/Algorithms/Algorithms.md#links)
 
 ## Links
 Links to outside sources.
@@ -27,3 +26,7 @@ Links to outside sources.
   - [Main website](https://www.3blue1brown.com/#lessons)
   - [YouTube](https://www.youtube.com/@3blue1brown)
 - [!] Developer's roadmap - roadmap for different developer's goals (**computer science**): [Link](https://roadmap.sh)
+- [!] Time complexity:
+  - Wiki (EN, RU, other): [Link](https://en.wikipedia.org/wiki/Time_complexity)
+  - Habr (RU): [Link](https://habr.com/ru/articles/782608/)
+- [!] Mod math (циклические вычеты по модулю)

@@ -1,23 +1,38 @@
 # Some sort of dictionary 
 
 ## Contents:
-- [Contents:](#contents)
-- [Imperative programming](#imperative-programming)
-- [Declarative programming](#declarative-programming)
-- [Object-oriented programming](#object-oriented-programming)
-  - [Main principals of the OOP:](#main-principals-of-the-oop)
-- [Abstraction](#abstraction)
-- [Encapsulation](#encapsulation)
-  - [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
-- [Layers](#layers)
-- [Properties](#properties)
-- [SOLID](#solid)
-  - [Recap:](#recap)
-    - [SOLID с примерами на Java (//❗❗)](#solid-с-примерами-на-java-)
-  - [Extra OOP rules](#extra-oop-rules)
-- [Polymorphism](#polymorphism)
-- [Framework](#framework)
-- [Design patterns](#design-patterns)
+- [Some sort of dictionary](#some-sort-of-dictionary)
+  - [Contents:](#contents)
+  - [Imperative programming](#imperative-programming)
+  - [Declarative programming](#declarative-programming)
+  - [Object-oriented programming](#object-oriented-programming)
+    - [Main principals of the OOP:](#main-principals-of-the-oop)
+  - [Abstraction](#abstraction)
+    - [C++ Example](#c-example)
+  - [Encapsulation](#encapsulation)
+    - [Encapsulation vs Abstraction](#encapsulation-vs-abstraction)
+  - [Layers](#layers)
+    - [C++ Example](#c-example-1)
+  - [Properties](#properties)
+  - [SOLID](#solid)
+    - [The acronym SOLID stands for:](#the-acronym-solid-stands-for)
+      - [S - Single Responsibility Principle (SRP):](#s---single-responsibility-principle-srp)
+      - [O - Open/Closed Principle (OCP):](#o---openclosed-principle-ocp)
+      - [L - Liskov Substitution Principle (LSP):](#l---liskov-substitution-principle-lsp)
+      - [I - Interface Segregation Principle (ISP):](#i---interface-segregation-principle-isp)
+      - [D - Dependency Inversion Principle (DIP):](#d---dependency-inversion-principle-dip)
+    - [Recap:](#recap)
+      - [SOLID с примерами на Java (//❗❗)](#solid-с-примерами-на-java-)
+    - [Extra OOP rules](#extra-oop-rules)
+      - [Sureness](#sureness)
+  - [Polymorphism](#polymorphism)
+    - [Types of Polymorphism](#types-of-polymorphism)
+    - [Benefits of Polymorphism](#benefits-of-polymorphism)
+  - [Framework](#framework)
+    - [Examples](#examples)
+  - [Design patterns](#design-patterns)
+    - [More](#more)
+  - [Hash tables](#hash-tables)
 
 
 ## Imperative programming
@@ -261,5 +276,8 @@ Frameworks are ready-made software structures that handle the general logic of a
 ## Design patterns
 Design patterns are general, reusable solutions to common problems that appear in software design. They are not code, but templates or concepts that guide how you structure your classes, objects, and interactions (best practices discovered by many developers over time). They help make your code more flexible, maintainable, and understandable.
 
-### [More](/General/elements/Design_patterns.md)
+### [More](/General/parts/Design_patterns.md)
+
+## [Hash tables](/General/Algorithms/parts/Hash.md)
+
 
