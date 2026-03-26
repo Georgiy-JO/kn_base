@@ -4686,7 +4686,7 @@ class ClassName{
 - **Unordered Associative Containers**: These containers do not store elements as "key-value" pairs and do not guarantee order.
   - Examples:
     - **`std::unordered_set`**: A container that stores unique elements without guaranteeing order.
-    - **`std::unordered_map`**: A container that stores "key-value" pairs without guaranteeing order.
+    - **`std::unordered_map`**: A container that stores "key-value" pairs without guaranteeing order (keys are unique).
 
 #### Examples of using STL Containers
 
