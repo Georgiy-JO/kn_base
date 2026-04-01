@@ -46,6 +46,14 @@ int main(){
 ![ScShot_1](/General/Algorithms/media/hash_1.png "Resizing hash table")  
 
 
+### Hash tables in languages
+Many programming languages use hash tables for some included complex data types and classes.
+#### Example 
+- **C++**: *std::unordered_map*, *std::unordered_set*, *std::unordered_multimap*, *std::unordered_multiset*.
+- **Python**: *dict*, *set*.
+- **Java**: *HashMap*, *HashSet*.
+- **Go**: *map*.
+
 
 
 

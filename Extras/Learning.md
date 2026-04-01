@@ -30,3 +30,4 @@ Links to outside sources.
   - Wiki (EN, RU, other): [Link](https://en.wikipedia.org/wiki/Time_complexity)
   - Habr (RU): [Link](https://habr.com/ru/articles/782608/)
 - [!] Mod math (циклические вычеты по модулю)
+- [!] Binary search
