@@ -53,8 +53,3 @@ Many programming languages use hash tables for some included complex data types 
 - **Python**: *dict*, *set*.
 - **Java**: *HashMap*, *HashSet*.
 - **Go**: *map*.
-
-
-
-
-

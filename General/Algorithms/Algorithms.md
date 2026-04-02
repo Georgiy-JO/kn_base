@@ -10,14 +10,17 @@ Check out:
 
 ## [Prefix sum](/General/Algorithms/parts/Prefix_sum.md)
 
+## [Two pointers](/General/Algorithms/parts/Two_pointers.md)
+
 
 ## Links 
 - Yandex guides (RU):
   - [1]
-  - [Sets]
+  - Sets
     - [Hash tables](https://www.youtube.com/watch?v=7jkSFyMN0Ks)
     - [Sets task examples](https://www.youtube.com/watch?v=UaKPFq1qEI8)
-  - [3]
+  - Different approaches
     - [Prefix sums](https://youtu.be/70WUDkSwk8M)
+    - [Two pointers](https://youtu.be/HQs6o7do4Ok)
   - [4]
 
