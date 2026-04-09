@@ -280,4 +280,9 @@ Design patterns are general, reusable solutions to common problems that appear i
 
 ## [Hash tables](/General/Algorithms/parts/Hash.md)
 
+## Standard data structures
+### [Stack](/General/Data_structures/Stanard_data_structures.md#stack)
+### [Queue](/General/Data_structures/Stanard_data_structures.md#queue)
+### [Deque](/General/Data_structures/Stanard_data_structures.md#deque)
+
 
