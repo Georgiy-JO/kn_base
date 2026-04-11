@@ -56,10 +56,9 @@ Double ended queue.
   - Creating a *deque* of candidates to the minimum:
     - if new element is smaller than the last element of the *deque*:
       - remove the last element from the *deque* (repeat until all larger elements are removed);
-      - **push** the new element to the *deque*;
+    - **push** the new element to the *deque* (we do it anyway);
     - if the element that is removed because we moved the window is the first element of the *deque*:
       - remove the first element from the *deque*;
-    - otherwise: do nothing.
   - As the result we will have the growing sequence in the *deque*, so the smallest element of the window is the first element of the *deque*.
   - move the window and repeat.
 - Output: the smallest elements for all windows.
