@@ -284,5 +284,8 @@ Design patterns are general, reusable solutions to common problems that appear i
 ### [Stack](/General/Data_structures/Stanard_data_structures.md#stack)
 ### [Queue](/General/Data_structures/Stanard_data_structures.md#queue)
 ### [Deque](/General/Data_structures/Stanard_data_structures.md#deque)
+### [Set](/General/Data_structures/Stanard_data_structures.md#set) (FINISH!!!!!)
+### [Dictionary](/General/Data_structures/Stanard_data_structures.md#dictionary) (FINISH!!!!!)
+### [Array](/General/Data_structures/Stanard_data_structures.md#array) (FINISH!!!!!)
 
 

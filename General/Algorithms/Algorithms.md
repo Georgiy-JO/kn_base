@@ -14,6 +14,13 @@ Check out:
 
 ## [Postfix notation](/General/Algorithms/parts/Postfix_notation.md)
 
+## Extra
+### [Other algorithms](/General/Algorithms/parts/Life_hacks.md)  
+- Ring buffer
+### [Data structures](/General/Data_structures/Stanard_data_structures.md)  
+There are some usage examples that can be related to algorithms.
+
+
 
 ## Links 
 - Yandex guides (RU):

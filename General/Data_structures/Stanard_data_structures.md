@@ -2,12 +2,12 @@
 Data can be structures in many ways. Some ways are better for one situation others for another. Some can be used in different algorithm solutions.
 
 ## Stack
-- **FIFO** - First in - First out - the element that was added last will be the first to be taken.
+- **LIFO** - Last in - First out - the element that was added last will be the first to be taken.
   - Other elements can't be accessed or taken.
-- Standard ways: ```stack.push(x)```(adds new element to the end of the stack), ```stack.pop()```(removes last element of the stack), ```x=stack.top()```(returns last element of the stack).
+- Standard ways: ```stack.push(x)```(adds new element to the end of the *stack*), ```stack.pop()```(removes last element of the *stack*), ```x=stack.top()```(returns last element of the *stack*).
 
 ### Example 
-- **C++**: ```std::stack```
+- **C++**: ```std::stack```.
 - **Python**: ```list``` is used instead of stack.
 
 ### Usage examples
@@ -30,11 +30,41 @@ Data can be structures in many ways. Some ways are better for one situation othe
 
 
 ## Queue
-- **LIFO** - Last in - First out - the element that was added first will be the first to be taken.
+- **FIFO** - First in - First out - the element that was added first will be the first to be taken.
+- Standard ways: ```queue.push(x)```(adds new element to the end of the *queue*), ```queue.pop()```(removes first element of the *queue*), ```x=stack.front()```(returns first element of the *queue*).
 
+### Example 
+- **C++**: ```std::queue```.
+- **Python**: ```from queue import Queue```.
 
 
 ## Deque
+Double ended queue.
+- Elements can be added and removed from both ends.
+- Standard ways: ```deque.push_back(x)```(adds new element to the end of the *deque*), ```deque.push_front(x)```(adds new element to the beginning of the *deque*), ```deque.pop_back()```(removes last element of the *deque*), ```deque.pop_front()```(removes first element of the *deque*), ```x=deque.back()```(returns last element of the *deque*), ```x=deque.front()```(returns first element of the *deque*).
+
+### Example 
+- **C++**: ```std::deque```.
+- **Python**: ```from collections import deque```.
+
+### Usage examples
+#### Minimum in window
+- Input: array of ``n`` numbers.
+- Task: for every element window length ``k`` find the smallest element in it.
+- Main idea: go through the array from left to right, use *deque* to keep all the candidates to the minimum for future windows.
+- Logic:
+  - Creating a *deque* of candidates to the minimum:
+    - if new element is smaller than the last element of the *deque*:
+      - remove the last element from the *deque* (repeat until all larger elements are removed);
+      - **push** the new element to the *deque*;
+    - if the element that is removed because we moved the window is the first element of the *deque*:
+      - remove the first element from the *deque*;
+    - otherwise: do nothing.
+  - As the result we will have the growing sequence in the *deque*, so the smallest element of the window is the first element of the *deque*.
+  - move the window and repeat.
+- Output: the smallest elements for all windows.
+
+## Set
 
 ## Dictionary
 
