@@ -24,7 +24,10 @@ There are some usage examples that can be related to algorithms.
 
 ## Links 
 - Yandex guides (RU):
-  - [1]
+  - Basics
+    - [Complexity of algorithms](https://disk.yandex.ru/d/iQbfEuLDTFOjqg/B1_T_1_L_draft3.mp4)
+    - [Self testing](https://disk.yandex.ru/d/iQbfEuLDTFOjqg/B1_T_2_L_draft3.mp4)
+    - [Automatization of tests](https://disk.yandex.ru/d/iQbfEuLDTFOjqg/B1_T_3_L_draft3.mp4)
   - Sets
     - [Hash tables](https://www.youtube.com/watch?v=7jkSFyMN0Ks)
     - [Sets task examples](https://www.youtube.com/watch?v=UaKPFq1qEI8)
