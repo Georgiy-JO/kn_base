@@ -22,6 +22,7 @@
     - [Max values](#max-values)
   - [Include guard.](#include-guard)
   - [C wrapper](#c-wrapper)
+  - [Data size and max / min](#data-size-and-max--min)
   - [**Lvalue** and **Rvalue**     (//❗❗)](#lvalue-and-rvalue-----)
   - [Precompiled header  (//❗❗)](#pch--)
   - [For each loop](#for-each-loop)
@@ -162,11 +163,8 @@ Here are several most frequently used code file types.
 | \<ctime>      | time related functions                                             |
 | \<iomanip>    | facilities for manipulating the input and output format of streams |
 | \<memory>     | [smart pointers](#smart-pointers-hint)                             |
-| \<vector>     | dynamic array ([STL-c.](#sequence-containers))                     |
-| \<map>        | pair data ([STL-c.](#associative-containers))                      |
 | \<algorithm>  | [STL algorithms](#stl-algorithms)                                  |
 | \<stdexcept>  | standard errors list                                               |
-| \<string>     | extra for strings                                                  |
 | \<fstream>    | to work with [files](#files)                                       |
 | \<random>     | [to generate random numbers](#random-numbers)                      |
 | \<sstream>    | [transform line into stream like object](#input---output)          |
@@ -174,6 +172,21 @@ Here are several most frequently used code file types.
 | \<chrono>     | It provides types and utilities to [work](/C&C++/materials/CPP/time_example/timer.cpp) with durations, time points, and clocks in a type-safe and precise way|
 | \<limits>     | maximums, minimums, etc. of data types                             |
 | \<filesystem> | provides a platform-independent API for [working with the file system](#other-file-related-actions): paths, files, directories, and file metadata |
+| \<vector>     | dynamic array ([STL-c.](#stl-containers))                     |
+| \<map>        | pair data ([STL-c.](#stl-containers))                      |
+| \<string>     | extra for strings                                                  |
+| \<set>        | set, multiset  ([STL-c.](#stl-containers)) |
+| \<deque>      | double-ended queue ([STL-c.](#stl-containers))    |
+| \<queue>      | queue ([STL-c.](#stl-containers)) |
+| \<stack>      | stack ([STL-c.](#stl-containers)) |
+| \<list>       | list ([STL-c.](#stl-containers)) |
+| \<array>      | array ([STL-c.](#stl-containers)) |
+| \<forward_list> | forward list ([STL-c.](#stl-containers)) |
+| \<unordered_map> | unordered map, unordered_multimap ([STL-c.](#stl-containers))  |
+| \<unordered_set> | unordered set, unordered_multiset ([STL-c.](#stl-containers))  |
+| \<bits/stdc++.h>| not standard for C++ in general, works only with GCC compiler (does not exists in clang, MSVC, etc). Used for contests mostly, because is basically a huge header that includes many other headers (\*) |
+- (\*) Includes: <iostream>, <iomanip>, <fstream>, <vector>, <list>, <deque>, <array>, <forward_list>, <stack>, <queue>, <priority_queue>, <algorithm>, <numeric>, <string>, <cstring>, <map>, <set>, <unordered_map>, <unordered_set>, <bitset>, <complex>, <cmath>, <cstdio>, <cstdlib>, <ctime>, <iterator>, <utility>, <functional>, etc - slows down compiling and makes the resulting file larger.  
+
 ### Third party
 
 | library / framework            | Description                                                                                                                                                                                                                                                  | Installation                                                             |
@@ -186,53 +199,37 @@ Here are several most frequently used code file types.
 ## General (+ Situations and examples)
 
 ### Tips
-- Assigning double value to an int variable truncates it
-    ```C++
-    int a = 3.7; // a is 3
-    int a = 5.5; // a is 5
-    int a = -5.5; // a is 5
-    ```
+
+#### Notes 
+- `nullptr` - *NULL* pointer;    
 - `const` keyword is used to declare a constant variable, it can be used with functions to prevent modification of the function's parameters (secure the data).
     ```C++
     void printer (const std::string &data_1, const int &data_2){...}
     ```
-- `sizeof` operator returns the size of a variable or data type in bytes, it can be used with arrays to get the total size of the array in bytes
+- `sizeof` operator returns the size of a variable or data type in bytes, it can be used with arrays to get the total size of the array in bytes (see [Data sizes](#data-size-and-max--min)).
+- If local and global variable share a same name (see [Namespaces](#namespaces))
 - If a function is described after the `main` function, it must be declared before it.
-- If local and global variable share a same name, function will use the local version, unless you use `::` before the variable name:
-    ```C++
-    int a = 5;
-    int main(){
-        int a = 10;
-        std::cout << a << std::endl; // prints 10
-        std::cout << ::a << std::endl; // prints 5
-    }
-    ```
-- ways to pass an array into a function (both actually receive a pointer):
+- Input and output can be fasten up (see [input & output](#speed-up-input--output))
+- `++i` is faster than `i++`
+  - `++i` - Increment first, then use
+  - `i++` - Use first, then increment
+- Ways to pass an array into a function (both actually receive a pointer):
     - 1:
-    ```C++ 
-    void fun1(){
-        //...
-        fun2(array);
-    }
-    void fun2(double passed_array[]){/*...*/ }
-    ```
+        ```C++ 
+        void fun1(){
+            //...
+            fun2(array);
+        }
+        void fun2(double passed_array[]){/*...*/ }
+        ```
     - 2:
-    ```C++ 
-    void fun1(){
-        //...
-        fun2(array);
-    }
-    void fun2(double* passed_array){/*...*/ }
-    ```
-- `nullptr` - *NULL* pointer;
-- `__cplusplus` - defined (exist) for g++ compiller.
-
-#### Conversion
-- **std::to_string** converts numbers to string.
-  ```C++
-  int x = 42;
-  std::string s = std::to_string(x); // "42"
-  ```
+        ```C++ 
+        void fun1(){
+            //...
+            fun2(array);
+        }
+        void fun2(double* passed_array){/*...*/ }
+        ```
 
 #### Suppress function's input
 Useful if function has input parameter, but it is not used inside.
@@ -242,29 +239,12 @@ Useful if function has input parameter, but it is not used inside.
         return 5+6;
     }
 ```
-#### Max values
-Library `#include <limits>` has different instruments to get the maximum values if data types and work with those.
-- **#1**
-    ```C++
-    std::numeric_limits<float>::max();
-    ```
-- **#2**
-    ```C++
-    float DoubleToFloat(const double input) {
-        if (input >= static_cast<double>(std::numeric_limits<float>::max()))
-            return std::numeric_limits<float>::max();
-        else if (input <= static_cast<double>(std::numeric_limits<float>::lowest()))
-            return std::numeric_limits<float>::lowest();
-        else if (input > 0 &&
-                input <= static_cast<double>(std::numeric_limits<float>::min()))
-            return std::numeric_limits<float>::min();
-        else if (input < 0 && input >= static_cast<double>(
-                                            std::numeric_limits<float>::min() * (-1)))
-            return std::numeric_limits<float>::min() * (-1);
-        else
-            return static_cast<float>(input);
-    }
-    ```
+#### [] vs {} vs () in declaration
+| Declaration | What creates | Size | Content | Type of variable |
+| --- | --- | ---| --- | ---| 
+|vector<int> a(5); |  Single vector         |    5   |    "{0,0,0,0,0}"  |     std::vector<int>|
+|vector<int> a{5}; |  Single vector         |    1    |   {5}            |     std::vector<int>|
+|vector<int> a[5]; |  Array of 5 vectors    | —     |  5 empty vectors |  std::vector<int>[5]|
 
 ### Include guard.
 It’s a common C/C++ pattern to prevent multiple inclusions of the same header file, which can cause redefinition errors. The typical structure looks like this:
@@ -289,6 +269,7 @@ To use C code inside a C++ project, you must wrap the C headers/functions so the
   - Never put it inside .c-files.
 - No changes to compiled C object files (.o).
 - No special linker flags needed, as long as you compile the C code with a C compiler and C++ code with C++ compiler.
+- `__cplusplus` - defined (exist) for g++ compiller.
 
 #### Syntaxes
 - Adjust C header:
@@ -611,6 +592,68 @@ int main(){
 ```
 
 ## Datatype +
+
+### Data size and max / min
+#### Values for 64-bit systems
+| Type / Container                   | Size (bites)       | Range                                         | Extra storage                             |
+|------------------------------------|--------------------|-----------------------------------------------|-------------------------------------------|
+| `bool`                             | 1                  | 0..1                                          | —                                         |
+| `char`                             | 1                  | -128..127                                     | —                                         |
+| `unsigned char`                    | 1                  | 0..255                                        | —                                         |
+| `short`                            | 2                  | -32768..32767                                 | —                                         |
+| `unsigned short`                   | 2                  | 0..65535                                      | —                                         |
+| `int`                              | 4                  | -2 147 483 648 .. 2 147 483 647               | —                                         |
+| `unsigned int`                     | 4                  | 0 .. 4 294 967 295                            | —                                         |
+| `long`                             | 8                  | -9.22e18..9.22e18                             | —                                         |
+| `long long`                        | 8                  | -9.22e18..9.22e18                             | —                                         |
+| `unsigned long long`               | 8                  | 0..1.84e19                                    | —                                         |
+| `float`                            | 4                  | ≈1.18e-38..3.40e38                            | —                                         |
+| `double`                           | 8                  | ≈2.23e-308..1.80e308                          | —                                         |
+| `long double`                      | 16                 | *Depent on the platform*                      | —                                         |
+| Pointer (`T*`)                     | 8                  | —                                             | —                                         |
+| T& (Reference / L-value reference) | 8                  | —                                             | —                                         |
+| T&& (R-value reference)            | 8                  | —                                             | —                                         |
+| `std::vector<T>`                   | 24                 | —                                             | Dynamic array (heap)                      |
+| `std::string`                      | 32                 | —                                             | SSO (\*) + heap                           |
+| `std::array<T, N>`                 | `N×sizeof(T)`      | —                                             | - (static array)                          |
+| `std::pair<T1,T2>`                 | сумма + padding    | —                                             | —                                         |
+| `std::deque<T>`                    | 80                 | —                                             | blocks ≈512 bytes                         |
+| `std::list<T>`                     | 24                 | —                                             | 24 bytes per element (2 pointers)         |
+| `std::forward_list<T>`             | 8                  | —                                             | 8 bytes per element                       |
+| `std::set<T>`                      | 24                 | —                                             | ≈32 bytes per element                     |
+| `std::map<Key, Value>`             | 24                 | —                                             | ≈40 bytes per element                     |
+| `std::unordered_set<T>`            | 56                 | —                                             | Hash-table                                |
+| `std::unordered_map<Key, Value>`   | 56                 | —                                             | Hash-table                                |
+
+- (\*) **Small String Optimization** - Instead of always allocating memory on the heap for small strings, stores short strings inside its own object (in the stack memory of the string itself). This avoids expensive heap allocation for small strings.  
+
+
+#### Usage in code 
+Library `#include <limits>` has different instruments to get the maximum values if data types and work with those.  
+
+Examples:  
+- **#1**  
+    ```C++
+    std::numeric_limits<float>::max();
+    ```
+- **#2 (with extra caution)**
+    ```C++
+    float DoubleToFloat(const double input) {
+        if (input >= static_cast<double>(std::numeric_limits<float>::max()))
+            return std::numeric_limits<float>::max();
+        else if (input <= static_cast<double>(std::numeric_limits<float>::lowest()))
+            return std::numeric_limits<float>::lowest();
+        else if (input > 0 &&
+                input <= static_cast<double>(std::numeric_limits<float>::min()))
+            return std::numeric_limits<float>::min();
+        else if (input < 0 && input >= static_cast<double>(
+                                            std::numeric_limits<float>::min() * (-1)))
+            return std::numeric_limits<float>::min() * (-1);
+        else
+            return static_cast<float>(input);
+    }
+    ```
+
 
 ### Element initialization
 C++ allows different ways of initialization of an element.
@@ -1109,6 +1152,19 @@ There are several types of explicit type conversion in c++:
 ```C++
 int a = (int)3.14; // C-style explicit cast
 ```
+- Assigning double value to an int variable truncates it
+    ```C++
+    int a = 3.7; // a is 3
+    int a = 5.5; // a is 5
+    int a = -5.5; // a is 5
+    ```
+
+#### Cast to string  
+**std::to_string** converts numbers to string.
+```C++
+int x = 42;
+std::string s = std::to_string(x); // "42"
+```
 
 #### Type Casting - `const_cast`
 Used to add or remove the `const`(and `volatile`) qualifier from a variable.
@@ -1264,6 +1320,8 @@ Namespace is a declarative region that provides a scope to the identifiers (such
         std::cout<<::global_2<<std::endl;   //10
         std::cout<<global_2<<std::endl;     //15
     }
+
+    
 - **Global namespace** is a default namespace of the program for those global variables, structures, etc. that do not have any namespace set.
 - `using` - allows to use the names from the namespace without prefixing them with the namespace name.
 
@@ -1918,6 +1976,32 @@ std::cin >> age;
 //or 
 std::cin >> name >> age;
 ```
+#### `get()` vs `getc()` vs `getchar()`
+
+| Feature                  | `cin.get()` / `fs.get()`       | `getc(FILE*)`             | `getchar()`                  |
+|--------------------------|--------------------------------|---------------------------|------------------------------|
+| Language                 | C++                            | C                         | C                            |
+| Belongs to               | `istream` (C++ streams)        | Standard C I/O            | Standard C I/O               |
+| Used with                | `cin`, `ifstream`, `fstream`   | `FILE*`                   | Always `stdin`               |
+| Returns                  | `int` (character)              | `int` (character)         | `int` (character)            |
+| On EOF                   | `EOF`                          | `EOF`                     | `EOF`                        |
+| Speed                    | Slow (by default)              | Fast                      | Fast                         |
+| Buffering                | Can be tied with `cout`        | Fully buffered            | Fully buffered               |
+
+Examples: 
+```c++
+char ch;
+cin.get(ch);           // read one character into ch
+ch = cin.get();        // read and return as int
+
+ifstream fs("file.txt");
+ch = fs.get();         // read from file
+
+FILE* f = fopen("file.txt", "r");
+int ch = getc(f);      // read from any FILE* 
+
+int ch = getchar();    // always reads from stdin
+```
 
 #### Getline
 Reads until *new line break* or set character.
@@ -2046,6 +2130,19 @@ std::cout << "You have: " << std::setprecision(8) << std::fixed << balance << st
 - `std::fixed` - sets the floating-point format to fixed-point notation (will add zeros at the end of the decimal part if needed for the set precision).
 - `std::setw(12)` - set the whole length of the output, will not cut output if it is longer, but will add spaces in front if it is shorter.
     
+### Speed up input & output   
+```c++
+std::ios::sync_with_stdio(false);       //#1
+std::cin.tie(nullptr);                  //#2
+```
+1. By default, C++ `cin` and `cout` are synchronized with the old C functions (`scanf` and `printf`). This synchronization makes them slow. This line turns off the synchronization.
+    - You cannot safely mix cin/cout with scanf/printf after using this.
+    - often makes 2–5x faster
+2. By default, `cin` is tied to `cout`. This means before every `cin`, `cout` is automatically flushed (output is printed immediately). This line breaks the tie (nullptr means no tie).
+    - Further improves speed when doing a lot of input.
+
+
+
 ### Manipulators
 In C++, manipulators are special functions or objects that are used to modify the behavior of input and output streams. They allow you to change the formatting and presentation of data when it is sent to or read from streams, such as `std::cout` for [output](#output) and `std::cin` for [input](#input).
 - Manipulators can change various aspects of stream formatting, such as precision, width, alignment, fill characters, etc.
@@ -2064,6 +2161,7 @@ In C++, manipulators are special functions or objects that are used to modify th
 | `std::setw(n)`                                   | Sets the minimum field width for the next output operation to n. If the output is shorter than this width, it will be padded (default is with spaces). | \<iomanip>  |
 | `std::setfill`                                   | Sets the fill character used when padding output to the specified width                                                                                | \<iomanip>  |
 | `std::left` <br>`std::right` <br>`std::internal` | Control the alignment of output within a specified width                                                                                               | \<iomanip>  |
+
 
 #### Example: 
 ```C++
@@ -2109,8 +2207,13 @@ Some basic methods to work with files.
 | `close()`             | to close file                                                                     | [#1](#1-files) |
 | `is_open()`           | to check if file is open                                                          | [#1](#1-files) |
 | `eof()`               | return **true** when we get to the end of the file                                | [#4](#4-files) |
-| `write(...)`          | straight writing data to file (byte to byte)                                      | [#5](#5-files) |
-| `read(...)`           | straight reading of data from file to memory (byte to byte)                       | [#5](#5-files) |
+| `write(...)`          | straight writing data to file (byte to byte)                                      | [#5](#5-files) <br> [#7](#7-files) |
+| `read(...)`           | straight reading of data from file to memory (byte to byte)                       | [#5](#5-files) <br> [#7](#7-files) |
+| `seekg(pos)`          | moves the **get pointer** (reading position) to a specific position               | [#7](#7-files) <br> [#9](#9-files) |
+| `tellg()`             | returns the current position of the **get pointer** (in bytes)                    | [#9](#9-files) |
+| `good()`              | returns `true` if the stream is in good state (no errors)                         | [#8](#8-files) |
+| `fail()`              | returns `true` if an operation failed (logical error)                             | [#8](#8-files) |
+| `bad()`               | returns `true` if a serious (fatal) error occurred (for examplethe disk if full)  | [#8](#8-files) |   
 - `write((char*)<pointer_to_beginning_of_data>,<size_of_data_to_write>)`
 - Writing data to file in binary form is the straight copying the memory. It takes less space.
 - `read((char*)<pointer_to_place_to_save>,<size_of_data_to_read>)` / `read((char*)<pointer_to_variable>,<size_of_data_to_read>)`
@@ -2126,13 +2229,16 @@ There are several modes of opening files. The particular mode can be chosen whil
 | `ios::app`    | to write to file <br> previous data will not be deleted  | `ifstream` <br>`ofstream` <br> `fstream`  |
 | `ios::ate`    | to open file and set the position to the end of file     | `ifstream` <br> `ofstream` <br> `fstream` |
 | `ios::binary` | to open file in binary mode                              | `ifstream` <br> `ofstream` <br> `fstream` |
+| `ios::trunc`  | clear file                                               | `ifstream` <br> `ofstream` <br> `fstream` |
 - These are more of those.
 - The flags can be mixed.
 - Examples [#2](#2-files), [#3](#3-files)
 
 ### Input and Output of data
-Works the same way as for `cin`, `cout`, but with our new objects.
+Works the same way as for [`cin`, `cout`](#input---output), but with our new objects.
 - Examples [#4](#4-files)
+- [`getline(..)`](#getline), works the same way.
+- [`get()` and `getc`](#get-vs-getc-vs-getchar) 
 
 ### Examples
 #### #1 files
@@ -2232,8 +2338,91 @@ cout << endl;
 return 0;
 ```
 
-#### #6 file
+#### #6 files
 - Writing a structure to file binary way: [/C&C++/materials/CPP/example_2.cpp](/C&C++/materials/CPP/example_2.cpp)
+
+#### #7 files
+```c++
+using namespace std;
+fstream fs("test.txt", ios::in | ios::out | ios::trunc);
+
+// 1. put() - write one character
+fs.put('A');
+fs.put('B');
+fs.put('\n');
+
+// 2. write() - write multiple bytes
+const char* str = "Hello World!";
+fs.write(str, 12);           // write 12 characters
+
+// 3. Go back to beginning to read
+fs.seekg(0);
+
+// 4. read() - read into buffer
+char buf[100] = {0};
+fs.read(buf, 20);            // read up to 20 characters
+
+cout << "Read content: " << buf << endl;
+
+fs.close();
+
+```
+
+#### #8 files
+File Stream State Checking
+```c++
+using namespace std;
+ifstream fs("test.txt");
+
+if (!fs.is_open()) {
+    cout << "Failed to open file\n";
+    return 1;
+}
+
+string line;
+while (getline(fs, line)) {
+    cout << line << endl;
+}
+
+if (fs.eof())      cout << "Reached end of file\n";
+if (fs.good())     cout << "Stream is good\n";
+if (fs.fail())     cout << "Logical error occurred\n";
+if (fs.bad())      cout << "Critical (fatal) error occurred\n";
+
+fs.close();
+```
+
+#### #9 files
+```c++
+using namespace std;
+fstream fs("data.txt", ios::in | ios::out | ios::trunc);
+
+// Write some sample data
+fs << "Hello World!\n";
+fs << "This is line 2.\n";
+fs << "This is line 3.\n";
+fs << "This is line 4.\n";
+
+// === 1. Go to specific position (absolute) ===
+fs.seekg(0);                    // go to beginning
+string line;
+getline(fs, line);
+cout << "Position 0: " << line << endl;
+
+fs.seekg(14);                   // go to byte 14
+getline(fs, line);
+cout << "Position 14: " << line << endl;
+
+// === 2. Go to the end of the file ===
+fs.seekg(0, ios::end);          // go to the very end
+cout << "\nWe are at the end of the file.\n";
+
+// Get current position
+cout << "Current position: " << fs.tellg() << " bytes from beginning\n";
+
+fs.close();
+```
+
 
 ### C style way
 To work with files in C style way you can use ```#include <cstdio>```.
@@ -4665,7 +4854,7 @@ class ClassName{
 ## Standard Template Library
 
 ### STL containers 
-**Standard Template Library containers** are template classes provided by the C++ Standard Library that are used for storing and managing collections of objects. They offer convenient and efficient ways to work with data, including adding, removing, searching, and sorting elements.
+**Standard Template Library containers** are template classes provided by the C++ Standard Library that are used for storing and managing collections of objects. They offer convenient and efficient ways to work with data, including adding, removing, searching, and sorting elements. Theory obout those can be seen at [Standart data structures](/General/Data_structures/Stanard_data_structures.md).
 
 #### Main Categories of STL Containers  (❗***HINT***)
 - **Sequence Containers**: These containers store elements in a specific order. Elements can be accessed by index, and their order is preserved.
@@ -4675,7 +4864,9 @@ class ClassName{
     - **`std::deque`**: A double-ended queue that allows adding and removing elements from both the front and the back - ***double-ended queue***.
     - **`std::stack`**: Last-In-First-Out adaptor (based on `std::deque` container).
     - **`std::queue`**: First-In-First-Out adaptor (likely based on `std::deque` container).
+    - **`std::priority_queue`**: *top()*/*pop()* always the largest element.
     - **`std::list`**: A ***doubly linked list*** that allows efficient insertion and deletion of elements at any position in the list, but does not provide fast access by index.
+    - **`std::forward_list`**: lightweight version of list. Only forward links → uses less memory, but less flexible.
   
 - **Associative Containers**: These containers store elements as pairs of "key-value". They provide fast access to elements by key.
   - Examples:
@@ -4685,10 +4876,109 @@ class ClassName{
 
 - **Unordered Associative Containers**: These containers do not store elements as "key-value" pairs and do not guarantee order.
   - Examples:
-    - **`std::unordered_set`**: A container that stores unique elements without guaranteeing order.
-    - **`std::unordered_map`**: A container that stores "key-value" pairs without guaranteeing order.
+    - **`std::unordered_set`**: A container that stores unique elements without guaranteeing order (realization via [hash-tables](/General/Algorithms/parts/Hash_tables.md)).
+    - **`std::unordered_map`**: A container that stores "key-value" pairs without guaranteeing order (realization via [hash-tables](/General/Algorithms/parts/Hash_tables.md)).
+    - **`std::unordered_multiset`** and **`std::unordered_multimap`**: Similar to unordered set and map, but allow duplicates.
 
-#### Examples of using STL Containers
+#### Main functors
+List main (most used) functors of containers (not all).
+- Legend:
+  - *it* - iterator;
+  - *n* - amount of elements;
+  - *el* - element / value;
+  - *key* - key.
+
+| Container | Functors |
+|---|---|
+| **vector** | `push_back(el)`, `front()`, `back()`, `size()`, `empty()`, `insert(it, el)`, `erase(it)`, `clear()`, `reserve(n)` - reserve space |
+| **set** <br> **unordered_set** <br> **multiset** <br> **unordered_multiset** | `insert(el)`, `erase(el)` - all elements same value, `erase(it)`, `find(el)` - returns *iterator* / *end()*, `count(el)` - returns amount of elements, ` clear(), `size(), `empty()`, <br> `lower_bound(el)` - return iterator to first position where the element is ≥ *el* (only for **set** and **multiset**), <br>  `upper_bound(el)` - return iterator to first position where the element is > *el* (only for **set** and **multiset**) |
+| **map** <br> **unordered_map** <br> **multimap** <br> **unordered_multimap** | `find(key)`, `count(key)`, `erase(key)`, `erase(it)`, (\*), `equal_range(key)` - returns **std::pair<iterator, iterator>** - both *lower_bound(key)* and *upper_bound(key)*, `lover_bound(key)`, `upper_bound(key)` |
+| **stack** | `push(el)`, `pop()`, `top()`, `size()`, `empty()` |
+| **queue** <br> **priority_queue** | `push(el)`, `pop()`, `front()`, `back()`, `size()`, `empty()` |
+| **deque** | `push_back(el)`, `push_front(el)`, `pop_back()`, `pop_front()`, `front()`, `back()`, `size()`, `empty()`, `clear()`, `reserve(n)` |
+| **list** | `push_back(el)`, `push_front(el)`, `pop_back()`, `pop_front()`, `front()`, `back()`, `size()`, `empty()`, `clear()`, `insert(it, el)`, `erase(it)`, `splice(it_where, list_form, it_from)` — move elements between lists efficiently (without copying - just relinks pointers), `sort()`, `reverse()`, (\*\*) |
+| **forward_list** | `push_front(el)`, `pop_front()`, `front()`, `size()`, `empty()`, `clear()`, `insert_after(it)`, `erase_after(it)`, `splice_after(...)`, `before_begin()` — special iterator to insert at front |
+| **unordered_set** <br> **unordered_multiset** <br> **unordered_map** <br> **unordered_multimap** | `bucket_count()` - returns the number of buckets (slots) in the hash table (each bucket can contain multiple elements (in case of hash collisions)), <br> `load_factor()` = number_of_elements / number_of_buckets (when load factor gets too high → performance drops → automatic rehash happens), <br> `rehash(n)` - forces the hash table to rebuild itself with at least n buckets, (\*\*\*) |
+
+- (\*) Allowed constructions: `for(auto& [k,v]:mp)`; not allowed: `[]` for **multimap**, **unordered_multimap**.
+- (\*\*) No random access .
+- (\*\*\*) **unordered_set** and **unordered_map** do not work with pair<...>.
+
+#### Time Complexity
+
+| Container                  | Based On                  | Access       | Search/Find              | Insert/Add                        | Delete/Erase                      |
+|---------------------------|---------------------------|--------------|--------------------------|-----------------------------------|-----------------------------------|
+| `array`                   | Static Array              | O(1)         | O(n)                     | — (fixed)                         | — (fixed)                         |
+| `vector`                  | Dynamic Array             | O(1)         | O(n)                     | O(1) amortized (end)<br>O(n) middle | O(1) (end)<br>O(n) middle        |
+| `deque`                   | Array of Blocks           | O(1)         | O(n)                     | O(1) (front & back)               | O(1) (front & back)               |
+| `list`                    | Doubly Linked List        | O(n)         | O(n)                     | O(1) (with iterator)              | O(1) (with iterator)              |
+| `forward_list`            | Singly Linked List        | O(n)         | O(n)                     | O(1) after iterator               | O(1) after iterator               |
+| `stack`                   | deque / vector            | O(1) (top)   | O(n)                     | O(1) (push)                       | O(1) (pop)                        |
+| `queue`                   | deque                     | O(1) (front) | O(n)                     | O(1) (back)                       | O(1) (front)                      |
+| `priority_queue`          | Binary Heap               | O(1) (top)   | O(n)                     | O(log n)                          | O(log n) (top)                    |
+| `set`                     | Red-Black Tree            | —            | O(log n)                 | O(log n)                          | O(log n)                          |
+| `multiset`                | Red-Black Tree            | —            | O(log n)                 | O(log n)                          | O(log n)                          |
+| `map`                     | Red-Black Tree            | —            | O(log n)                 | O(log n)                          | O(log n)                          |
+| `multimap`                | Red-Black Tree            | —            | O(log n)                 | O(log n)                          | O(log n)                          |
+| `unordered_set`           | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
+| `unordered_map`           | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
+| `unordered_multiset`      | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
+| `unordered_multimap`      | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
+
+#### Iterators
+An **iterator** is an object that acts like a pointer to elements in a container. It allows you to traverse (go through) the elements one by one without knowing the internal structure of the container.
+- Iterators provide a uniform way to access elements across all STL containers.
+- Common usage: 
+    ```c++
+    it                      // iterator
+    *it                     // dereference (get value)
+    ++it / it++             // move to next element
+    --it / it--             // move to previous (if bidirectional)
+    it1 == it2              // compare iterators
+    it1 += 2
+    it2 -= 3
+    auto it = v.begin()     // iterator pointing to first element
+    ```   
+  - `+=`, `-=`, `+`, `-` - work only with Random Access Iterators.
+  - `--`, `++` - work with all iterators.
+  - `--t` is faster than `t--`.
+- Standard functions:   
+    | Function | Discription | Returns | Iterator <br> demands |
+    |----------|-------------|---------|-----------------------|
+    |std::next(it)       |    Forward 1 position  |               New iterator|  Forward Iterator|
+    |"std::next(it, n)" |     Forward *n* positions  |               New iterator|  Forward Iterator|
+    |std::prev(it)       |    Backward 1 position  |                New iterator|  Bidirectional Iterator|
+    |"std::prev(it, n)" |     Backward *n* positions  |                New iterator|  Bidirectional Iterator|
+    |"std::advance(it, n)" |  Change iterator *it* at *n* (*it* gets changed)   | void  |   "Input (Foward iterator), <br> Bidirectional (Bidirectional Iterator)"|
+    |"std::distance(a,b)"    |Distance between two iterators    |ptrdiff_t  |     Input Iterator|
+
+| Container                    | Iterator Support          | `begin()` / `end()` | Bidirectional | Random Access | Notes |
+|-----------------------------|---------------------------|---------------------|---------------|---------------|-------|
+| `array`                     | Yes                       | Yes                 | Yes           | Yes           | Full support |
+| `vector`                    | Yes                       | Yes                 | Yes           | Yes           | Full support |
+| `deque`                     | Yes                       | Yes                 | Yes           | Yes           | Full support |
+| `list`                      | Yes                       | Yes                 | Yes           | No            | Bidirectional |
+| `forward_list`              | Yes                       | Yes                 | No            | No            | Forward only |
+| `set`                       | Yes                       | Yes                 | Yes           | No            | Ordered |
+| `multiset`                  | Yes                       | Yes                 | Yes           | No            | Ordered |
+| `map`                       | Yes                       | Yes                 | Yes           | No            | Ordered |
+| `multimap`                  | Yes                       | Yes                 | Yes           | No            | Ordered |
+| `unordered_set`             | Yes                       | Yes                 | No            | No            | Unordered |
+| `unordered_map`             | Yes                       | Yes                 | No            | No            | Unordered |
+| `unordered_multiset`        | Yes                       | Yes                 | No            | No            | Unordered |
+| `unordered_multimap`        | Yes                       | Yes                 | No            | No            | Unordered |
+| `stack`                     | **No**                    | No                  | -             | -             | Adapter |
+| `queue`                     | **No**                    | No                  | -             | -             | Adapter |
+| `priority_queue`            | **No**                    | No                  | -             | -             | Adapter |
+
+#### Examples of using STL Containers 
+- `std::vector`   
+    | Declaration | What creates | Size | Content | Type of variable |
+    | --- | --- | ---| --- | ---| 
+    |vector<int> a(5); |  Single vector         |    5   |    "{0,0,0,0,0}"  |     std::vector<int>|
+    |vector<int> a{5}; |  Single vector         |    1    |   {5}            |     std::vector<int>|
+    |vector<int> a[5]; |  Array of 5 vectors   | —     |  5 empty vectors |  std::vector<int>[5]|
+
 
 - `std::vector`
     ```C++
@@ -4782,7 +5072,7 @@ Here are some commonly used STL algorithms:
         return 0;
     }
     ```
-- Example of Using `std::find`
+- Example of Using `std::find`:
     ```C++
     #include <iostream>
     #include <vector>
@@ -4801,6 +5091,14 @@ Here are some commonly used STL algorithms:
 
         return 0;
     }
+    ```
+- Example #3:   
+    ```c++
+    std::sort(v.begin(), v.end());
+    std::sort(v.begin(), v.end(), std::greater<int>());
+    std::sort(v.begin(), v.end(), [](int a, int b){ return a > b; });
+
+    auto it = std::find(v.begin(), v.end(), 25);
     ```
 
 ## Multithreading 
