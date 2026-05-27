@@ -4925,6 +4925,31 @@ List main (most used) functors of containers (not all).
 | `unordered_multiset`      | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
 | `unordered_multimap`      | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
 
+#### Compairison 
+C++ containers can be compared using `==`, `!=`, `<`, `>`, `<=`, `>=`.
+- `==` and `!=` → Compare equality (element by element)
+- `<`, `>`, `<=`, `>=` → Use lexicographical comparison (dictionary order)
+- support table:  
+    | Container               | `==` / `!=` | `<` / `>` / `<=` / `>=` | Comparison Type          | Notes |
+    |-------------------------|-------------|--------------------------|--------------------------|-------|
+    | `vector`                | Yes         | Yes                      | Lexicographical          | Most common |
+    | `array`                 | Yes         | Yes                      | Lexicographical          | — |
+    | `deque`                 | Yes         | Yes                      | Lexicographical          | — |
+    | `list`                  | Yes         | Yes                      | Lexicographical          | — |
+    | `string`                | Yes         | Yes                      | Lexicographical          | — |
+    | `set`                   | Yes         | Yes                      | Lexicographical (sorted) | — |
+    | `multiset`              | Yes         | Yes                      | Lexicographical (sorted) | — |
+    | `map`                   | Yes         | Yes                      | Lexicographical (by key) | — |
+    | `multimap`              | Yes         | Yes                      | Lexicographical (by key) | — |
+    | `forward_list`          | Yes         | **No**                   | Only equality            | No order |
+    | `unordered_set`         | Yes         | **No**                   | Only equality            | Hash-based |
+    | `unordered_map`         | Yes         | **No**                   | Only equality            | Hash-based |
+    | `unordered_multiset`    | Yes         | **No**                   | Only equality            | Hash-based |
+    | `unordered_multimap`    | Yes         | **No**                   | Only equality            | Hash-based |
+    | `stack`                 | **No**      | **No**                   | —                        | Adapter |
+    | `queue`                 | **No**      | **No**                   | —                        | Adapter |
+    | `priority_queue`        | **No**      | **No**                   | —                        | Adapter |
+
 #### Iterators
 An **iterator** is an object that acts like a pointer to elements in a container. It allows you to traverse (go through) the elements one by one without knowing the internal structure of the container.
 - Iterators provide a uniform way to access elements across all STL containers.
