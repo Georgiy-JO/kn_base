@@ -144,7 +144,8 @@
 - [Links](#links)
 
 ## Code file types
-Here are several most frequently used code file types.
+Here are several most frequently used code file types.  
+
 |File type | Main usage |
 |------|-----|
 |.hpp (recommended) / .hh |**C++ Header File** is used to declare (announce) classes, functions, etc. These files are providing code structure (name system), interface, as well as functions signatures, so those can be used later in other files. Headers are not meant to keep any actual code (definitions/implementations) and are not compiled separately - they are being *#include* into code files. |
@@ -156,45 +157,43 @@ Here are several most frequently used code file types.
 ## Libraries & Frameworks
 ### Standard
 
-| std libraries | Description                                                        |
-| ------------- | ------------------------------------------------------------------ |
-| \<iostream>   | input/output                                                       |
-| \<cmath>      | math functions                                                     |
-| \<ctime>      | time related functions                                             |
-| \<iomanip>    | facilities for manipulating the input and output format of streams |
-| \<memory>     | [smart pointers](#smart-pointers-hint)                             |
-| \<algorithm>  | [STL algorithms](#stl-algorithms)                                  |
-| \<stdexcept>  | standard errors list                                               |
-| \<fstream>    | to work with [files](#files)                                       |
-| \<random>     | [to generate random numbers](#random-numbers)                      |
-| \<sstream>    | [transform line into stream like object](#input---output)          |
-| \<cstdio>     | It’s mostly [used](#c-style-way) when to use C-style I/O (printf, scanf, fopen, etc.) instead of C++ streams (std::cin, std::cout, std::ifstream, std::ofstream) + allows remove and create files|
-| \<chrono>     | It provides types and utilities to [work](/C&C++/materials/CPP/time_example/timer.cpp) with durations, time points, and clocks in a type-safe and precise way|
-| \<limits>     | maximums, minimums, etc. of data types                             |
-| \<filesystem> | provides a platform-independent API for [working with the file system](#other-file-related-actions): paths, files, directories, and file metadata |
-| \<vector>     | dynamic array ([STL-c.](#stl-containers))                     |
-| \<map>        | pair data ([STL-c.](#stl-containers))                      |
-| \<string>     | extra for strings                                                  |
-| \<set>        | set, multiset  ([STL-c.](#stl-containers)) |
-| \<deque>      | double-ended queue ([STL-c.](#stl-containers))    |
-| \<queue>      | queue ([STL-c.](#stl-containers)) |
-| \<stack>      | stack ([STL-c.](#stl-containers)) |
-| \<list>       | list ([STL-c.](#stl-containers)) |
-| \<array>      | array ([STL-c.](#stl-containers)) |
-| \<forward_list> | forward list ([STL-c.](#stl-containers)) |
-| \<unordered_map> | unordered map, unordered_multimap ([STL-c.](#stl-containers))  |
-| \<unordered_set> | unordered set, unordered_multiset ([STL-c.](#stl-containers))  |
-| \<bits/stdc++.h>| not standard for C++ in general, works only with GCC compiler (does not exists in clang, MSVC, etc). Used for contests mostly, because is basically a huge header that includes many other headers (\*) |
-- (\*) Includes: <iostream>, <iomanip>, <fstream>, <vector>, <list>, <deque>, <array>, <forward_list>, <stack>, <queue>, <priority_queue>, <algorithm>, <numeric>, <string>, <cstring>, <map>, <set>, <unordered_map>, <unordered_set>, <bitset>, <complex>, <cmath>, <cstdio>, <cstdlib>, <ctime>, <iterator>, <utility>, <functional>, etc - slows down compiling and makes the resulting file larger.  
+| std libraries    | Description                                                                                                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| \<iostream>      | input/output                                                                                                                                                                                            |
+| \<cmath>         | math functions                                                                                                                                                                                          |
+| \<ctime>         | time related functions                                                                                                                                                                                  |
+| \<iomanip>       | facilities for manipulating the input and output format of streams                                                                                                                                      |
+| \<memory>        | [smart pointers](#smart-pointers-hint)                                                                                                                                                                  |
+| \<algorithm>     | [STL algorithms](#stl-algorithms)                                                                                                                                                                       |
+| \<stdexcept>     | standard errors list                                                                                                                                                                                    |
+| \<fstream>       | to work with [files](#files)                                                                                                                                                                            |
+| \<random>        | [to generate random numbers](#random-numbers)                                                                                                                                                           |
+| \<sstream>       | [transform line into stream like object](#input---output)                                                                                                                                               |
+| \<cstdio>        | It’s mostly [used](#c-style-way) when to use C-style I/O (printf, scanf, fopen, etc.) instead of C++ streams (std::cin, std::cout, std::ifstream, std::ofstream) + allows remove and create files       |
+| \<chrono>        | It provides types and utilities to [work](/C&C++/materials/CPP/time_example/timer.cpp) with durations, time points, and clocks in a type-safe and precise way                                           |
+| \<limits>        | maximums, minimums, etc. of data types                                                                                                                                                                  |
+| \<filesystem>    | provides a platform-independent API for [working with the file system](#other-file-related-actions): paths, files, directories, and file metadata                                                       |
+| \<vector>        | dynamic array ([STL-c.](#stl-containers))                                                                                                                                                               |
+| \<map>           | pair data ([STL-c.](#stl-containers))                                                                                                                                                                   |
+| \<string>        | extra for strings                                                                                                                                                                                       |
+| \<set>           | set, multiset  ([STL-c.](#stl-containers))                                                                                                                                                              |
+| \<deque>         | double-ended queue ([STL-c.](#stl-containers))                                                                                                                                                          |
+| \<queue>         | queue ([STL-c.](#stl-containers))                                                                                                                                                                       |
+| \<stack>         | stack ([STL-c.](#stl-containers))                                                                                                                                                                       |
+| \<list>          | list ([STL-c.](#stl-containers))                                                                                                                                                                        |
+| \<array>         | array ([STL-c.](#stl-containers))                                                                                                                                                                       |
+| \<forward_list>  | forward list ([STL-c.](#stl-containers))                                                                                                                                                                |
+| \<unordered_map> | unordered map, unordered_multimap ([STL-c.](#stl-containers))                                                                                                                                           |
+| \<unordered_set> | unordered set, unordered_multiset ([STL-c.](#stl-containers))                                                                                                                                           |
+| \<bits/stdc++.h> | not standard for C++ in general, works only with GCC compiler (does not exists in clang, MSVC, etc). Used for contests mostly, because is basically a huge header that includes many other headers (\*) |
+- (\*) Includes: \<iostream>, \<iomanip>, \<fstream>, \<vector>, \<list>, \<deque>, \<array>, \<forward_list>, \<stack>, \<queue>, \<priority_queue>, \<algorithm>, \<numeric>, \<string>, \<cstring>, \<map>, \<set>, \<unordered_map>, \<unordered_set>, \<bitset>, \<complex>, \<cmath>, \<cstdio>, \<cstdlib>, \<ctime>, \<iterator>, \<utility>, \<functional>, etc - slows down compiling and makes the resulting file larger.  
 
-### Third party
+###  Third party  
 
-| library / framework            | Description                                                                                                                                                                                                                                                  | Installation                                                             |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| [QT](QT_notes.md) | Huge framework that is mainly meant to handle creating graphical applications. Includes many elements, libraries, tools and provides plenty of opportunities (like simple way to create GUI, handle graphics, networking, threads, OpenGL, multimedia, etc.) | With official GUI based installer / console commands                     |
-| ncurses                        | library for creating TUIs (text-based user interfaces)                                                                                                                                                                                                       | sudo apt-get install libncurses6 <br>sudo apt-get install libncurses-dev |
-
-
+| Library / framework | Description                                                                                                                                                                                                                                                  | Installation                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| [QT](QT_notes.md)   | Huge framework that is mainly meant to handle creating graphical applications. Includes many elements, libraries, tools and provides plenty of opportunities (like simple way to create GUI, handle graphics, networking, threads, OpenGL, multimedia, etc.) | With official GUI based installer / console commands                     |
+| ncurses             | library for creating TUIs (text-based user interfaces)                                                                                                                                                                                                       | sudo apt-get install libncurses6 <br>sudo apt-get install libncurses-dev |
 
 ## General (+ Situations and examples)
 
@@ -240,11 +239,11 @@ Useful if function has input parameter, but it is not used inside.
     }
 ```
 #### [] vs {} vs () in declaration
-| Declaration | What creates | Size | Content | Type of variable |
-| --- | --- | ---| --- | ---| 
-|vector<int> a(5); |  Single vector         |    5   |    "{0,0,0,0,0}"  |     std::vector<int>|
-|vector<int> a{5}; |  Single vector         |    1    |   {5}            |     std::vector<int>|
-|vector<int> a[5]; |  Array of 5 vectors    | —     |  5 empty vectors |  std::vector<int>[5]|
+| Declaration       | What creates       | Size | Content         | Type of variable     |
+| ----------------- | ------------------ | ---- | --------------- | -------------------- |
+| vector<int> a(5); | Single vector      | 5    | "{0,0,0,0,0}"   | std::vector<int>     |
+| vector<int> a{5}; | Single vector      | 1    | {5}             | std::vector<int>     |
+| vector<int> a[5]; | Array of 5 vectors | —    | 5 empty vectors | std::vector\<int>[5] |
 
 ### Include guard.
 It’s a common C/C++ pattern to prevent multiple inclusions of the same header file, which can cause redefinition errors. The typical structure looks like this:
@@ -484,7 +483,7 @@ x=='Y'?std::cout << "YES":std::cout <<"NO";
     - Use `y = rand()%n` to generate a random number between 0 and n-1.
 
 #### C++ style
-In C++ the most popular way is to use Mersenne Twister (<random> library).
+In C++ the most popular way is to use Mersenne Twister (\<random> library).
 
 - The Mersenne Twister is a widely used pseudorandom number generator (PRNG) known for its high quality and long period. It was developed by Makoto Matsumoto and Takuji Nishimura in 1997. The name "Mersenne Twister" comes from the fact that it uses Mersenne primes to achieve its long period.
 - Key Features:
@@ -595,38 +594,38 @@ int main(){
 
 ### Data size and max / min
 #### Values for 64-bit systems
-| Type / Container                   | Size (bites)       | Range                                         | Extra storage                             |
-|------------------------------------|--------------------|-----------------------------------------------|-------------------------------------------|
-| `bool`                             | 1                  | 0..1                                          | —                                         |
-| `char`                             | 1                  | -128..127                                     | —                                         |
-| `unsigned char`                    | 1                  | 0..255                                        | —                                         |
-| `short`                            | 2                  | -32768..32767                                 | —                                         |
-| `unsigned short`                   | 2                  | 0..65535                                      | —                                         |
-| `int`                              | 4                  | -2 147 483 648 .. 2 147 483 647               | —                                         |
-| `unsigned int`                     | 4                  | 0 .. 4 294 967 295                            | —                                         |
-| `long`                             | 8                  | -9.22e18..9.22e18                             | —                                         |
-| `long long`                        | 8                  | -9.22e18..9.22e18                             | —                                         |
-| `unsigned long long`               | 8                  | 0..1.84e19                                    | —                                         |
-| `float`                            | 4                  | ≈1.18e-38..3.40e38                            | —                                         |
-| `double`                           | 8                  | ≈2.23e-308..1.80e308                          | —                                         |
-| `long double`                      | 16                 | *Depent on the platform*                      | —                                         |
-| Pointer (`T*`)                     | 8                  | —                                             | —                                         |
-| T& (Reference / L-value reference) | 8                  | —                                             | —                                         |
-| T&& (R-value reference)            | 8                  | —                                             | —                                         |
-| `std::vector<T>`                   | 24                 | —                                             | Dynamic array (heap)                      |
-| `std::string`                      | 32                 | —                                             | SSO (\*) + heap                           |
-| `std::array<T, N>`                 | `N×sizeof(T)`      | —                                             | - (static array)                          |
-| `std::pair<T1,T2>`                 | сумма + padding    | —                                             | —                                         |
-| `std::deque<T>`                    | 80                 | —                                             | blocks ≈512 bytes                         |
-| `std::list<T>`                     | 24                 | —                                             | 24 bytes per element (2 pointers)         |
-| `std::forward_list<T>`             | 8                  | —                                             | 8 bytes per element                       |
-| `std::set<T>`                      | 24                 | —                                             | ≈32 bytes per element                     |
-| `std::map<Key, Value>`             | 24                 | —                                             | ≈40 bytes per element                     |
-| `std::unordered_set<T>`            | 56                 | —                                             | Hash-table                                |
-| `std::unordered_map<Key, Value>`   | 56                 | —                                             | Hash-table                                |
+| Type / Container                   | Size (bites)    | Range                           | Extra storage                     |
+| ---------------------------------- | --------------- | ------------------------------- | --------------------------------- |
+| `bool`                             | 1               | 0..1                            | —                                 |
+| `char`                             | 1               | -128..127                       | —                                 |
+| `unsigned char`                    | 1               | 0..255                          | —                                 |
+| `short`                            | 2               | -32768..32767                   | —                                 |
+| `unsigned short`                   | 2               | 0..65535                        | —                                 |
+| `int`                              | 4               | -2 147 483 648 .. 2 147 483 647 | —                                 |
+| `unsigned int`                     | 4               | 0 .. 4 294 967 295              | —                                 |
+| `long`                             | 8               | -9.22e18..9.22e18               | —                                 |
+| `long long`                        | 8               | -9.22e18..9.22e18               | —                                 |
+| `unsigned long long`               | 8               | 0..1.84e19                      | —                                 |
+| `float`                            | 4               | ≈1.18e-38..3.40e38              | —                                 |
+| `double`                           | 8               | ≈2.23e-308..1.80e308            | —                                 |
+| `long double`                      | 16              | *Depent on the platform*        | —                                 |
+| Pointer (`T*`)                     | 8               | —                               | —                                 |
+| T& (Reference / L-value reference) | 8               | —                               | —                                 |
+| T&& (R-value reference)            | 8               | —                               | —                                 |
+| `std::vector<T>`                   | 24              | —                               | Dynamic array (heap)              |
+| `std::string`                      | 32              | —                               | SSO (\*) + heap                   |
+| `std::array<T, N>`                 | `N×sizeof(T)`   | —                               | - (static array)                  |
+| `std::pair<T1,T2>`                 | сумма + padding | —                               | —                                 |
+| `std::deque<T>`                    | 80              | —                               | blocks ≈512 bytes                 |
+| `std::list<T>`                     | 24              | —                               | 24 bytes per element (2 pointers) |
+| `std::forward_list<T>`             | 8               | —                               | 8 bytes per element               |
+| `std::set<T>`                      | 24              | —                               | ≈32 bytes per element             |
+| `std::map<Key, Value>`             | 24              | —                               | ≈40 bytes per element             |
+| `std::unordered_set<T>`            | 56              | —                               | Hash-table                        |
+| `std::unordered_map<Key, Value>`   | 56              | —                               | Hash-table                        |
 
 - (\*) **Small String Optimization** - Instead of always allocating memory on the heap for small strings, stores short strings inside its own object (in the stack memory of the string itself). This avoids expensive heap allocation for small strings.  
-
+- There are [sertain sized](#extra-data-types) simple data types
 
 #### Usage in code 
 Library `#include <limits>` has different instruments to get the maximum values if data types and work with those.  
@@ -961,13 +960,23 @@ int main(){
 ### Extra data types 
 Some extra data types.
 
-| Type       | Description                                     | Inc in                         | Size                                 |
-| ---------- | ----------------------------------------------- | ------------------------------ | ------------------------------------ |
-| `bool`     | can be `true`(1) or `false`(0)                  | exists by default              | 1 byte                               |
-| `wchar_t`  | expended char (for Unicode)                     | exists by default              | 2 byte - Windows <br> 4 byte - Linux |
-| `char8_t`  | 8-bit Unicode character (for Unicode (UTF-16))  | exists by default (from C++20) | 1 byte                               |
-| `char16_t` | 16-bit Unicode character (for Unicode (UTF-16)) | exists by default              | 2 byte                               |
-| `char32_t` | 32-bit Unicode character (for Unicode (UTF-32)) | exists by default              | 4 byte                               |
+| Type           | Description                                      | Included in                    | Size          | Range of Values |
+|----------------|--------------------------------------------------|--------------------------------|---------------|-----------------|
+| `bool`         | can be `true`(1) or `false`(0)                   | exists by default              | 1 byte        | `false` or `true` |
+| `char`         | character (signed or unsigned, depends on compiler) | exists by default           | 1 byte        | -128..127 or 0..255 |
+| `wchar_t`      | wide character (for Unicode)                     | exists by default              | 2 byte (Win)<br>4 byte (Linux) | Platform dependent |
+| `char8_t`      | 8-bit Unicode character (UTF-8)                  | `<cuchar>` (C++20)             | 1 byte        | 0..255 |
+| `char16_t`     | 16-bit Unicode character (UTF-16)                | exists by default              | 2 byte        | 0..65535 |
+| `char32_t`     | 32-bit Unicode character (UTF-32)                | exists by default              | 4 byte        | 0..4,294,967,295 |
+| `size_t`       | unsigned integer type for size of objects        | `<cstddef>`                    | 8 byte (64-bit) | 0 .. 18,446,744,073,709,551,615 |
+| `int8_t`       | 8-bit signed integer                             | `<cstdint>`                    | 1 byte        | -128 .. 127 |
+| `uint8_t`      | 8-bit unsigned integer                           | `<cstdint>`                    | 1 byte        | 0 .. 255 |
+| `int16_t`      | 16-bit signed integer                            | `<cstdint>`                    | 2 byte        | -32,768 .. 32,767 |
+| `uint16_t`     | 16-bit unsigned integer                          | `<cstdint>`                    | 2 byte        | 0 .. 65,535 |
+| `int32_t`      | 32-bit signed integer                            | `<cstdint>`                    | 4 byte        | -2,147,483,648 .. 2,147,483,647 |
+| `uint32_t`     | 32-bit unsigned integer                          | `<cstdint>`                    | 4 byte        | 0 .. 4,294,967,295 |
+| `int64_t`      | 64-bit signed integer                            | `<cstdint>`                    | 8 byte        | -9.22e18 .. 9.22e18 |
+| `uint64_t`     | 64-bit unsigned integer                          | `<cstdint>`                    | 8 byte        | 0 .. 18,446,744,073,709,551,615 |
 
 #### Example
 ```C++
@@ -1781,7 +1790,7 @@ Exceptions in C++ are a powerful mechanism for error handling that allows develo
 
 #### Exception class
 There built-in methods of exception creation.
-- `std::exception` is the base class for all standard exceptions in C++. It is defined in the <exception> header and provides a common interface for handling errors and exceptional conditions in C++ programs.
+- `std::exception` is the base class for all standard exceptions in C++. It is defined in the \<exception> header and provides a common interface for handling errors and exceptional conditions in C++ programs.
 Furthermore, you can write your own class for that:
 - ***#1*** 
     ```C++
@@ -4925,12 +4934,12 @@ List main (most used) functors of containers (not all).
 | `unordered_multiset`      | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
 | `unordered_multimap`      | Hash Table                | —            | O(1) avg<br>O(n) worst   | O(1) avg<br>O(n) worst            | O(1) avg<br>O(n) worst            |
 
-#### Compairison 
+#### Comparison 
 C++ containers can be compared using `==`, `!=`, `<`, `>`, `<=`, `>=`.
 - `==` and `!=` → Compare equality (element by element)
 - `<`, `>`, `<=`, `>=` → Use lexicographical comparison (dictionary order)
-- support table:  
-    | Container               | `==` / `!=` | `<` / `>` / `<=` / `>=` | Comparison Type          | Notes |
+- support table:    
+	| Container               | `==` / `!=` | `<` / `>` / `<=` / `>=` | Comparison Type          | Notes |
     |-------------------------|-------------|--------------------------|--------------------------|-------|
     | `vector`                | Yes         | Yes                      | Lexicographical          | Most common |
     | `array`                 | Yes         | Yes                      | Lexicographical          | — |
@@ -4968,7 +4977,7 @@ An **iterator** is an object that acts like a pointer to elements in a container
   - `--`, `++` - work with all iterators.
   - `--t` is faster than `t--`.
 - Standard functions:   
-    | Function | Discription | Returns | Iterator <br> demands |
+	| Function | Discription | Returns | Iterator <br> demands |
     |----------|-------------|---------|-----------------------|
     |std::next(it)       |    Forward 1 position  |               New iterator|  Forward Iterator|
     |"std::next(it, n)" |     Forward *n* positions  |               New iterator|  Forward Iterator|
@@ -5003,8 +5012,7 @@ An **iterator** is an object that acts like a pointer to elements in a container
     |vector<int> a(5); |  Single vector         |    5   |    "{0,0,0,0,0}"  |     std::vector<int>|
     |vector<int> a{5}; |  Single vector         |    1    |   {5}            |     std::vector<int>|
     |vector<int> a[5]; |  Array of 5 vectors   | —     |  5 empty vectors |  std::vector<int>[5]|
-
-
+    
 - `std::vector`
     ```C++
     #include <iostream>
