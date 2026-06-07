@@ -102,7 +102,7 @@ print(first, middle, last)          # 10 [20, 30, 40] 50
 ## Input && Output 
 
 ### Output
-#### Print parameters
+#### `Print` parameters
 ```python
 a=5
 b=6.5
@@ -118,11 +118,16 @@ print("Hello", end=" ")
 print("world")
 # Hello world
 #*
-```
-- ```sep``` - sets the separator between arguments (default is space).
-- ```end``` - sets parameter to the end on print (default is new line ('\n')).
 
-#### Print formatting (f-strings)
+print("*" * 5)          # *****
+#**
+```
+- **\***:
+  - ```sep``` - sets the separator between arguments (default is space);
+  - ```end``` - sets parameter to the end on print (default is new line ('\n')).
+- **\*\***: checkout [strings](#strings).
+
+#### `Print` formatting (f-strings)
 ```python
 x=5.5
 y=-25
@@ -319,20 +324,6 @@ print(not (a % 3 == 0 or a % 2 == 0))   #True
     |not|3|
   - The Highest priority goes first.
 
-### Service functions
-#### bool()
-```python
-bool(1)         #True
-bool(0)         #False
-bool(-1)        #True
-bool(10)        #True
-bool(0.0)       #False
-bool(0.1)       #True
-bool("")        #False
-bool(" ")       #True
-bool("Hello")   #True
-```
-
 ## Strings
 Unchangeable type.
 ### General
@@ -426,17 +417,17 @@ print("abc" > "Abc")                    #True
 
 
 ### Service functions, operators, methods
-#### str()
+#### `str()`
 Check out [type casting](#type-casting).
 
-#### len()
+#### `len()`
 Calculate length of the string.
 ```python
 len('hello')        #5
 len('')             #0
 ```
 
-#### in
+#### `in`
 Check if one string is in another (operator).
 ```python
 print('lab' in 'matlabkomabsamabtolib')     #True
@@ -445,13 +436,13 @@ print('lab' not in 'matlabkomabsamabtolib') #False
 print('aaa' not in 'matlabkomabsamabtolib') #True
 ```
 
-#### ord()
+#### `ord()`
 Returns a number representing the decimal Unicode code (ASCII code) of a specified character.
 ```python
 print(ord('A'))     #65
 ```
 
-#### upper() and lower()
+#### `upper()` and `lower()`
 ```python
 s = 'python'
 print(s.upper())    #PYTHON
@@ -461,7 +452,7 @@ s = 'PYTHON'
 print(s.lower())    #python
 ```
 
-#### count(), find(), rfind() and index()
+#### `count()`, `find()`, `rfind()` and `index()`
 - **count()** - counting amount of substrings in string.
 - **find()** - finding the substring in string (if there is none, return ```-1```).
 - **rfind()** - same as **find()**, but goes from the end of the string.
@@ -500,7 +491,7 @@ print(s.index('python'))            # 7
 print(s.index('pithon'))            # ValueError: substring not found
 ```
 
-#### replace()
+#### `replace()`
 Replacing substrings.
 - Can the amount of replacements be set (```-1``` - unlimited).
 ```python
@@ -516,7 +507,7 @@ print(s.replace('A','o'))       # Banana Republic
 print(s.replace('A',''))        # Banana Republic
 ```
 
-#### isalpha(), isdigit(), isalnum()
+#### `isalpha()`, `isdigit()`, `isalnum()`
 ```python
 s = "Banana"
 print(s.isalpha())      # True
@@ -541,7 +532,7 @@ s = '123a'
 print(s.isdigit())      # False
 print(s.isalnum())      # True
 ```
-#### rjust(), ljust(), center()
+#### `rjust()`, `ljust()`, `center()`
 - **rjust()** - add symbols (default:" ") to the beginning of the string, so it will have the set length.
 - **ljust()** - add symbols (default:" ") to the end of the string, so it will have the set length.
 - **center()** - add symbols (default:" ") to the beginning and end of the string, so it will have the set length.
@@ -559,7 +550,7 @@ print(s1.center(10,'&'))    # &&Banana&&
 print(s1.center(11,'&'))    # &&&Banana&&
 ```
 
-#### split() and join()
+#### `split()` and `join()`
 - **split()** - sprits the string into substrings according to separator (default:" ").
 - **join()** - join strings putting separator between them.
 ```python
@@ -582,7 +573,7 @@ s = "John Johnson Riverside"
 print(", ".join(s.split()))     # John, Johnson, Riverside
 ```
 
-#### strip() and rstrip() and lstrip()
+#### `strip()` and `rstrip()` and `lstrip()`
 Removes spaces, new lines, tabs etc for strings.
 - **strip()** - both sides.
 - **rstrip()** - right side.
@@ -596,7 +587,7 @@ s.lstrip()          # ME \t\t\n\n      \n\n
 ```
 
 ### Formatted strings  
-#### format()
+#### `format()`
 ```python
 st = "Uncle {0} is {1} years old. {0} lives in {2}."
 a = "Ben"
@@ -693,7 +684,7 @@ Comparison of lists works the same way as for strings - elements are compared on
 ```
 - Compared elements must be the same type.
  
-#### list()
+#### `list()`
 Creates lists from any object that can be iterated.
 ```python
 a = list("python")
@@ -712,7 +703,7 @@ b = list(['some','list'])
 - [```a.sort()```](#copy-count-index-reverse-sort) - sort the current list (returns nothing (```None```)), [```sorted(a)```](#len-min-max-sum-sorted) - returns sorted list (does not change the original one).
 
 ### Service functions, operators, methods
-#### len(), min(), max(), sum(), sorted()
+#### `len()`, `min()`, `max()`, `sum()`, `sorted()`
 ```python
 a = list("number of letters")
 print(len(a))       # 17
@@ -753,7 +744,7 @@ del(c[1])
 print(c)                # ['me', 'knife', 1986, True, 5.55]
 ```
 
-#### append(), insert(), extend(), remove(), pop(), clear()
+#### `append()`, `insert()`, `extend()`, `remove()`, `pop()`, `clear()`
 - ```append()```, ```insert()```, ```extend()```, ```remove()``` return nothing (```None```).
 - ```pop()``` returns popped element.
 ```python
@@ -859,6 +850,7 @@ print(complex_structure[0][0][1])   # 2
 
 ## Conditions
 - Condition blocks are defined by **4 spaces**.
+- *<* and *>* works faster than *<=* or *>=*.
 ```python
 z = float(input("Enter z: "))
 if z < 5 and z > 0:
@@ -895,5 +887,74 @@ print(line)                 # a - odd number
 ```
 
 ## Loops
+- **while**
+    ```python
+    i = -1
+    while i <= N and i <= 100:
+        i += 1
+        if a[i] % 2 == 0
+            continue
+        s += a[i]
+        if s % 5 == 0
+            print (s)
+        if s == 999
+            break
+    else:       # will be executed if the loop was exited correctly (not with "break")
+        print("all elements or first 100 elements was checked")
+    ```
+  - **for**
+    ```python
+    d = [1,2,3,4,5]
+    for i in d:
+        print(i)
+        i = 0       # i only reference elements of the array so you can't change it that way
+    print(d)        # [1, 2, 3, 4, 5]
+
+    for i in range(len(d)):
+        d[i] = 0
+    print(d)        # [0, 0, 0, 0, 0]
+
+    for x in "python":
+        print(x)
+
+
+    ```
+
+## Functions
+### Service functions
+- Also checkout:
+  - [Basic math functions](#basic-math-functions)
+  - [String service functions](#service-functions-operators-methods)
+  - [List service functions](#service-functions-operators-methods-1)
+
+#### `bool()`
+```python
+bool(1)         #True
+bool(0)         #False
+bool(-1)        #True
+bool(10)        #True
+bool(0.0)       #False
+bool(0.1)       #True
+bool("")        #False
+bool(" ")       #True
+bool("Hello")   #True
+```
+#### ```range(beg, end, step)```
+- *beg* - included, *end* - not included.
+```python
+range(start, stop, step)
+print(range(5))         # [0, 1, 2, 3, 4]
+print(range(1,5))       # [1, 2, 3, 4]
+print(range(1,10,2))    # [1, 3, 5, 7, 9]
+
+print(range(-5))        # []
+print(range(5,0))       # []
+print(range(5,0,-1))    # [5, 4, 3, 2, 1]
+print(range(-10, -5))   # [-10, -9, -8, -7, -6]
+
+```
+
+
+
 
 
