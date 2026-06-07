@@ -64,7 +64,32 @@ Double ended queue.
 - Output: the smallest elements for all windows.
 
 ## Set
+**Unordered collection** of **unique** elements. No duplicates allowed.
+- Fast membership testing (`in` operation), insertion, and deletion (average O(1) time).
+- Does not maintain insertion order (except in ordered variants like `std::set`).
+- Standard ways: ```set.insert(x)``` (adds element if not present), ```set.erase(x)``` / ```set.remove(x)``` (removes element), ```set.count(x)``` / ```x in set``` (checks existence).
+
+### Example 
+- **C++**: ```std::unordered_set``` (hash-based) or ```std::set``` (ordered).
+- **Python**: ```set``` (built-in).
 
 ## Dictionary
+**Key-value** pairs (also called map or associative array).
+- Keys must be unique and hashable. Values can be duplicated.
+- Fast lookup, insertion, and deletion by key (average O(1)).
+- Maintains insertion order in modern implementations (Python 3.7+, C++17+ `std::unordered_map` does not guarantee order).
+- Standard ways: ```dict[key] = value``` (insert/update), ```dict[key]``` / ```dict.get(key)``` (access), ```del dict[key]``` / ```dict.erase(key)``` (remove), ``dict.count(key)`` / ```key in dict``` (check).
+
+### Example 
+- **C++**: ```std::unordered_map``` (hash-based) or ```std::map``` (ordered).
+- **Python**: ```dict``` (built-in).
 
 ## Array
+**Contiguous** collection of elements of the same type, accessed by **index**.
+- Fixed size in many languages (or dynamic like vectors).
+- Fast random access (O(1) by index), good cache locality.
+- Standard ways: ```arr[index]``` (access/assign), ```arr.push_back(x)``` (dynamic resize in vectors), ```arr.size()``` (get length).
+
+### Example 
+- **C++**: ```std::vector<T>``` (dynamic) or raw ```T arr[N]``` (fixed).
+- **Python**: ```list``` (dynamic array) or ```array.array``` (for primitive types).

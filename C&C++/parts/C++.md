@@ -4666,6 +4666,7 @@ class ClassName{
 
 ### STL containers 
 **Standard Template Library containers** are template classes provided by the C++ Standard Library that are used for storing and managing collections of objects. They offer convenient and efficient ways to work with data, including adding, removing, searching, and sorting elements.
+- Check out [*standart data structures*](/General/Data_structures/Stanard_data_structures.md) for some general info.
 
 #### Main Categories of STL Containers  (❗***HINT***)
 - **Sequence Containers**: These containers store elements in a specific order. Elements can be accessed by index, and their order is preserved.
