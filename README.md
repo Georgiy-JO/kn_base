@@ -9,7 +9,9 @@
 ## Contents:
 - **General**
   - [Dictionary of terms](/General/Dictionaty.md)
-    - [Design patterns](/General/elements/Design_patterns.md)
+    - [Design patterns](/General/parts/Design_patterns.md)
+  - [Algorithms](/General/Algorithms/Algorithms.md)
+    - [Hash tables](/General/Algorithms/parts/Hash_tables.md)
 - **ML&AI** 
   - [ML&AI](/ML_AI/ML&AI.md)
 - **SQL**
