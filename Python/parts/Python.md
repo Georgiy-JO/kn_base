@@ -916,9 +916,8 @@ print(line)                 # a - odd number
 
     for x in "python":
         print(x)
-
-
     ```
+    - Checkout: [Enumerate](#enumerate)
 
 ## Functions
 ### Service functions
@@ -952,6 +951,18 @@ print(range(5,0))       # []
 print(range(5,0,-1))    # [5, 4, 3, 2, 1]
 print(range(-10, -5))   # [-10, -9, -8, -7, -6]
 
+```
+#### `enumerate()`
+- Returns a pair from an object: index and value.
+```python
+digs = [4, 16, 25, 64, 125, -23, -42, 0]
+for i, d in enumerate(digs):
+    if(i % 2 == 0):
+        print(d)
+        digs[i] = 0
+    else:
+        print("Not even placed element")
+#
 ```
 
 
