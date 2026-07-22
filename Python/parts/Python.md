@@ -9,8 +9,132 @@
 ### [Interpreter](General_info.md#interpreter)
 ### [Code style](General_info.md#code-style)
 
-## Variables
+## General
+### Comparison
+```python
+a = 5
 
+print(a <= 10 and a > 0)                #True
+print(a <= 10 or a < 0)                 #True
+print(0 < a <= 10)                      #True
+print(a % 3 == 0 or a % 2 == 0)         #False
+print(a % 3 != 0 or a % 2 != 0)         #True
+print(not (a % 3 == 0 or a % 2 == 0))   #True
+```
+- Instead of *&&* and *||* are used *and* and *or*.
+- Operator's priority:
+    |Operator| Priority|
+    |---|---|
+    |or|1|
+    |and|2|
+    |not|3|
+  - The Highest priority goes first.
+
+### Conditions
+- Condition blocks are defined by **4 spaces**.
+- *<* and *>* works faster than *<=* or *>=*.
+```python
+z = float(input("Enter z: "))
+if z < 5 and z > 0:
+    print("z is less than 5")
+    print("z is positive")
+elif 5 <= z <= 10:
+    print("z is greater or equal to 5 and less or equal to 10")
+    print("do something else here")
+elif z > 10:
+    print("z is greater than 10")
+else:
+    print("z is less than 0 or equal to 0")
+print("end of block here")
+```
+#### Ternary operator 
+```python
+z = float(input("Enter a: "))
+z = float(input("Enter b: "))
+res = a if a > b else b
+print(res)                  # largest number
+
+s = 'python'
+par = 'upper'
+s = s.upper() if par == 'upper' else s.lower()
+print(s)                    # PYTHON
+
+a = 5
+b = 8
+arr = [1,2,a if (a>b) else b, 6, 7]
+print(arr)                  # [1, 2, 8, 6, 7]
+
+line = "a - " + ("even" if a%2 == 0 else "odd") + " number"
+print(line)                 # a - odd number
+```
+
+### Loops
+- **while**
+    ```python
+    i = -1
+    while i <= N and i <= 100:
+        i += 1
+        if a[i] % 2 == 0
+            continue
+        s += a[i]
+        if s % 5 == 0
+            print (s)
+        if s == 999
+            break
+    else:       # will be executed if the loop was exited correctly (not with "break")
+        print("all elements or first 100 elements was checked")
+    ```
+  - **for**
+    ```python
+    d = [1,2,3,4,5]
+    for i in d:
+        print(i)
+        i = 0       # i only reference elements of the array so you can't change it that way
+    print(d)        # [1, 2, 3, 4, 5]
+
+    for i in range(len(d)):
+        d[i] = 0
+    print(d)        # [0, 0, 0, 0, 0]
+
+    for x in "python":
+        print(x)
+    ```
+    - Checkout: [Enumerate](#enumerate)
+
+### Iterator
+Allows going through iterable objects one by one once in one direction.
+```python
+s = "python"
+l = [5, 3, true, -5.5]
+r = range(5)
+i = 5
+
+it = iter(s)
+print(next(it))         # p
+print(next(it))         # y
+
+it = iter(l)
+print(next(it))         # 5
+print(next(it))         # 3
+print(next(it))         # true
+print(next(it))         # -5.5  
+print(next(it))         # Error
+it = iter(l)
+print(next(it))         # 5 
+
+print(next(r))          # 0
+print(next(r))          # 1
+print(next(r))          # 2
+print(next(r))          # 3
+print(next(r))          # 4 
+print(next(r))          # Error 
+
+it = iter(i)            # Error
+```
+- `for x in range(5)` - cycle `for` when used this way basically use iterators too.
+
+
+## Variables
 ### Types
 Python is [dynamically typed language](/General/Dictionaty.md#dynamically-typed-languages).
 
@@ -24,6 +148,21 @@ a="Hello"
 print(type(a))      # <class 'str'>
 ```
 - ```type(...)``` allows to get the type of the variable.
+
+#### Changeable vs Unchangeable
+| Category          | Immutable (Unchangeable)                  | Mutable (Changeable)              |
+|-------------------|-------------------------------------------|-----------------------------------|
+| **Numeric**       | `int`, `float`, `complex`                 | -                                 |
+| **Boolean**       | `bool`                                    | -                                 |
+| **Sequences**     | `str`, `tuple`, `bytes`                   | `list`, `bytearray`               |
+| **Sets**          | `frozenset`                               | `set`                             |
+| **Mappings**      | -                                         | `dict` (not keys)                 |
+| **Others**        | `NoneType` (`None`)                       | User-defined class instances      |   
+* Immutable: Once created, the object's value cannot be modified. Operations that appear to "change" them actually create a new object (e.g., `s = s + "world"` creates a new string).
+* Mutable: The object's content can be changed in place without creating a new object (e.g., `lst.append(42)` modifies the list directly).
+* Most custom classes are mutable by default (you can add/change attributes).
+* Tuples are immutable, but if they contain mutable objects (e.g., lists), those inner objects can still be modified.
+* *frozenset* is the immutable version of set.
 
 #### Type casting
 - **To numbers**:
@@ -303,27 +442,6 @@ b = math.e                   #2.718281828459045
 ```
 - [Type casting](#type-casting) works the same way and is used way more often.
 
-## General
-### Comparison
-```python
-a = 5
-
-print(a <= 10 and a > 0)                #True
-print(a <= 10 or a < 0)                 #True
-print(0 < a <= 10)                      #True
-print(a % 3 == 0 or a % 2 == 0)         #False
-print(a % 3 != 0 or a % 2 != 0)         #True
-print(not (a % 3 == 0 or a % 2 == 0))   #True
-```
-- Instead of *&&* and *||* are used *and* and *or*.
-- Operator's priority:
-    |Operator| Priority|
-    |---|---|
-    |or|1|
-    |and|2|
-    |not|3|
-  - The Highest priority goes first.
-
 ## Strings
 Unchangeable type.
 ### General
@@ -399,7 +517,7 @@ s6 = 'l' + s1[1:]               # line
 - Strings are **unchangeable** data type (aka. you can only create a new string, not change the old one).
 
 
-#### Comparison
+### Comparison
 Operators: **==**, **!=**, **>**, **>=**, **<**, **<=**.
 ```python
 print(s1 == 'Line')                     #True
@@ -617,7 +735,6 @@ print(sg)
 # Mayor Samantha is 35 years old. Samantha Works in SG.
 ```
 
-
 ## Lists
 Ordered collection of elements.
 - Changeable type.
@@ -823,6 +940,84 @@ a.sort()                # Error
 ```
 - ```copy()``` creates an independent ***copy*** of the list.
 
+### List comprehensions
+Or *list generators*. Allows replacing `for` while creating a list (works faster). 
+
+#### Single `for` 
+Construction: `[<operator> for <iterator> in <iterative object> if <condition>]`
+```python
+a = [i for i in range(10)]
+print(a)                # [0, 1, 2, 3, 4, 5, 6, 7
+a = [x**2 for x in range(10)]
+print(a)                # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+a = [x%2==0 for x in range(10)]
+print(a)                # [False, False, True, False, True, False, True, False, True, False]
+b="1 2 3 4 5"           # string
+a = [int(x) for x in b.split()]
+print(a)                # [1, 2, 3, 4, 5]   # numbers
+a = [ord(a) for a in "python"]
+print(a)                # [112, 121, 116, 104, 111, 110]
+a = [x for x in range(-5,5) if x < 0]
+print(a)                # [-5, -4, -3, -2, -1]
+a = [x for x in range(-6,7) if x % 2 == 0 and x % 3 ==0]
+print(a)                # [-6, 0, 6]
+a = ['even' if x%2==0 else 'odd' for x in range(10)]
+print(a)                # ['even', 'odd', 'even', 'odd', 'even', 'odd', 'even', 'odd', 'even', 'odd']
+
+# Can be cun into several lines
+a = ['even' if x%2==0 else 'odd'
+     for x in range(10)
+     if x%3==0]
+print(a)                # ['even', 'odd', 'even', 'odd']
+```
+
+#### Multiple `for` 
+Nested `for` loops (one inside other).  
+Construction: `[<operator> for <iterator> in <iterative object> if <condition>] for <iterator> in <iterative object> if <condition>]`
+```python
+a = [(i,j) for i in range(2) for j in range(3)]
+print(a)                # [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+a = [(i,j)
+     for i in range(4) if i % 3 ==0
+     for j in range(3) if j % 2 == 0
+     ]
+print(a)                # [(0, 0), (0, 2), (3, 0), (3, 2)]
+a = [f"{i}*{j}={i*j}"
+     for i in range(1,3)
+     for j in range(1,2)
+     ]
+print(a)                # ['1*1=1', '2*1=2']
+
+matrix = [[1,2,3],[4,5,6],[7,8,9]]
+a = [x for row in matrix for x in row]  #*
+print(a)                # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+- \* - variables from different `for` loops can be used in another inside list comprehension.
+
+#### List comprehension as an element of list comprehension
+List comprehension can be used in `<operator>` part and in `<iterative object>` part.
+```python
+# List comprehension as operator
+N, M = 3, 4
+matrix = [[i for i in range(N)] for j in range(M)]
+print(matrix)           # [[0, 1, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2]]
+A = [[1,2,3],[4,5,6],[7,8,9]]
+a2 = [[x**2 for x in row] for row in A]
+A2 = [x**2 for row in A for x in row]
+print(a2)               # [[1, 4, 9], [16, 25, 36], [49, 64, 81]]
+print(A2)               # [1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+A = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+AT = [[row[i] for row in A] for i in range(len(A[0]))] #*
+print(AT)               # [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]
+
+# List comprehension as iterative object
+a = [i**2 for i in [j+1 for j in range(5)]]
+print(a)                # [1, 4, 9, 16, 25]
+```
+- \* - transposition of a matrix.
+
+
 ### Use examples
 #### Nested lists
 ```python
@@ -848,76 +1043,56 @@ complex_structure = [[[1,2],True],["words","system"]]
 print(complex_structure[0][0][1])   # 2
 ```
 
-## Conditions
-- Condition blocks are defined by **4 spaces**.
-- *<* and *>* works faster than *<=* or *>=*.
+
+## Dictionaries
+*Key* + *value* pair (*key* - unique).
+- Changeable type (values).
+- Keys can be any UNCHANGEABLE type.
 ```python
-z = float(input("Enter z: "))
-if z < 5 and z > 0:
-    print("z is less than 5")
-    print("z is positive")
-elif 5 <= z <= 10:
-    print("z is greater or equal to 5 and less or equal to 10")
-    print("do something else here")
-elif z > 10:
-    print("z is greater than 10")
-else:
-    print("z is less than 0 or equal to 0")
-print("end of block here")
+d = {"house":"дом", "car":"машина", 
+     "tree":"дерево"}
+print(d["house"])       # 'дом'
+d["house"]="здание"
+print(d["house"])       # 'здание'
+a["cat"]="кот"
+print(d)                # {'house': 'здание', 'car': 'машина', 'tree': 'дерево', 'cat': 'кот'}
+print(d["lawn"])        # ERROR
+
+d = {True:1, False:"Ложь", 'list':[1,2,3], 5:5}
+
 ```
-### Ternary operator 
+### Service functions, operators, methods
+#### `dict()`
+Creating a dictionary.
 ```python
-z = float(input("Enter a: "))
-z = float(input("Enter b: "))
-res = a if a > b else b
-print(res)                  # largest number
-
-s = 'python'
-par = 'upper'
-s = s.upper() if par == 'upper' else s.lower()
-print(s)                    # PYTHON
-
-a = 5
-b = 8
-arr = [1,2,a if (a>b) else b, 6, 7]
-print(arr)                  # [1, 2, 8, 6, 7]
-
-line = "a - " + ("even" if a%2 == 0 else "odd") + " number"
-print(line)                 # a - odd number
+lst = [[2,"bad"],[3,"so-so"],[4,"good"]]
+d = dict(lst)
+print(d)                # {2: 'bad', 3: 'so-so', 4: 'good'}
 ```
 
-## Loops
-- **while**
-    ```python
-    i = -1
-    while i <= N and i <= 100:
-        i += 1
-        if a[i] % 2 == 0
-            continue
-        s += a[i]
-        if s % 5 == 0
-            print (s)
-        if s == 999
-            break
-    else:       # will be executed if the loop was exited correctly (not with "break")
-        print("all elements or first 100 elements was checked")
-    ```
-  - **for**
-    ```python
-    d = [1,2,3,4,5]
-    for i in d:
-        print(i)
-        i = 0       # i only reference elements of the array so you can't change it that way
-    print(d)        # [1, 2, 3, 4, 5]
+#### `len()`
+Length of the dictionary.
 
-    for i in range(len(d)):
-        d[i] = 0
-    print(d)        # [0, 0, 0, 0, 0]
+#### `del()`
+Deleting an element (based on *key*).
+```python
+d = {"house":"дом", "car":"машина", "tree":"дерево"}
+print(d)                # {'house': 'дом', 'car': 'машина', 'tree': 'дерево'}
+del(d["house"])
+print(d)                # {'car': 'машина', 'tree': 'дерево'}
+del d["car"]
+print(d)                # {'tree': 'дерево'}
+del d["lawn"]           # ERROR
+```
+#### `in`, `not in`
+Operators to determine if the *key* is in the dictionary.
+```python
+d = {"house":"дом", "car":"машина", "tree":"дерево"}
+print("house" in d)     # True
+print("cat" in d)      # False
+print("cat" not in d)   # True
+```
 
-    for x in "python":
-        print(x)
-    ```
-    - Checkout: [Enumerate](#enumerate)
 
 ## Functions
 ### Service functions
@@ -964,6 +1139,7 @@ for i, d in enumerate(digs):
         print("Not even placed element")
 #
 ```
+
 
 
 
