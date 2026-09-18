@@ -79,6 +79,37 @@ void QuickSort(vector<int>& a, int fs, int ls){
         QuickSort(a, lf, ls);
     }
 }
+```   
+
+In C++ (faster with Tail recursion):
+```C++
+void QuickSort(vector<int>& a, int fs, int ls) {
+    while (fs < ls) {
+        int mid = fs + (ls - fs) / 2;
+        if (a[fs] > a[mid]) swap(a[fs], a[mid]);
+        if (a[fs] > a[ls])  swap(a[fs], a[ls]);
+        if (a[mid] > a[ls]) swap(a[mid], a[ls]);
+
+        int lf = fs, rt = ls, pivot = a[mid];
+        while (lf <= rt) {
+            while (a[lf] < pivot) lf++;
+            while (a[rt] > pivot) rt--;
+            if (lf <= rt) {
+                swap(a[lf], a[rt]);
+                lf++;
+                rt--;
+            }
+        }
+
+        if (rt - fs < ls - lf) {
+            QuickSort(a, fs, rt);
+            fs = lf;
+        } else {
+            QuickSort(a, lf, ls);
+            ls = rt;
+        }
+    }
+}
 ```
 
 
