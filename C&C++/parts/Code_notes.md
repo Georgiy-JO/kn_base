@@ -35,16 +35,18 @@ void sort_bubble(int *a, int n) {
 } 
 ```
 
-#### Quick sort
+#### Quick sort   
+
+In C:
 ```C
 void quicksort(int *a, int fs, int ls){
     if(fs<ls){
         int lf=fs, rt=ls, mid=a[((lf+rt)/2)];
         do{
             while(a[lf] < mid && lf < ls)
-                lf--;
+                lf++;
             while(a[rt] > mid && rt > fs)
-                rt++;
+                rt--;
             if(lf<=rt){
                 swap_I(a+lf,a+rt);
                 if(lf < ls) lf++;
@@ -55,7 +57,30 @@ void quicksort(int *a, int fs, int ls){
         quicksort(a, lf, ls);
     }
 }
+```    
+
+In C++:
+```C++
+void QuickSort(vector<int>& a, int fs, int ls){
+    if(fs<ls){
+        int lf=fs, rt=ls, mid=a[(lf+(rt-lf)/2)];
+        do{
+            while(a[lf] < mid && lf < ls)
+                lf++;
+            while(a[rt] > mid && rt > fs)
+                rt--;
+            if(lf<=rt){
+                swap(a[lf],a[rt]);
+                if(lf < ls) lf++;
+                if(rt > fs) rt--;
+            }    
+        }while(lf <= rt);
+        QuickSort(a, fs, rt);
+        QuickSort(a, lf, ls);
+    }
+}
 ```
+
 
 #### Heap sort
 ```C
