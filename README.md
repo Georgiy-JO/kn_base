@@ -30,14 +30,14 @@
     - [Fedora setup](/Linux/materials/fedora_start_up.md)
     - [Ubuntu setup](/Linux/materials/ubuntu_start_up.md)
 - **C**
-  - [C main](/C&C++/C_notes.md)
-    - [Tools](/C&C++/parts/Tools_notes.md)
-    - [Code samples](/C&C++/parts/Code_notes.md)
-    - [Code style](/C&C++/parts/Code_style_notes.md)
-    - [C](/C&C++/parts/C.md)
-    - [C++](/C&C++/parts/C++.md)
-    - [C#](/C&C++/parts/C-Sharp.md)
-    - [QT_notes](/C&C++/parts/QT_notes.md)
+  - [C main](/C&C++&C-Sharp/C_notes.md)
+    - [Tools](/C&C++&C-Sharp/parts/Tools_notes.md)
+    - [Code samples](/C&C++&C-Sharp/parts/Code_notes.md)
+    - [Code style](/C&C++&C-Sharp/parts/Code_style_notes.md)
+    - [C](/C&C++&C-Sharp/parts/C.md)
+    - [C++](/C&C++&C-Sharp/parts/C++.md)
+    - [C#](/C&C++&C-Sharp/parts/C-Sharp.md)
+    - [QT_notes](/C&C++&C-Sharp/parts/QT_notes.md)
 - **Bash and SH**
   - [Bash and sh](/Bash/Bash_notes.md)
 - **Extras**

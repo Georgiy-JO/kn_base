@@ -11,10 +11,10 @@ The repository's goal is to learn, so it is logical that plenty of information i
 
 ### References to the links lists
 - Separate computer languages guides (**computer science**):
-  - [C++](/C&C++/parts/C++.md#links)
+  - [C++](/C&C++&C-Sharp/parts/C++.md#links)
   - [SQL](/SQL/SQL_notes.md#links)
 - Programming related(**computer science**):
-  - [C++ code style](/C&C++/parts/Code_style_notes.md#links)
+  - [C++ code style](/C&C++&C-Sharp/parts/Code_style_notes.md#links)
   - [CI/CD](/DevOps/CICD_notes.md#links)
   - [Tg bot](/Extras/TgBot/TgBot_notes.md#links)
 - ML&AI (**computer science**): [links list](/ML_AI/ML&AI.md#links)

@@ -183,7 +183,7 @@ Here are several most frequently used code file types.
 | \<random>        | [to generate random numbers](#random-numbers)                                                                                                                                                           |
 | \<sstream>       | [transform line into stream like object](#input---output)                                                                                                                                               |
 | \<cstdio>        | It’s mostly [used](#c-style-way) when to use C-style I/O (printf, scanf, fopen, etc.) instead of C++ streams (std::cin, std::cout, std::ifstream, std::ofstream) + allows remove and create files       |
-| \<chrono>        | It provides types and utilities to [work](/C&C++/materials/CPP/time_example/timer.cpp) with durations, time points, and clocks in a type-safe and precise way                                           |
+| \<chrono>        | It provides types and utilities to [work](/C&C++&C-Sharp/materials/CPP/time_example/timer.cpp) with durations, time points, and clocks in a type-safe and precise way                                           |
 | \<limits>        | maximums, minimums, etc. of data types                                                                                                                                                                  |
 | \<filesystem>    | provides a platform-independent API for [working with the file system](#other-file-related-actions): paths, files, directories, and file metadata                                                       |
 | \<vector>        | dynamic array ([STL-c.](#stl-containers))                                                                                                                                                               |
@@ -840,11 +840,11 @@ Smart pointers in C++ are objects that manage dynamic memory and automatically r
   - `unique()` - return **true** if only one pointer reference the memory, **false** - if 2 and more.
   - etc.
 - Memory control for `std::shared_ptr` be like:  
-    ![Memory_ctrl_shared_ptr_1](/C&C++/media/shared_ptr_1.png "Two point to one")  
-    ![Memory_ctrl_shared_ptr_2](/C&C++/media/shared_ptr_2.png "Each point to different")  
-    ![Memory_ctrl_shared_ptr_3](/C&C++/media/shared_ptr_3.png "When not a single one is pointing, it gets deleted") 
+    ![Memory_ctrl_shared_ptr_1](/C&C++&C-Sharp/media/shared_ptr_1.png "Two point to one")  
+    ![Memory_ctrl_shared_ptr_2](/C&C++&C-Sharp/media/shared_ptr_2.png "Each point to different")  
+    ![Memory_ctrl_shared_ptr_3](/C&C++&C-Sharp/media/shared_ptr_3.png "When not a single one is pointing, it gets deleted") 
 - Memory control for `std::shared_ptr` for class be like:   
-    ![Memory_ctrl_shared_ptr_4](/C&C++/media/shared_ptr_4.png "Two point to one")  
+    ![Memory_ctrl_shared_ptr_4](/C&C++&C-Sharp/media/shared_ptr_4.png "Two point to one")  
 
 
 #### Examples `unique_ptr`
@@ -1478,7 +1478,7 @@ int main(){
 ### Dynamic memory  
 Memory that is allocated after the program is already compiled and running. 
 - This memory is allocated in the heap, which is a big segment of the memory assigned to the program.  
-![Memory](/C&C++/media/program_memory.png "Memory of a program")
+![Memory](/C&C++&C-Sharp/media/program_memory.png "Memory of a program")
 - The `new` operator is used to allocate memory dynamically - allocates memory and calls the [constructor](#constructor) (if it exists).
   - Use `new` to allocate memory for one object.
   - Use `new[]` to allocate memory for an array of objects.
@@ -2361,7 +2361,7 @@ return 0;
 ```
 
 #### #6 files
-- Writing a structure to file binary way: [/C&C++/materials/CPP/example_2.cpp](/C&C++/materials/CPP/example_2.cpp)
+- Writing a structure to file binary way: [/C&C++&C-Sharp/materials/CPP/example_2.cpp](/C&C++&C-Sharp/materials/CPP/example_2.cpp)
 
 #### #7 files
 ```c++
@@ -2876,7 +2876,7 @@ int main(){
         return 0;
     }
     ```
-- **#5**: [/C&C++/materials/CPP/lambda_fun_ex.cpp](/C&C++/materials/CPP/lambda_fun_ex.cpp)
+- **#5**: [/C&C++&C-Sharp/materials/CPP/lambda_fun_ex.cpp](/C&C++&C-Sharp/materials/CPP/lambda_fun_ex.cpp)
 - **#6**
     ```C++
     int main(){
@@ -3135,14 +3135,14 @@ Same works with destructors.
 ### Summery
 Structures and [classes](#object-and-class) are pretty close in C++.
 
-![StructVsClass](/C&C++/media/STRUCTvsCLASS.png "structure vs class")
+![StructVsClass](/C&C++&C-Sharp/media/STRUCTvsCLASS.png "structure vs class")
 
 
 ## Object and Class
 
 ### General 
 
-![OOP_1](/C&C++/media/oop_1.png "example of OOP based on real world")
+![OOP_1](/C&C++&C-Sharp/media/oop_1.png "example of OOP based on real world")
 
 #### Class
 - A class is a blueprint or template for creating objects;
@@ -3189,7 +3189,7 @@ In C++, methods are functions that are associated with a class or an object. The
   - Static methods
   - [Virtual methods](#abstract-methods-virtual-functions)
 - When a method is called by an object the object passes `this` pointer to the method of a class - that is the way class methods knows which value to use, even thought they are stored separately with the objects of the class.  
-    ![Scheme_object→class](/C&C++/media/ObjectToClass.png "Scheme how class let the method knows what data to use")
+    ![Scheme_object→class](/C&C++&C-Sharp/media/ObjectToClass.png "Scheme how class let the method knows what data to use")
 
 #### Access modifiers
 **Access modifiers** are keywords used in object-oriented programming to set the accessibility or visibility of **methods**, **Attributes** and other members of **class** or **structure**. They control how and where these members can be accessed from other parts of the program. 
@@ -4153,12 +4153,12 @@ int main(){
 
 #### Operations: `+=`, `*=`, `%=`, etc  (//❗❗)
 - Guide: [Click](https://youtu.be/EdHgDl52aNU?si=uKE0OiCSzNLgskdz)
-- File: <!-- [/C&C++/materials/CPP/dynamic_array.cpp](/C&C++/materials/CPP/dynamic_array.cpp) -not ready -->
+- File: <!-- [/C&C++&C-Sharp/materials/CPP/dynamic_array.cpp](/C&C++&C-Sharp/materials/CPP/dynamic_array.cpp) -not ready -->
 
 #### Operations: `++`, `--`               (//❗❗)
 Increment and decrement operators.
 - Guide: [Click](https://youtu.be/zd4nAiRt18Y?si=T9XccOm91frAkZZV)
-- File: <!-- [/C&C++/materials/CPP/dynamic_array.cpp](/C&C++/materials/CPP/dynamic_array.cpp) -not ready -->
+- File: <!-- [/C&C++&C-Sharp/materials/CPP/dynamic_array.cpp](/C&C++&C-Sharp/materials/CPP/dynamic_array.cpp) -not ready -->
   
 #### Operator `()`
 See [Functors](#functors)
@@ -4265,7 +4265,7 @@ Inheritance is a principle of *OOP* that allows a new class (subclass/derived cl
     }
     ```
 **Override attributes**: is possible, but is mostly used only for constants (due to the fact that it damage readability of code). In this case both the parent class and child class attributes are getting memory storage and methods from each class affect attributes from that class.  
-  ![Overriding_class_elements](/C&C++/media/override_clas_elements.png "The way overrided elements are stored in memory")
+  ![Overriding_class_elements](/C&C++&C-Sharp/media/override_clas_elements.png "The way overrided elements are stored in memory")
 
 #### Inheritance types
 Description will be based at:
@@ -4364,7 +4364,7 @@ class Circle : public Shape{            //public inheritance
     } 
     ```
 - **#2**
-Check [/C&C++/materials/CPP/example_1.cpp](/C&C++/materials/CPP/example_1.cpp)
+Check [/C&C++&C-Sharp/materials/CPP/example_1.cpp](/C&C++&C-Sharp/materials/CPP/example_1.cpp)
 
 
 ### Virtual method 
@@ -4392,8 +4392,8 @@ An **virtual method** (**virtual function**) is a member function in a base clas
     }
     ```
   - Schemes of memory control:  
-    - [for parent pointing to child](/C&C++/media/virtual_method_1.png)
-    - [for parent pointing to parent](/C&C++/media/virtual_method_2.png)
+    - [for parent pointing to child](/C&C++&C-Sharp/media/virtual_method_1.png)
+    - [for parent pointing to parent](/C&C++&C-Sharp/media/virtual_method_2.png)
   - Letting a program decide at runtime which method to invoke is an example of dynamic (or run-time) [***polymorphism***](/General/Dictionaty.md).
 - Using virtual method allows you to treat objects of derived classes as objects of the base class. This is particularly useful in scenarios where you want to write code that can work with objects of different types through a common interface.
 - The class that inherit and re-define a virtual method is called "polymorphic class".
@@ -4445,7 +4445,7 @@ An **virtual method** (**virtual function**) is a member function in a base clas
     }
     ```
 - **#2**
-  Check out [/C&C++/materials/CPP/example_1.cpp](/C&C++/materials/CPP/example_1.cpp)
+  Check out [/C&C++&C-Sharp/materials/CPP/example_1.cpp](/C&C++&C-Sharp/materials/CPP/example_1.cpp)
 
 
 ### **Abstract method** (Pure Virtual Functions)
@@ -4566,9 +4566,9 @@ Multiple inheritance is a feature in object-oriented programming where a class c
 - Multiple inheritance can be achieved by writing parent classes with inheritance mod for each separated by comma in the child class declaration line.
 - In case of multiple inheritance constructors of base classes are called in the same order as classes was written in child class declaration and then child class' constructor will be called. Destructors will have the backwards order.
 - Memory scheme:
-    ![Multyple_inheritance](/C&C++/media/multiple_inheritance.png)
+    ![Multyple_inheritance](/C&C++&C-Sharp/media/multiple_inheritance.png)
 - Example: 
-  - [/C&C++/materials/CPP/multiple_inheritance.cpp](/C&C++/materials/CPP/multiple_inheritance.cpp)
+  - [/C&C++&C-Sharp/materials/CPP/multiple_inheritance.cpp](/C&C++&C-Sharp/materials/CPP/multiple_inheritance.cpp)
 
 #### Diamond inheritance  (virtual classes declaration)
 Specific scenario in multiple inheritance where a class inherits from two classes that both derive from a common base class. This creates a diamond-shaped structure in the class hierarchy, leading to potential ambiguity in method resolution.

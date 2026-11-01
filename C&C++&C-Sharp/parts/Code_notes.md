@@ -223,7 +223,7 @@ free(single_array_matrix);
 
 ### Simple logger
 Simple way to log output from different parts of the program for debugging reasons.
-Just include [header](/C&C++/materials/CPP/logger/logger.hpp) and compile [source](/C&C++/materials/CPP/logger/logger.cpp) file.
+Just include [header](/C&C++&C-Sharp/materials/CPP/logger/logger.hpp) and compile [source](/C&C++&C-Sharp/materials/CPP/logger/logger.cpp) file.
 
 
 

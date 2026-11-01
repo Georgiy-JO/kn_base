@@ -274,7 +274,7 @@ sudo apt-get install check
 ### Use
 Added to a c file as a library allow to use functions to compare output or result of execution of your functions with prepared values or results of calculation.
 
-#### [Example](/C&C++/materials/C/tetris_tests.c)
+#### [Example](/C&C++&C-Sharp/materials/C/tetris_tests.c)
 * see [Notes/links](#links-1)
 
 ### Links
@@ -313,7 +313,7 @@ The main function can be not included in the test file -default main function wi
 [Assertions Reference](https://google.github.io/googletest/reference/assertions.html)
 
 ### Example 
-[Example #1](/C&C++/materials/CPP/model3d_tests.cpp)
+[Example #1](/C&C++&C-Sharp/materials/CPP/model3d_tests.cpp)
 
 
 ## Makefile
@@ -368,7 +368,7 @@ clean:
 - -**.PHONY**: This tells `make` that `all` and `clean` are not files but commands.
 
 
-#### [Example](/C&C++/materials/C/Makefile)
+#### [Example](/C&C++&C-Sharp/materials/C/Makefile)
 * see [Notes/links](#links-1)
 
 ### Tips and structure
@@ -504,9 +504,9 @@ Running Tests:
 
 
 #### #2: From [Viewer3D project](https://github.com/Georgiy-JO/Viewer3D)
-- [Main CMakeLists.txt](/C&C++/materials/CPP/cmake_example/CMakeLists.txt)
-  - [Tests CMakeLists.txt](/C&C++/materials/CPP/cmake_example/tests/CMakeLists.txt)
-  - [Third part CMakeLists.txt](/C&C++/materials/CPP/cmake_example/third_party/CMakeLists.txt)
+- [Main CMakeLists.txt](/C&C++&C-Sharp/materials/CPP/cmake_example/CMakeLists.txt)
+  - [Tests CMakeLists.txt](/C&C++&C-Sharp/materials/CPP/cmake_example/tests/CMakeLists.txt)
+  - [Third part CMakeLists.txt](/C&C++&C-Sharp/materials/CPP/cmake_example/third_party/CMakeLists.txt)
 
 ## Gcov and Gcovr
 `gcov` and `gcovr` are tools used in C and C++ programming for code coverage analysis. They help developers understand which parts of their code are being exercised by tests, which can be crucial for improving test coverage and ensuring code quality.

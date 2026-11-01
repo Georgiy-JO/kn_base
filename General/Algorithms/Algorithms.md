@@ -2,9 +2,9 @@
 
 ## Sort
 Check out:
-- [Bubble sort](/C&C++/parts/Code_notes.md#bubble-sort)
-- [Quick sort](/C&C++/parts/Code_notes.md#quick-sort)
-- [Heap sort](/C&C++/parts/Code_notes.md#heap-sort)
+- [Bubble sort](/C&C++&C-Sharp/parts/Code_notes.md#bubble-sort)
+- [Quick sort](/C&C++&C-Sharp/parts/Code_notes.md#quick-sort)
+- [Heap sort](/C&C++&C-Sharp/parts/Code_notes.md#heap-sort)
 
 ## [Hash tables](/General/Algorithms/parts/Hash.md)
 
