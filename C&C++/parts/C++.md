@@ -4876,7 +4876,7 @@ class ClassName{
 ## Standard Template Library
 
 ### STL containers 
-**Standard Template Library containers** are template classes provided by the C++ Standard Library that are used for storing and managing collections of objects. They offer convenient and efficient ways to work with data, including adding, removing, searching, and sorting elements. Theory obout those can be seen at [Standart data structures](/General/Data_structures/Stanard_data_structures.md).
+**Standard Template Library containers** are template classes provided by the C++ Standard Library that are used for storing and managing collections of objects. They offer convenient and efficient ways to work with data, including adding, removing, searching, and sorting elements. Theory about those can be seen at [Standart data structures](/General/Data_structures/Stanard_data_structures.md).
 
 #### Main Categories of STL Containers  (❗***HINT***)
 - **Sequence Containers**: These containers store elements in a specific order. Elements can be accessed by index, and their order is preserved.
@@ -4899,7 +4899,7 @@ class ClassName{
 - **Unordered Associative Containers**: These containers do not store elements as "key-value" pairs and do not guarantee order.
   - Examples:
     - **`std::unordered_set`**: A container that stores unique elements without guaranteeing order (realization via [hash-tables](/General/Algorithms/parts/Hash_tables.md)).
-    - **`std::unordered_map`**: A container that stores "key-value" pairs without guaranteeing order (realization via [hash-tables](/General/Algorithms/parts/Hash_tables.md)).
+    - **`std::unordered_map`**: A container that stores "key-value" (keys are unique) pairs without guaranteeing order (realization via [hash-tables](/General/Algorithms/parts/Hash_tables.md)).
     - **`std::unordered_multiset`** and **`std::unordered_multimap`**: Similar to unordered set and map, but allow duplicates.
 
 #### Main functors
