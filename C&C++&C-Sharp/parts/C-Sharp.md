@@ -32,6 +32,126 @@
 - Works the same way as in C++: `/*...*/`, `//`.
 - Writing `///` before class/method/etc. will automatically create it's description (may not work in some coding environments).
 
+## Life-Hacks
+### Determining types  
+#### [`GetType()`](#gettype-1)
+#### `is`
+```c#
+foreach (var animal in animals)
+{
+    if (animal is Wolf wolf)  // it is Wolf
+    else if (animal is Rabbit rabbit) // it is Rabbit
+}
+```
+#### `switch`
+```c#
+foreach (var entity in entities)
+{
+    switch (entity)
+{
+    case Animal animal:     
+        _data.Animals.Add(animal);
+        break;
+    case Food food:
+        _data.Food.Add(food);
+        break;
+    default: break;
+}
+}
+```
+- This doesn't change the original type of the entity, so if Animal is only one of parent types, object of the original child type will be added
+
+#### Check the parent class
+1. [Check out](#switch)
+2. `IsAssignableFrom`:
+  ```c#
+  Dictionary <int, Type> dic;
+  if (dic.TryGetValue(id, out Type? type) && typeof(Animal).IsAssignableFrom(type))
+  ```
+
+## Key-words and Operators
+### Key-words 
+#### `Using`
+- Used to include libraries, namespaces, types. (❗update)
+|Feature|using Namespace;|using static Type;|
+|---|---|---|
+|What it imports|"Types (classes, structs, enums…)"|Static members of one type|
+|Example|`using System.Linq;`|`using static System.Math;`|
+|Allows|`List<T>`, `Dictionary<K,V>`|`Sqrt()`, `PI`, `Max()`|
+|Does not allow|Calling static methods directly|Using the type name itself without qualification|
+
+#### [`record`](#configure-structures)
+#### [`base`](#constructors--destructors)
+#### [`public`, `private`, `protected`, `internal` ](#modifiers)
+#### `yield`
+Keywords used to create **iterators** (lazy sequences).  
+Typically used in methods returning `IEnumerable<T>` or `IEnumerator<T>`.
+
+- **`yield return <value>;`**
+  - Returns one element to the caller.
+  - Pauses the method and saves its state.
+  - Continues execution from the same point when the next element is requested.
+
+- **`yield break;`**
+  - Stops the iteration immediately.
+  - Equivalent to an early end of the sequence.
+```C#
+// Ex.
+// Method:
+  public IEnumerable<int> GetNumbers()
+  {
+      Console.WriteLine("Start");
+      yield return 1;
+      Console.WriteLine("After 1");
+      yield return 2;
+      Console.WriteLine("After 2");
+      yield return 3;
+      Console.WriteLine("End");
+  }
+// Calling:
+  foreach (var n in GetNumbers())
+  {
+      Console.WriteLine($"Received: {n}");
+  }
+// output:
+  // Start
+  // Received: 1
+  // After 1
+  // Received: 2
+  // After 2
+  // Received: 3
+  // End
+```
+- If added `yield break` before `yield return` the method will stop and if called one more time will restart.
+
+
+#### Namespaces 
+- Check out [using](#using)
+
+### Operators
+#### `??`
+null-coalescing operator
+- If the part on the left of `??` returns **NOT** `null`  the line returns the result.
+- If it is `null` the part on the right is executed.
+```C#
+//ex.
+ var data = JsonSerializer.Deserialize<Data>(json, options) ?? throw new InvalidDataException("Failed to deserialize data");
+```
+
+## Methods 
+### `GetType`
+Allows to check the type of an object.
+```C#
+var wolf = new Wolf(...);
+Type type = wolf.GetType();
+
+Console.WriteLine(type.Name);          // "Wolf"                  ← только имя класса
+Console.WriteLine(type.FullName);      // "Wolf_Island.Entities.Animals.Wolf"  ← с namespace
+Console.WriteLine(type.Namespace);     // "Wolf_Island.Entities.Animals"
+Console.WriteLine(type.ToString());    // обычно то же, что FullName
+```
+
+
 ## Classes
 
 ### Modifiers
@@ -98,22 +218,37 @@ var food4 = new FoodDataShort("Grass", 10, 6);           // Id = "Grass", Value 
 record struct AnimalData(uint MaxHealth = 1, uint MaxFullness = 1, uint MeatValue = 1, uint FieldOfView = 1, Sizes Size = Sizes.szMedium, uint HungerTimer = 2, uint LifelossTimer = 2, uint MoveDistance = 1) : IConfig;
 ```
 
-### Key words
-#### `Using`
-- Used to include libraries, namespaces, types. (❗update)
-|Feature|using Namespace;|using static Type;|
-|---|---|---|
-|What it imports|"Types (classes, structs, enums…)"|Static members of one type|
-|Example|`using System.Linq;`|`using static System.Math;`|
-|Allows|`List<T>`, `Dictionary<K,V>`|`Sqrt()`, `PI`, `Max()`|
-|Does not allow|Calling static methods directly|Using the type name itself without qualification|
+## Scenarios 
+### Reading data from JSON
+Check out [file](/C&C++&C-Sharp/materials/C-Sharp/JsonParser.cs):
+- `LoadListFromFile` - reads file into text;
+- `LoadListFromJsonText` - parse (deserialize) text according to the structure (`TList` should be a list of object that have the same structure as the json-file).
 
-#### [`record`](#configure-structures)
-#### [`base`](#constructors--destructors)
-#### [`public`, `private`, `protected`, `internal` ](#modifiers)
 
-### Namespaces 
-- Check out [using](#using)
+## Temple Notes (❗update)
+### 1
+StringComparer.OrdinalIgnoreCase нужен, чтобы ключи словаря не зависели от регистра букв
+
+Сравниватель,"""Wolf"" == ""wolf""","""Wolf"" == ""WOLF""",Скорость,Рекомендуется для
+StringComparer.Ordinal,Нет,Нет,Самая высокая,Когда регистр важен
+StringComparer.OrdinalIgnoreCase,Да,Да,Очень высокая,"Ключи, ID, имена"
+StringComparer.CurrentCultureIgnoreCase,Да,Да,Медленнее,"Для текста, который видит пользователь"
+### 2
+```c#
+return id.ToLowerInvariant() switch
+        {
+            "wolf"   => new Wolf(data, position),
+            "rabbit" => new Rabbit(data, position),
+            // просто добавляешь новую строку, когда появится новый тип
+            _ => throw new NotSupportedException($"Unknown animal type: {id}")
+        };
+```
+### 3
+...CreateInstance(...)!
+Activator.CreateInstance может теоретически вернуть null.
+
+Оператор ! говорит компилятору:«Я уверен, что здесь не будет null, не ругайся».Это нужно, потому что метод CreateAnimal возвращает Animal (не Animal?).
+
 
 
 
