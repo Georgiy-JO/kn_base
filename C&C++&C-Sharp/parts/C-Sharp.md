@@ -25,7 +25,7 @@
     // C#
     Math.Abs(-5);
     ```
-
+- `foreach(int a in array)` is the same as `for(int a: array)`, but while C++ allows to `for(int& a: array)`  to change values, c# doesn't ([more info](#foreach)).
 ## Code Style (❗update)
 
 ## Comments
@@ -137,6 +137,20 @@ null-coalescing operator
 //ex.
  var data = JsonSerializer.Deserialize<Data>(json, options) ?? throw new InvalidDataException("Failed to deserialize data");
 ```
+#### `foreach`
+- You can read keys and values in foreach.
+- You cannot change the dictionary structure (Add/Remove) during foreach.
+- You can change the contents of a reference-type value (if the value is a class).
+- You cannot assign a new value to the current entry directly through the foreach variable.
+  - `pair.Key` - read-only;
+  - `pair.Value` - read-only reference (you can't do `pair.Value = something`);
+  - Can be overcome with:
+    ```c#
+    foreach (var key in dictionary.Keys.ToList())
+    {
+        dictionary[key] = newValue;
+    }
+    ```
 
 ## Methods 
 ### `GetType`
