@@ -130,6 +130,8 @@ Typically used in methods returning `IEnumerable<T>` or `IEnumerator<T>`.
 
 #### Namespaces 
 - Check out [using](#using)
+#### `is` and `is not`
+Can replace `==` and `!=` in many cases.
 
 ### Operators
 #### `??`
@@ -154,6 +156,11 @@ null-coalescing operator
         dictionary[key] = newValue;
     }
     ```
+
+## Build-in instruments
+### Classes
+#### `DateTime`
+A standard class and instruments to work with date and time.
 
 ## Methods 
 ### `GetType`
