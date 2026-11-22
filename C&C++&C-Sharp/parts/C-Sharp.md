@@ -319,6 +319,28 @@ Check out [file](/C&C++&C-Sharp/materials/C-Sharp/JsonParser.cs):
 - `LoadListFromJsonText` - parse (deserialize) text according to the structure (`TList` should be a list of object that have the same structure as the json-file).
 
 
+## Release
+### Flags
+- `-p:DebugType=none -p:DebugSymbols=false` - to stop creating the debug files.
+### App
+How to create a release version of an app.
+```Bash
+# Single-folder deploy (default) — exe + DLLs + Configs
+dotnet publish src/YourApp/YourApp.csproj -c Release -o artifacts/app
+# Self-contained (user does not need .NET installed)
+dotnet publish src/YourApp/YourApp.csproj -c Release -r win-x64 --self-contained true -o artifacts/app-win64
+# Single-file exe (optional)
+dotnet publish src/YourApp/YourApp.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/app-win64
+```
+### Library
+How to create a release version of an library.
+```bash
+# NuGet package
+dotnet pack src/YourGame.Core/YourGame.Core.csproj -c Release -o artifacts/nuget
+# Folder with the DLL
+dotnet publish src/YourGame.Core/YourGame.Core.csproj -c Release -o artifacts/library
+```
+
 ## Temple Notes (❗update)
 ### 1
 StringComparer.OrdinalIgnoreCase нужен, чтобы ключи словаря не зависели от регистра букв
