@@ -29,6 +29,11 @@
     Math.Abs(-5);
     ```
 - `foreach(int a in array)` is the same as `for(int a: array)`, but while C++ allows to `for(int& a: array)`  to change values, c# doesn't ([more info](#foreach)).
+- `auto` in `C++` == [`var`](#var) in `C#`;
+
+
+
+
 ## Code Style (❗update)
 
 ## Comments
@@ -36,8 +41,23 @@
 - Writing `///` before class/method/etc. will automatically create it's description (may not work in some coding environments).
 
 ## Life-Hacks
+
+### Variables
+### [Possible `null`](#possible-null-1)
+
+#### Initialing variables
+There are different ways for empty variables (will get the default values of the respective type) :
+```c#
+List<(string id,(uint x, uint y))> a = new List<(string id,(uint x, uint y))>();
+List<(string id,(uint x, uint y))> b = new();
+List<(string id,(uint x, uint y))> c = [];
+var d = new List<(string id,(uint x, uint y))>();
+```
+
+
+
 ### Determining types  
-#### [`GetType()`](#gettype-1)
+#### Using [`GetType()`](#gettype)
 #### `is`
 ```c#
 foreach (var animal in animals)
@@ -72,8 +92,42 @@ foreach (var entity in entities)
   if (dic.TryGetValue(id, out Type? type) && typeof(Animal).IsAssignableFrom(type))
   ```
 
+## Types
+### Any Type
+#### `object`
+All types in `C#` comes from one base class type `object`; 
+```C#
+int b = 5;
+List<double> c = new(5);
+List<myType> d = new();
+object a = b;
+a = c;
+a = d;
+```
+#### `var`
+Same as `auto` in C++;
+
+### Tuple types
+Several types can be united into one "structure" (similar to `C++` `pair<>`).
+```C#
+(int x, int y) coord = (5,3);
+coord.x =7;
+return coord;
+```
+### Possible `null`
+If you want to give your self an ability to set/receive/return not just a certain type variable, but `null` too - use `?`.
+```c#
+private int? Fun (int? a){
+  int? a;
+  if(a is null) a = null;
+  else a =5;
+  return a;
+}
+```
+
 ## Key-words and Operators
 ### Key-words 
+#### [`?`](#possible-null-1)
 #### `Using`
 - Used to include libraries, namespaces, types. (❗update)
 |Feature|using Namespace;|using static Type;|
@@ -128,7 +182,7 @@ Typically used in methods returning `IEnumerable<T>` or `IEnumerator<T>`.
 - If added `yield break` before `yield return` the method will stop and if called one more time will restart.
 
 
-#### Namespaces 
+#### `namespace` 
 - Check out [using](#using)
 #### `is` and `is not`
 Can replace `==` and `!=` in many cases.
@@ -158,11 +212,12 @@ null-coalescing operator
     ```
 
 ## Build-in instruments
-### Classes
+### Build-in Classes
+[More info](#classes)
 #### `DateTime`
 A standard class and instruments to work with date and time.
 
-## Methods 
+## Build-in Methods 
 ### `GetType`
 Allows to check the type of an object.
 ```C#
@@ -223,6 +278,17 @@ var food3 = new FoodDataShort("Grass", 10);              // Id = "Grass", Value 
 var food4 = new FoodDataShort("Grass", 10, 6);           // Id = "Grass", Value = 10, ChangeTimer = 6
 ```
 
+### `Array` vs other  (❗update)
+- Even though array is made with `new` it is a fix length data type.
+```c#
+// Initializing
+List<int> a = new(5);   // space allocation (not creating elements)
+var b = new int[5];     // creating 5 elements of default (here 0) values
+
+int l1 = a.Count;   // Amount of elements
+int l2 = b.Length;  // Amount of elements
+```
+
 ## Structures
 - Usually is used for storing and passing data, but has almost the same functionality as classes.
 - Can't be interfaces.
@@ -260,12 +326,12 @@ StringComparer.CurrentCultureIgnoreCase,Да,Да,Медленнее,"Для т�
 ### 2
 ```c#
 return id.ToLowerInvariant() switch
-        {
-            "wolf"   => new Wolf(data, position),
-            "rabbit" => new Rabbit(data, position),
-            // просто добавляешь новую строку, когда появится новый тип
-            _ => throw new NotSupportedException($"Unknown animal type: {id}")
-        };
+  {
+      "wolf"   => new Wolf(data, position),
+      "rabbit" => new Rabbit(data, position),
+      // просто добавляешь новую строку, когда появится новый тип
+      _ => throw new NotSupportedException($"Unknown animal type: {id}")
+  };
 ```
 ### 3
 ...CreateInstance(...)!
@@ -277,3 +343,5 @@ Activator.CreateInstance может теоретически вернуть null
 
 
 ## Links
+- Russian C# tutorial and info site - [Metanit](https://metanit.com/sharp/tutorial/)
+- [Official Microsoft documentation](https://learn.microsoft.com/en-us/dotnet/csharp/)
