@@ -52,8 +52,8 @@
   - [BlackBox](https://www.blackbox.ai/)
   - [Grok] (https://grok.com)
 - Remote repositories
-  - GitHub
-  - GitLab
+  - [GitHub](https://github.com/Georgiy-JO)
+  - [GitLab](https://gitlab.com/Georgiy-JO)
 ### Repository templates 
 - [Empty repository](https://github.com/Georgiy-JO/gh_gen_template)
 - [Empty, for 2 separate repositories](https://github.com/Georgiy-JO/2_rep_template)
