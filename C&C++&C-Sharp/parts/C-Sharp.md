@@ -30,6 +30,7 @@
     ```
 - `foreach(int a in array)` is the same as `for(int a: array)`, but while C++ allows to `for(int& a: array)`  to change values, c# doesn't ([more info](#foreach)).
 - `auto` in `C++` == [`var`](#var) in `C#`;
+- [Tuple](#tuple-types)(кортеж) instead of `pair<>`.
 
 
 
@@ -108,11 +109,14 @@ a = d;
 Same as `auto` in C++;
 
 ### Tuple types
-Several types can be united into one "structure" (similar to `C++` `pair<>`).
+Several types can be united into one "structure" (similar to `C++` `pair<>`, but instead if `first`/`second` there is `Item1`/`Item2`, and it can contain more than 2 elements).
 ```C#
 (int x, int y) coord = (5,3);
 coord.x =7;
 return coord;
+
+(int, int) coord = (5,3);
+coord.Item1 =7;
 ```
 ### Possible `null`
 If you want to give your self an ability to set/receive/return not just a certain type variable, but `null` too - use `?`.
