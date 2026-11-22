@@ -365,7 +365,11 @@ Activator.CreateInstance может теоретически вернуть null
 
 Оператор ! говорит компилятору:«Я уверен, что здесь не будет null, не ругайся».Это нужно, потому что метод CreateAnimal возвращает Animal (не Animal?).
 
-
+## Add info from
+- Lections (algorithms + modules)
+- Video course? 
+- Wolf project
+- other small projects.
 
 
 ## Links
